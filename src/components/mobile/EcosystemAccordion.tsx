@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 /**
- * "A connected echosystem" — Figma "Hero_mobile_option_2" States 9-13
+ * "A connected ecosystem" — Figma "Hero_mobile_option_2" States 9-13
  * (nodes 13061:3927 / 13063:4314 / 4368 / 4422 / 4476).
  *
  * Tap-driven accordion below the pinned mobile Hero. Exactly one card is
@@ -20,11 +20,18 @@ const ITEMS: Array<{
   plates: Plate[];
 }> = [
   {
-    key: 'magnetic-lock',
-    title: 'Magnetic lock',
-    body: "Magnetic lock seals every slot. \nAn IR sensor confirms the dose the slot glows when it's done.",
-    note: 'No more pills spilling in your bag.',
-    plates: [{ src: '/assets/mobile/plate-magnetic-lock.jpg', className: 'object-cover' }],
+    key: 'connected-to-curebay',
+    title: 'Connected to CureBay',
+    body: 'Consult doctors, order medicines, book lab tests, manage every dose, and access emergency support—all seamlessly connected through the Take Care App.',
+    note: 'No more disconnected healthcare.',
+    plates: [{ src: '/assets/mobile/plate-curebay-connected.png', className: 'object-cover' }],
+  },
+  {
+    key: 'works-24x7',
+    title: 'Works 24x7',
+    body: 'One missed dose; instant alerts to you, your family & the 24×7 command centre.',
+    note: 'No more boxes \nthat just sit there.',
+    plates: [{ src: '/assets/mobile/plate-247.png', className: 'object-cover' }],
   },
   {
     key: '30-day-slots',
@@ -51,18 +58,11 @@ const ITEMS: Array<{
     ],
   },
   {
-    key: 'mounted-labels',
-    title: 'Mounted Labels',
-    body: "Numbers Mounted in, never printed. Screen + app always show what's next.",
-    note: 'No more faded or mislabeled days.',
-    plates: [{ src: '/assets/mobile/plate-mounted-labels.jpg', className: 'object-cover object-bottom' }],
-  },
-  {
-    key: 'connected-care',
-    title: 'Connected Care',
-    body: 'One missed dose; instant alerts to you, your family & the 24×7 command centre.',
-    note: 'No more boxes that just sit there.',
-    plates: [{ src: '/assets/mobile/plate-connected-care.jpg', className: 'object-cover' }],
+    key: 'magnetic-lock',
+    title: 'Magnetic lock',
+    body: "Magnetic lock seals every slot. \nAn IR sensor confirms the dose the slot glows when it's done.",
+    note: 'No more pills spilling in your bag.',
+    plates: [{ src: '/assets/mobile/plate-magnetic-lock.jpg', className: 'object-cover' }],
   },
 ];
 
@@ -76,15 +76,25 @@ export default function EcosystemAccordion() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section className="w-full bg-[#F5FAFF] md:hidden">
-      <div className="mx-auto flex w-full max-w-[402px] flex-col items-center gap-6 px-[29px] py-12">
+    <section className="relative w-full overflow-hidden md:hidden">
+      {/* Background photo (mobile-specific tall crop, Figma node 13063:4422 "State=12") +
+          top-to-bottom white→#70737C gradient overlay at 32% opacity */}
+      <div aria-hidden className="absolute inset-0">
+        <img src="/assets/mobile/eco-section-bg.png" alt="" className="absolute size-full max-w-none object-cover" />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.32) 21.211%, rgba(112,115,124,0.32) 39%)' }}
+        />
+      </div>
+
+      <div className="relative mx-auto flex w-full max-w-[402px] flex-col items-center gap-6 px-[29px] py-12">
         {/* Heading */}
         <div className="flex w-full max-w-[329px] flex-col gap-6">
           <h2
             className="font-inter font-bold not-italic text-black [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
             style={{ fontSize: 48, lineHeight: 'normal' }}
           >
-            A connected echosystem
+            A connected ecosystem
           </h2>
           <p
             className="whitespace-pre-line font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
@@ -147,7 +157,7 @@ export default function EcosystemAccordion() {
                       <p className="whitespace-pre-line not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]" style={{ color: '#4D4D4D' }}>
                         {item.body}
                       </p>
-                      <p className="whitespace-pre-line italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]" style={{ color: '#808080' }}>
+                      <p className="whitespace-pre-line italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]" style={{ color: '#D82525' }}>
                         {item.note}
                       </p>
                     </div>

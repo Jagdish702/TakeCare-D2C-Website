@@ -3,24 +3,29 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { useFitScale } from '../../hooks/useFitScale';
-import plateMagneticLock from '../../assets/figma-hero/plate-magnetic-lock.png';
-import plateBase from '../../assets/figma-hero/plate-base.png';
-import plate30DayOverlay from '../../assets/figma-hero/plate-30day-overlay.png';
+import ecoSectionBg from '../../assets/figma-hero/eco-section-bg.png';
+import plateCurebayConnected from '../../assets/figma-hero/plate-curebay-connected.png';
+import plate247 from '../../assets/figma-hero/plate-247.png';
+import plate30DayDrawers from '../../assets/figma-hero/plate-30day-drawers.png';
 import plateMedical from '../../assets/figma-hero/plate-medical.png';
-import plateMountedLabels from '../../assets/figma-hero/plate-mounted-labels.png';
-import plateConnectedCare from '../../assets/figma-hero/plate-connected-care.png';
+import plateMagneticLock from '../../assets/figma-hero/plate-magnetic-lock.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * "A connected Ecosystem" — Figma "Hero" component set States 9-10
- * (nodes 13063:5221 / 13063:5514), desktop follow-up to the pinned Hero.
+ * "A connected Ecosystem" — Figma "Hero" component set (node 13617:23693),
+ * desktop follow-up to the pinned Hero. Updated card set/order/copy —
+ * replaces the previous "Mounted Labels" + "Connected Care" cards with
+ * "Connected to CureBay" (new) and "Works 24x7" (new title, same body/note
+ * as the old "Connected Care" card, new photo).
  *
- * 1440×1233 canvas on #F5FAFF (Blue Primary/2): root p-120 flex column
- * (gap 60), header (gap 36), then a 1144px 3-card grid (gap 60) and a
- * centred 2-card row (gap 60, cards 341.333 wide). State 9 shows only the
- * header; scrolling scrubs the five cards rising in (state 10).
- * All values verbatim from get_design_context — do not round.
+ * 1440×1233 canvas on a photo background (marble/plant + faint wave/cross
+ * pattern) with a top-to-bottom white→#576385 gradient overlay at 32%
+ * opacity: root p-120 flex column (gap 60), header (gap 36), then a
+ * 1144px 3-card grid (gap 60) and a centred 2-card row (gap 60, cards
+ * 341.333 wide). State 9 shows only the header; scrolling scrubs the five
+ * cards rising in (state 10). All values verbatim from get_design_context
+ * — do not round.
  */
 
 type Plate = { src: string; className?: string; style?: React.CSSProperties };
@@ -31,52 +36,41 @@ const ITEMS: Array<{
   body: string;
   note: string;
   plates: Plate[];
-  /** Cards 1 & 3 use justify-between (plate pinned to the card bottom). */
-  justifyBetween?: boolean;
 }> = [
   {
-    key: 'magnetic-lock',
-    title: 'Magnetic lock',
-    body: "Magnetic lock seals every slot. \nAn IR sensor confirms the dose the slot glows when it's done.",
-    note: 'No more pills spilling in your bag.',
-    plates: [{ src: plateMagneticLock, className: 'object-cover' }],
-    justifyBetween: true,
+    key: 'connected-to-curebay',
+    title: 'Connected to CureBay',
+    body: 'Consult doctors, order medications, book lab tests, manage doses, and access emergency support—all through the Take Care App.',
+    note: 'No more disconnected healthcare.',
+    plates: [{ src: plateCurebayConnected, className: 'object-cover' }],
+  },
+  {
+    key: 'works-24x7',
+    title: 'Works 24x7',
+    body: 'One missed dose; instant alerts to you, your family & the 24×7 command centre.',
+    note: 'No more boxes \nthat just sit there.',
+    plates: [{ src: plate247, className: 'object-cover' }],
   },
   {
     key: '30-day-slots',
     title: '30-Day Slots',
     body: 'Drop in a whole sealed strip — 30 days per slot, refilled monthly by CureBay.',
     note: 'No more popping pills \nfrom foil every day.',
-    // Figma layers a transparent cut-out photo over a shared base image.
-    plates: [
-      { src: plateBase, className: 'object-cover' },
-      { src: plate30DayOverlay, style: { height: '125.73%', left: '0.07%', top: '-25.95%', width: '100%' } },
-    ],
+    plates: [{ src: plate30DayDrawers, style: { height: '125.73%', left: '0.07%', top: '-25.95%', width: '100%' } }],
   },
   {
     key: 'medical-grade-build',
     title: 'Medical-Grade Build',
     body: 'Medical-grade ABS, anti-microbial finish. Built to last, easy to wipe clean.',
     note: 'No more cracks on the first drop.',
-    plates: [
-      { src: plateBase, className: 'object-cover' },
-      { src: plateMedical, className: 'object-cover' },
-    ],
-    justifyBetween: true,
+    plates: [{ src: plateMedical, className: 'object-cover' }],
   },
   {
-    key: 'mounted-labels',
-    title: 'Mounted Labels',
-    body: "Numbers Mounted in, never printed. Screen + app always show what's next.",
-    note: 'No more faded or mislabeled days.',
-    plates: [{ src: plateMountedLabels, className: 'object-bottom' }],
-  },
-  {
-    key: 'connected-care',
-    title: 'Connected Care',
-    body: 'One missed dose; instant alerts to you, your family & the 24×7 command centre.',
-    note: 'No more boxes that just sit there.',
-    plates: [{ src: plateConnectedCare, className: 'object-cover' }],
+    key: 'magnetic-lock',
+    title: 'Magnetic lock',
+    body: "Magnetic lock seals every slot. \nAn IR sensor confirms the dose the slot glows when it's done.",
+    note: 'No more pills spilling in your bag.',
+    plates: [{ src: plateMagneticLock, className: 'object-cover' }],
   },
 ];
 
@@ -94,26 +88,28 @@ function EcoCard({
   index,
   cardRef,
   fixedWidth,
+  fixedHeight,
 }: {
   item: (typeof ITEMS)[number];
   index: number;
   cardRef: (el: HTMLDivElement | null) => void;
   fixedWidth?: number;
+  fixedHeight?: number;
 }) {
   return (
     <div
       ref={cardRef}
-      className={`flex flex-col items-start ${item.justifyBetween ? 'justify-between' : ''}`}
-      style={{ ...CARD_CHROME, width: fixedWidth }}
+      className={`flex flex-col items-start ${fixedHeight ? '' : 'h-full'}`}
+      style={{ ...CARD_CHROME, width: fixedWidth, height: fixedHeight }}
     >
-      {/* Content */}
-      <div className="flex w-full flex-col items-start" style={{ padding: 12, gap: 8 }}>
+      {/* Content — flex-1 so it fills the space above the fixed-height image plate below */}
+      <div className="flex w-full flex-1 flex-col items-start" style={{ padding: 12, gap: 8 }}>
         {/* Header pill */}
         <div
           className="flex w-full items-center backdrop-blur-[2px]"
           style={{ gap: 16, padding: '8px 16px 8px 8px', borderRadius: 116 }}
         >
-          <div className="flex size-6 shrink-0 items-center justify-center bg-black" style={{ borderRadius: 22 }}>
+          <div className="flex size-6 shrink-0 items-center justify-center bg-[#00b82e]" style={{ borderRadius: 22 }}>
             <p className="font-inter font-bold not-italic text-white" style={{ fontSize: 18, lineHeight: 'normal' }}>
               {index + 1}
             </p>
@@ -134,7 +130,7 @@ function EcoCard({
           <p className="w-full whitespace-pre-wrap not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]" style={{ color: '#4D4D4D' }}>
             {item.body}
           </p>
-          <p className="w-full whitespace-pre-wrap italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]" style={{ color: '#808080' }}>
+          <p className="w-full whitespace-pre-wrap italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]" style={{ color: '#D82525' }}>
             {item.note}
           </p>
         </div>
@@ -197,9 +193,18 @@ export default function ConnectedEcosystem() {
   return (
     <div ref={triggerRef} className="relative w-full">
       <div
-        className="relative h-screen w-full overflow-hidden bg-[#F5FAFF]"
+        className="relative h-screen w-full overflow-hidden"
         style={{ minHeight: '480px' }}
       >
+        {/* Background photo + top-to-bottom white→#576385 gradient overlay (32% opacity) */}
+        <div aria-hidden className="absolute inset-0">
+          <img src={ecoSectionBg} alt="" className="absolute size-full max-w-none object-cover" />
+          <div
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.32) 13.95%, rgba(87,99,133,0.32) 47.142%)' }}
+          />
+        </div>
+
         {/* Contain-fit 1440×1233 canvas below the 52px sticky header */}
         <div
           className="absolute left-1/2"
@@ -264,6 +269,7 @@ export default function ConnectedEcosystem() {
                   index={i + 3}
                   cardRef={(el) => (cardRefs.current[i + 3] = el)}
                   fixedWidth={341.333}
+                  fixedHeight={366}
                 />
               ))}
             </div>

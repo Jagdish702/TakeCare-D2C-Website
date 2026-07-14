@@ -33,7 +33,7 @@ export type { ProfileFormData };
  */
 
 const CANVAS_W = 1481;
-const DASH = '—';
+export const DASH = '—';
 
 export type CartPlan = {
   key: string;
@@ -42,17 +42,17 @@ export type CartPlan = {
   subPeriod: [string, string];
 } | null;
 
-function val(v?: string): string {
+export function val(v?: string): string {
   return v && v.trim() ? v.trim() : DASH;
 }
 
-function formatAddress(f: ProfileFormData): string | null {
+export function formatAddress(f: ProfileFormData): string | null {
   if (!f.address1?.trim()) return null;
   const line2 = [f.city, f.state, f.pincode].filter((s) => s?.trim()).join(', ');
   return [f.address1, line2, f.country].filter((s) => s?.trim()).join(', ');
 }
 
-function displayName(f: ProfileFormData | null): string {
+export function displayName(f: ProfileFormData | null): string {
   const name = [f?.firstName, f?.lastName].filter((s) => s?.trim()).join(' ').trim();
   return name || 'there';
 }
@@ -70,7 +70,7 @@ const EMPTY_ROW_CLS = 'w-full font-inter text-[16px] font-medium leading-[28px] 
 
 // ─── Primitives ──────────────────────────────────────────────────────────────
 
-function Divider() {
+export function Divider() {
   return <div className="h-px w-full shrink-0 bg-[#e5e5e5]" />;
 }
 
@@ -83,7 +83,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-type ChipVariant = 'success' | 'info' | 'detail' | 'danger';
+export type ChipVariant = 'success' | 'info' | 'detail' | 'danger';
 const CHIP_STYLES: Record<ChipVariant, string> = {
   success: 'bg-[#e8fff1] text-[#00b82e]',
   info: 'bg-[#e5f7fc] text-[#008eb1]',
@@ -91,7 +91,7 @@ const CHIP_STYLES: Record<ChipVariant, string> = {
   danger: 'bg-[#ffdbdb] text-[#d82525]',
 };
 
-function Chip({ text, variant }: { text: string; variant: ChipVariant }) {
+export function Chip({ text, variant }: { text: string; variant: ChipVariant }) {
   return (
     <span
       className={`inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-lg px-3 py-2 font-inter text-[12px] font-medium leading-[20px] tracking-[0.3883px] ${CHIP_STYLES[variant]}`}
@@ -102,7 +102,7 @@ function Chip({ text, variant }: { text: string; variant: ChipVariant }) {
 }
 
 // Transparent, fully round — header Edit/Add-photo icon buttons.
-function IconRoundButton({
+export function IconRoundButton({
   icon,
   width,
   height,
@@ -129,7 +129,7 @@ function IconRoundButton({
 }
 
 // Transparent, rounded-20 — General row trailing chevrons.
-function IconChevronButton() {
+export function IconChevronButton() {
   return (
     <button
       type="button"
@@ -143,7 +143,7 @@ function IconChevronButton() {
 }
 
 // Light-green rounded-xl badge — Notifications/General row leads.
-function IconGreenBadge({ icon, width, height }: { icon: string; width: number; height: number }) {
+export function IconGreenBadge({ icon, width, height }: { icon: string; width: number; height: number }) {
   return (
     <span
       className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#ebf8f3]"
@@ -154,7 +154,7 @@ function IconGreenBadge({ icon, width, height }: { icon: string; width: number; 
   );
 }
 
-function GhostButton({
+export function GhostButton({
   children,
   className,
   onClick,
@@ -175,7 +175,7 @@ function GhostButton({
   );
 }
 
-function TintedButton({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+export function TintedButton({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
   return (
     <button
       type="button"
@@ -188,7 +188,7 @@ function TintedButton({ children, onClick }: { children: React.ReactNode; onClic
   );
 }
 
-function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
+export function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
   return (
     <button
       type="button"
@@ -466,9 +466,9 @@ function OrdersCard({ cartPlan }: { cartPlan: CartPlan }) {
 
 // ─── Notifications ───────────────────────────────────────────────────────────
 
-type NotifKey = 'orderUpdates' | 'subscriptionAlerts' | 'healthReminders' | 'promotions';
+export type NotifKey = 'orderUpdates' | 'subscriptionAlerts' | 'healthReminders' | 'promotions';
 
-const NOTIF_ROWS: { key: NotifKey; icon: string; iw: number; ih: number; label: string }[] = [
+export const NOTIF_ROWS: { key: NotifKey; icon: string; iw: number; ih: number; label: string }[] = [
   { key: 'orderUpdates', icon: iconPackage, iw: 16.4, ih: 18, label: 'Order updates' },
   { key: 'subscriptionAlerts', icon: iconMembership, iw: 16.2, ih: 9.2, label: 'Subscription alerts' },
   { key: 'healthReminders', icon: iconHeartPulse, iw: 19.6, ih: 20.2, label: 'Health reminders' },
@@ -545,7 +545,7 @@ function GeneralCard() {
 
 // ─── Logout ──────────────────────────────────────────────────────────────────
 
-function LogoutButton({ onClick }: { onClick?: () => void }) {
+export function LogoutButton({ onClick }: { onClick?: () => void }) {
   return (
     <button
       type="button"

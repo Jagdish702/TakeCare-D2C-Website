@@ -34,6 +34,7 @@ import GetTakeCareStrip from './components/GetTakeCareStrip/GetTakeCareStrip';
 import ProfileModal from './components/ProfileModal/ProfileModal';
 import OTPModal from './components/OTPModal/OTPModal';
 import ProfileDashboard, { type ProfileFormData } from './components/ProfileDashboard/ProfileDashboard';
+import ProfileDashboardMobile from './components/ProfileDashboard/ProfileDashboardMobile';
 
 export default function App() {
   const [cartPlan, setCartPlan] = useState<any>(null);
@@ -107,12 +108,21 @@ export default function App() {
     <div className="bg-black">
       <Header onOpenCart={openCart} onOpenProfile={openProfile} />
       {showDashboard && (
-        <ProfileDashboard
-          formData={profileData}
-          cartPlan={cartPlan}
-          onBack={backToHome}
-          onLogout={backToHome}
-        />
+        isMobile ? (
+          <ProfileDashboardMobile
+            formData={profileData}
+            cartPlan={cartPlan}
+            onBack={backToHome}
+            onLogout={backToHome}
+          />
+        ) : (
+          <ProfileDashboard
+            formData={profileData}
+            cartPlan={cartPlan}
+            onBack={backToHome}
+            onLogout={backToHome}
+          />
+        )
       )}
       {/* Marketing homepage stays mounted (never unmounted) even while the
           dashboard is shown — several sections below run pinned GSAP
