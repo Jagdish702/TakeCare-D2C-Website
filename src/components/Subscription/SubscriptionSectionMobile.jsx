@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PrimaryButton from '../common/PrimaryButton';
-import CartPopup from './CartPopup';
+import CartPopupMobile from './CartPopupMobile';
 import { PLANS, PLAN_FEATURES } from './SubscriptionSection';
 
 /*
@@ -144,14 +144,14 @@ export default function SubscriptionSectionMobile({ onGetStarted, onOpenCart }) 
   return (
     <>
       {activePlan && (
-        <CartPopup
+        <CartPopupMobile
           plan={activePlan}
           onClose={() => setActivePlan(null)}
           onViewCart={() => { setActivePlan(null); onOpenCart?.(); }}
         />
       )}
       <div
-        id="subscription-plans-mobile"
+        id="subscription-plans"
         style={{
           width: '100%',
           background: SECTION_BG,

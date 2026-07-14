@@ -14,7 +14,11 @@ gsap.registerPlugin(ScrollTrigger);
 // so pins stay locked. Scoped to touch devices — desktop wheel/trackpad
 // scrolling doesn't have this failure mode and shouldn't be altered.
 if (window.matchMedia('(pointer: coarse)').matches) {
-  ScrollTrigger.normalizeScroll(true);
+  // allowNestedScroll: without it, normalizeScroll hijacks ALL touch
+  // scrolling for the pinned GSAP sections, so nested `overflow:auto`
+  // containers (CartDrawerMobile, CheckoutPageMobile, ProfileDashboard,
+  // AvailDiscounts' address dropdown, etc.) stop being scrollable on touch.
+  ScrollTrigger.normalizeScroll({ allowNestedScroll: true });
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

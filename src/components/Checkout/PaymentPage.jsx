@@ -15,7 +15,7 @@ import DisclaimerCard from '../Subscription/DisclaimerCard';
 const HEADER_H = 52;
 const FONT = 'Inter, sans-serif';
 
-const PAYMENT_OPTIONS = [
+export const PAYMENT_OPTIONS = [
   { key: 'all', label: 'Pay via Debit/Credit/Netbanking/UPI', icons: ['visa', 'mastercard', 'paypal', 'upi'] },
   { key: 'debit', label: 'Pay via Debit Card', icons: ['visa', 'mastercard', 'paypal'] },
   { key: 'credit', label: 'Pay via Credit Card', icons: ['visa', 'mastercard', 'paypal'] },
@@ -25,7 +25,7 @@ const PAYMENT_OPTIONS = [
   { key: 'cod', label: 'Cash on delivery', subtext: '(Not available for subscription orders)', icons: ['cash'] },
 ];
 
-const ICON_SRC = {
+export const ICON_SRC = {
   visa: '/assets/checkout/pay-visa.png',
   mastercard: '/assets/checkout/pay-mastercard.png',
   paypal: '/assets/checkout/pay-paypal.png',
@@ -36,7 +36,7 @@ const ICON_SRC = {
 
 // Figma's per-icon sizes (image 107/108/109/111 — same assets/dims reused
 // in CheckoutSummaryPanel's payment-logos row).
-const ICON_SIZE = {
+export const ICON_SIZE = {
   visa: { width: 40.091, height: 17.621 },
   mastercard: { width: 30.273, height: 18 },
   paypal: { width: 30.273, height: 18 },
@@ -45,7 +45,7 @@ const ICON_SIZE = {
   netbanking: { width: 30, height: 16 },
 };
 
-function CashIcon() {
+export function CashIcon() {
   return (
     <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
       <path d="M5 11H2C1.73478 11 1.48043 10.8946 1.29289 10.7071C1.10536 10.5196 1 10.2652 1 10V2C1 1.73478 1.10536 1.48043 1.29289 1.29289C1.48043 1.10536 1.73478 1 2 1H14C14.2652 1 14.5196 1.10536 14.7071 1.29289C14.8946 1.48043 15 1.73478 15 2V5" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -56,7 +56,7 @@ function CashIcon() {
 }
 
 // Info-circle icon for the "No duplicate charges" disclaimer (Figma "Alert Circle").
-function AlertCircleIcon() {
+export function AlertCircleIcon() {
   return (
     <svg width="14.6667" height="14.6667" viewBox="0 0 14.6667 14.6667" fill="none">
       <path

@@ -21,9 +21,15 @@ import DownloadAppSectionMobile from './components/DownloadApp/DownloadAppSectio
 import SubscriptionSection from './components/Subscription/SubscriptionSection';
 import SubscriptionSectionMobile from './components/Subscription/SubscriptionSectionMobile';
 import CartDrawer from './components/Subscription/CartDrawer';
+import CartDrawerMobile from './components/Subscription/CartDrawerMobile';
 import CheckoutPage from './components/Checkout/CheckoutPage';
+import CheckoutPageMobile from './components/Checkout/CheckoutPageMobile';
 import ShippingDetailsPage from './components/Checkout/ShippingDetailsPage';
+import ShippingDetailsPageMobile from './components/Checkout/ShippingDetailsPageMobile';
 import PaymentPage from './components/Checkout/PaymentPage';
+import PaymentPageMobile from './components/Checkout/PaymentPageMobile';
+import FAQSection from './components/FAQ/FAQSection';
+import FAQSectionMobile from './components/mobile/FAQSectionMobile';
 import GetTakeCareStrip from './components/GetTakeCareStrip/GetTakeCareStrip';
 import ProfileModal from './components/ProfileModal/ProfileModal';
 import OTPModal from './components/OTPModal/OTPModal';
@@ -141,29 +147,62 @@ export default function App() {
         ) : (
           <SubscriptionSection onGetStarted={handleGetStarted} onOpenCart={openCart} />
         )}
+        {isMobile ? <FAQSectionMobile /> : <FAQSection />}
         {!isMobile && <GetTakeCareStrip />}
       </div>
       {showSetupFlowPage && <SetupRefillFlowPage onBackHome={closeSetupFlowPage} />}
-      <CartDrawer
-        plan={cartPlan}
-        isOpen={cartOpen}
-        onClose={closeCart}
-        onCheckout={openCheckout}
-      />
-      <CheckoutPage
-        plan={cartPlan}
-        onBack={closeCheckout}
-        onContinue={continueToShipping}
-        isOpen={checkoutStep === 'summary'}
-      />
-      <ShippingDetailsPage isOpen={checkoutStep === 'shipping'} onContinue={continueToPayment} />
-      <PaymentPage
-        plan={cartPlan}
-        shippingInfo={shippingInfo}
-        isOpen={checkoutStep === 'payment'}
-        onBack={backToShipping}
-        onContinue={() => {}}
-      />
+      {isMobile ? (
+        <CartDrawerMobile
+          plan={cartPlan}
+          isOpen={cartOpen}
+          onClose={closeCart}
+          onCheckout={openCheckout}
+        />
+      ) : (
+        <CartDrawer
+          plan={cartPlan}
+          isOpen={cartOpen}
+          onClose={closeCart}
+          onCheckout={openCheckout}
+        />
+      )}
+      {isMobile ? (
+        <CheckoutPageMobile
+          plan={cartPlan}
+          onBack={closeCheckout}
+          onContinue={continueToShipping}
+          isOpen={checkoutStep === 'summary'}
+        />
+      ) : (
+        <CheckoutPage
+          plan={cartPlan}
+          onBack={closeCheckout}
+          onContinue={continueToShipping}
+          isOpen={checkoutStep === 'summary'}
+        />
+      )}
+      {isMobile ? (
+        <ShippingDetailsPageMobile isOpen={checkoutStep === 'shipping'} onContinue={continueToPayment} />
+      ) : (
+        <ShippingDetailsPage isOpen={checkoutStep === 'shipping'} onContinue={continueToPayment} />
+      )}
+      {isMobile ? (
+        <PaymentPageMobile
+          plan={cartPlan}
+          shippingInfo={shippingInfo}
+          isOpen={checkoutStep === 'payment'}
+          onBack={backToShipping}
+          onContinue={() => {}}
+        />
+      ) : (
+        <PaymentPage
+          plan={cartPlan}
+          shippingInfo={shippingInfo}
+          isOpen={checkoutStep === 'payment'}
+          onBack={backToShipping}
+          onContinue={() => {}}
+        />
+      )}
       {profileStep === 'profile' && (
         <ProfileModal onClose={closeProfileFlow} onRequestOTP={handleRequestOTP} />
       )}
