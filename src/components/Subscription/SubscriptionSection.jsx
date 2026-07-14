@@ -17,13 +17,13 @@ const CARD_H   = 776;
 const SECTION_BG =
   'radial-gradient(ellipse 50% 50% at 50% 50%, #F2FBFD 0%, #FFFFFF 100%)';
 
-const PLAN_FEATURES = [
+export const PLAN_FEATURES = [
   { icon: '/assets/subscription/Mobile.svg',       text: 'Free on boarding and set up.' },
   { icon: '/assets/subscription/warrenty.svg',     text: 'One year warranty on tablet dispenser.' },
   { icon: '/assets/subscription/shield check.svg', text: 'Lifetime CureBay command Centre support.' },
 ];
 
-const PLANS = [
+export const PLANS = [
   {
     key: 'monthly',
     title: 'Monthly plan',

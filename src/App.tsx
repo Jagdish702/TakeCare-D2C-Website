@@ -19,6 +19,7 @@ import NobodyFallsSection from './components/NobodyFalls/NobodyFallsSection';
 import DownloadAppSection from './components/DownloadApp/DownloadAppSection';
 import DownloadAppSectionMobile from './components/DownloadApp/DownloadAppSectionMobile';
 import SubscriptionSection from './components/Subscription/SubscriptionSection';
+import SubscriptionSectionMobile from './components/Subscription/SubscriptionSectionMobile';
 import CartDrawer from './components/Subscription/CartDrawer';
 import CheckoutPage from './components/Checkout/CheckoutPage';
 import ShippingDetailsPage from './components/Checkout/ShippingDetailsPage';
@@ -135,7 +136,11 @@ export default function App() {
           )}
         </ErrorBoundary>
         {isMobile ? <DownloadAppSectionMobile /> : <DownloadAppSection />}
-        <SubscriptionSection onGetStarted={handleGetStarted} onOpenCart={openCart} />
+        {isMobile ? (
+          <SubscriptionSectionMobile onGetStarted={handleGetStarted} onOpenCart={openCart} />
+        ) : (
+          <SubscriptionSection onGetStarted={handleGetStarted} onOpenCart={openCart} />
+        )}
         {!isMobile && <GetTakeCareStrip />}
       </div>
       {showSetupFlowPage && <SetupRefillFlowPage onBackHome={closeSetupFlowPage} />}
