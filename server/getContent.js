@@ -107,5 +107,9 @@ export function getContent() {
       notificationRows: all('SELECT * FROM dashboard_notification_rows ORDER BY sort_order'),
       generalCard: one('SELECT * FROM dashboard_general_card WHERE id = 1'),
     },
+
+    images: Object.fromEntries(
+      all('SELECT image_key, url FROM image_assets').map((row) => [row.image_key, row.url]),
+    ),
   };
 }

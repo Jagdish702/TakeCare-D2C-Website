@@ -7,10 +7,8 @@
 
 import { useContent } from '../../context/ContentContext';
 
-const PHONE_FRAME_IMG = '/assets/download-app/phone-frame.png';
-
 export default function DownloadAppSectionMobile() {
-  const { downloadApp } = useContent();
+  const { downloadApp, images } = useContent();
   const {
     headline,
     subheading_line1: subheadingLine1,
@@ -69,7 +67,7 @@ export default function DownloadAppSectionMobile() {
         >
           <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
             <img
-              src={PHONE_FRAME_IMG}
+              src={images['download-app-phone-frame']}
               alt=""
               draggable={false}
               style={{ position: 'absolute', width: '100%', height: '162.06%', top: '-0.51%', left: '0.05%', maxWidth: 'none', objectFit: 'contain' }}

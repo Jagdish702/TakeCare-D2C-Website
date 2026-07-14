@@ -10,14 +10,12 @@ const CANVAS_W = 1440;
 const CANVAS_H = 1100;
 
 // State 0: annotated front view
-const SPEC_IMG = '/assets/specifications/spec-device.png';
 const SPEC_W   = 440.816;
 const SPEC_H   = 600;
 const SPEC_L   = (CANVAS_W - SPEC_W) / 2;  // 499.592
 const SPEC_T   = 298;
 
 // States 1–4: touchscreen close-up
-const STATE1_IMG   = '/assets/specifications/spec-state1.png';
 const STATE1_SCALE = 979 / SPEC_W;  // 2.2207
 
 // State 3: device sits 60px below grid bottom
@@ -25,14 +23,12 @@ const STATE3_Y = 387;
 
 // State 5–6: angled product photo
 // IMG6_Y: Figma outer h=1100, items-center, right-col h=1246 → (1100-1246)/2 = -73
-const STATE6_IMG = '/assets/specifications/spec-state6.png';
 const IMG6_W     = 979;
 const IMG6_H     = 1332;
 const IMG6_Y     = -73;
 
 // State 9: bottom/side device view
 // Figma: center at canvas (732.5, 1395) → left=46, top=461, 1373×1868
-const STATE9_IMG   = '/assets/specifications/spec-state9.png';
 const IMG9_W       = 1373;
 const IMG9_H       = 1868;
 const IMG9_L       = Math.round(720 + 12.5 - IMG9_W / 2);  // 46
@@ -102,7 +98,11 @@ function StatItem({ number, unit, label }) {
 }
 
 export default function SpecificationsSection() {
-  const { specifications } = useContent();
+  const { specifications, images } = useContent();
+  const SPEC_IMG   = images['specifications-spec-device'];
+  const STATE1_IMG = images['specifications-spec-state1'];
+  const STATE6_IMG = images['specifications-spec-state6'];
+  const STATE9_IMG = images['specifications-spec-state9'];
   const cardsByState = (key) => specifications.cards.filter((c) => c.state_key === key);
   const state8ByIcon = Object.fromEntries(cardsByState('state8').map((c) => [c.icon_key, c]));
   const CARDS = cardsByState('state3').map((row) => {

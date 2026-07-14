@@ -21,7 +21,7 @@ const SECTION_BG =
 
 
 export default function DownloadAppSection() {
-  const { downloadApp } = useContent();
+  const { downloadApp, images } = useContent();
   const {
     headline,
     subheading_line1: subheadingLine1,
@@ -246,7 +246,7 @@ export default function DownloadAppSection() {
               }}
             >
               <img
-                src="/assets/download-app/phone-frame.png"
+                src={images['download-app-phone-frame']}
                 alt=""
                 draggable={false}
                 style={{

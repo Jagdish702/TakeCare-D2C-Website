@@ -1,5 +1,3 @@
-import productImg from '../../assets/hero-product.png';
-import mobileImg from '../../assets/hero-mobile.png';
 import { useContent } from '../../context/ContentContext';
 
 /**
@@ -10,7 +8,7 @@ import { useContent } from '../../context/ContentContext';
  * desktop `GetTakeCareStrip` bottom pill (Figma "Type=Web" sibling).
  */
 export default function GetTakeCareBarMobile() {
-  const { header } = useContent();
+  const { header, images } = useContent();
   const { promoStrip } = header;
 
   const scrollToPlans = () => {
@@ -21,7 +19,7 @@ export default function GetTakeCareBarMobile() {
     <div className="flex w-full items-center justify-between">
       <div className="flex shrink-0 items-center" style={{ gap: '8px' }}>
         <div className="relative shrink-0" style={{ width: '21.787px', height: '31.757px' }}>
-          <img src={productImg} alt="" className="pointer-events-none absolute inset-0 size-full max-w-none object-cover" />
+          <img src={images['hero-product']} alt="" className="pointer-events-none absolute inset-0 size-full max-w-none object-cover" />
         </div>
         <p
           className="shrink-0 whitespace-nowrap font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] [word-break:break-word]"
@@ -31,7 +29,7 @@ export default function GetTakeCareBarMobile() {
         </p>
         <div className="relative shrink-0 overflow-hidden" style={{ width: '15.509px', height: '32px' }}>
           <img
-            src={mobileImg}
+            src={images['hero-mobile']}
             alt=""
             className="pointer-events-none absolute max-w-none"
             style={{ left: '-0.26%', top: '-0.61%', width: '101.79%', height: '100.61%' }}

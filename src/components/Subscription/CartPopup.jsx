@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
+import { useContent } from '../../context/ContentContext';
 
 export default function CartPopup({ plan, onClose, onViewCart }) {
+  const { images } = useContent();
   useEffect(() => {
     const t = setTimeout(onClose, 3000);
     return () => clearTimeout(t);
@@ -49,7 +51,7 @@ export default function CartPopup({ plan, onClose, onViewCart }) {
         }}
       >
         <img
-          src="/assets/subscription/device.png"
+          src={images['subscription-device']}
           alt="TakeCare device"
           draggable={false}
           style={{

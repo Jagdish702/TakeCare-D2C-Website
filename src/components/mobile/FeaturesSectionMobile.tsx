@@ -2,15 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { buildTabs } from '../Features/FeaturesSection';
 import { useContent } from '../../context/ContentContext';
 
-// Real Figma mobile exports (355×~395, one per tab, same order as TABS) —
-// dropped into public/assets/mobile by hand since Figma's Dev Mode MCP asset
-// directory wasn't whitelisted for automatic download.
-const MOBILE_IMAGES = [
-  '/assets/mobile/Features_mobile%20doctor.png',
-  '/assets/mobile/Features_mobile%20medicines.png',
-  '/assets/mobile/Features_mobile%20lb%20test.png',
-  '/assets/mobile/Features_mobile%20sos.png',
-  '/assets/mobile/Features_mobile%20dose%20management.png',
+// Mobile hero images (355×~395, one per tab, same order as TABS) — now sourced
+// from the DB `images` map (see useContent()) via these image keys.
+const MOBILE_IMAGE_KEYS = [
+  'mobile-features-mobile-doctor',
+  'mobile-features-mobile-medicines',
+  'mobile-features-mobile-lb-test',
+  'mobile-features-mobile-sos',
+  'mobile-features-mobile-dose-management',
 ];
 
 /**
@@ -23,8 +22,9 @@ const MOBILE_IMAGES = [
  * mockup images (MOBILE_IMAGES, portrait crops) differ.
  */
 export default function FeaturesSectionMobile() {
-  const { features } = useContent();
-  const TABS = buildTabs(features.tabs);
+  const { features, images } = useContent();
+  const TABS = buildTabs(features.tabs, images);
+  const MOBILE_IMAGES = MOBILE_IMAGE_KEYS.map((key) => images[key]);
 
   const [activeTab, setActiveTab] = useState(0);
   const [displayTab, setDisplayTab] = useState(0);
@@ -36,7 +36,7 @@ export default function FeaturesSectionMobile() {
       const img = new Image();
       img.src = src;
     });
-  }, []);
+  }, [images]);
 
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current);

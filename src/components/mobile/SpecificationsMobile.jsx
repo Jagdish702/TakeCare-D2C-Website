@@ -11,11 +11,6 @@
 
 import { useContent } from '../../context/ContentContext';
 
-const SPEC_IMG_DIMENSIONED = '/assets/specifications/spec-device-mobile.png';
-const SPEC_IMG_FRONT = '/assets/specifications/spec-state1.png';
-const SPEC_IMG_EXPLODED = '/assets/specifications/spec-state6.png';
-const SPEC_IMG_ANGLED = '/assets/specifications/spec-state9.png';
-
 const FONT = 'Inter, sans-serif';
 const textTrim = '[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]';
 
@@ -122,7 +117,11 @@ function ConnectivityCard({ icon, title, body, bodyPlaceholder }) {
 }
 
 export default function SpecificationsMobile() {
-  const { specifications } = useContent();
+  const { specifications, images } = useContent();
+  const SPEC_IMG_DIMENSIONED = images['specifications-spec-device-mobile'];
+  const SPEC_IMG_FRONT = images['specifications-spec-state1'];
+  const SPEC_IMG_EXPLODED = images['specifications-spec-state6'];
+  const SPEC_IMG_ANGLED = images['specifications-spec-state9'];
   const FEATURE_CARDS = specifications.cards
     .filter((c) => c.state_key === 'state3')
     .map((row) => {

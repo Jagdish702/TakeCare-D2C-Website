@@ -4,18 +4,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { useContent } from '../../context/ContentContext';
 import { useFitScale } from '../../hooks/useFitScale';
-import bgNight from '../../assets/figma-hero/bg-night.png';
-import bgLiving from '../../assets/figma-hero/bg-living.png';
-import productImg from '../../assets/figma-hero/product.png';
 import productShadowImg from '../../assets/figma-hero/product-shadow.svg';
 import qrChipImg from '../../assets/figma-hero/qr-chip.png';
 import iconApple from '../../assets/figma-hero/icon-apple.svg';
 import iconAndroid from '../../assets/figma-hero/icon-android.svg';
-import phoneAppImg from '../../assets/figma-hero/phone-app.png';
-import ecoCardDispenser from '../../assets/figma-hero/eco-card-dispenser.png';
-import ecoCardApp from '../../assets/figma-hero/eco-card-app.png';
-import ecoCardCurebay from '../../assets/figma-hero/eco-card-curebay.png';
-import ecoCardCommand from '../../assets/figma-hero/eco-card-command.png';
 import madeInIndiaImg from '../../assets/made in india IMG.png';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -90,7 +82,7 @@ const ECO_CARD_LABEL_STYLE: React.CSSProperties = {
 };
 
 export default function Hero() {
-  const { hero } = useContent();
+  const { hero, images } = useContent();
   // Ecosystem card labels — image assets stay local; only the label text and
   // its order come from the DB (already sort_order-ascending).
   const ecosystemCards = [...hero.ecosystemCards].sort((a, b) => a.sort_order - b.sort_order);
@@ -328,7 +320,7 @@ export default function Hero() {
           aria-hidden
         >
           <img
-            src={bgLiving}
+            src={images['figma-hero-bg-living']}
             alt=""
             className="absolute inset-0 size-full max-w-none object-cover"
           />
@@ -346,7 +338,7 @@ export default function Hero() {
         {/* ── BG Layer 1: dark night bedroom (states 0-2) ────────────────── */}
         <div ref={bgNightRef} className="pointer-events-none absolute inset-0" aria-hidden>
           <img
-            src={bgNight}
+            src={images['figma-hero-bg-night']}
             alt=""
             className="absolute inset-0 size-full max-w-none object-cover"
           />
@@ -454,7 +446,7 @@ export default function Hero() {
         >
           <img
             ref={productImgRef}
-            src={productImg}
+            src={images['figma-hero-product']}
             alt="Take Care smart medicine dispenser"
             className="absolute inset-0 size-full max-w-none object-cover object-bottom"
           />
@@ -605,28 +597,28 @@ export default function Hero() {
           >
             {/* Smart Dispenser */}
             <div className="relative flex items-end justify-center self-stretch overflow-hidden" style={{ borderRadius: 32, paddingTop: 16, paddingBottom: 16 }}>
-              <img src={ecoCardDispenser} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
+              <img src={images['figma-hero-eco-card-dispenser']} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
               <p className={ECO_CARD_LABEL_CLASS} style={ECO_CARD_LABEL_STYLE}>
                 {ecosystemCards[0].label}
               </p>
             </div>
             {/* Takecare App */}
             <div className="relative flex items-end justify-center self-stretch overflow-hidden" style={{ borderRadius: 32, paddingTop: 16, paddingBottom: 16 }}>
-              <img src={ecoCardApp} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
+              <img src={images['figma-hero-eco-card-app']} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
               <p className={ECO_CARD_LABEL_CLASS} style={ECO_CARD_LABEL_STYLE}>
                 {ecosystemCards[1].label}
               </p>
             </div>
             {/* CureBay Services */}
             <div className="relative flex items-end justify-center self-stretch overflow-hidden" style={{ borderRadius: 32, paddingTop: 16, paddingBottom: 16 }}>
-              <img src={ecoCardCurebay} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
+              <img src={images['figma-hero-eco-card-curebay']} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
               <p className={ECO_CARD_LABEL_CLASS} style={ECO_CARD_LABEL_STYLE}>
                 {ecosystemCards[2].label}
               </p>
             </div>
             {/* 24×7 Command Centre */}
             <div className="relative flex items-end justify-center self-stretch overflow-hidden" style={{ borderRadius: 32, paddingTop: 16, paddingBottom: 16 }}>
-              <img src={ecoCardCommand} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
+              <img src={images['figma-hero-eco-card-command']} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
               <p className={ECO_CARD_LABEL_CLASS} style={ECO_CARD_LABEL_STYLE}>
                 {ecosystemCards[3].label}
               </p>
@@ -664,7 +656,7 @@ export default function Hero() {
             style={{ width: '242px', height: '495px' }}
           >
             <img
-              src={phoneAppImg}
+              src={images['figma-hero-phone-app']}
               alt="TakeCare mobile app"
               className="absolute max-w-none"
               style={{ height: '101.12%', width: '99.75%', left: '0.13%', top: '-0.64%' }}

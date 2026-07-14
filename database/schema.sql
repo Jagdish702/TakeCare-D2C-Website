@@ -593,3 +593,22 @@ CREATE TABLE dashboard_general_card (
     privacy_label     TEXT NOT NULL,   -- "Privacy & data"
     footer_text       TEXT NOT NULL
 );
+
+-- ============================================================================
+-- 14. IMAGE ASSETS  (photo/background/product/scene images, GCP Storage URLs)
+-- ============================================================================
+
+-- Every photographic/illustrative image on the site (backgrounds, product &
+-- device renders, phone/app mockups, scene illustrations). Deliberately
+-- excludes small UI icon files, logos, badges, and QR codes — those stay as
+-- local imports in the codebase, same convention as inline SVG icon
+-- components. image_key is a stable symbolic reference the frontend maps to
+-- a <img src>; url is a public Google Cloud Storage object URL
+-- (https://storage.googleapis.com/<bucket>/<path>) that starts out as a
+-- placeholder mirroring the current local asset path and gets overwritten
+-- once the real files are uploaded to the real bucket.
+CREATE TABLE image_assets (
+    image_key   TEXT PRIMARY KEY,
+    url         TEXT NOT NULL,
+    updated_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);

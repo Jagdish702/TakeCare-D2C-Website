@@ -31,28 +31,6 @@ function toBox(offsetX, offsetY, w, h, br = 0) {
   return { left: CX + offsetX - w / 2, top: CY + offsetY - h / 2, width: w, height: h, borderRadius: br };
 }
 
-const ASSETS = {
-  bg:        '/assets/setup-refill/Set_&_refill_reimagined_MOBILE blue bg.png',
-  bg18:      '/assets/setup-refill/Set_&_refill_reimagined_MOBILE green bg img.png',
-  rxCard:    '/assets/setup-refill/rx-card.png',
-  phone1:    '/assets/setup-refill/phone1.png',
-  phone2:    '/assets/setup-refill/phone2-s2.png',
-  phone3:    '/assets/setup-refill/phone3-s3.png',
-  phone4:    '/assets/setup-refill/phone4-s4.png',
-  person6:   '/assets/setup-refill/person-s6.png',
-  dispenserEmpty:  '/assets/setup-refill/pill-dispenser-s8.png',
-  dispenserFilled: '/assets/setup-refill/pill-dispenser-s9.png',
-  phone10:   '/assets/setup-refill/phone-s10.png',
-  phone13:   '/assets/setup-refill/phone-s13.png',
-  dispenser14: '/assets/setup-refill/dispenser-s14.png',
-  phone14:   '/assets/setup-refill/phone-s14.png',
-  dispenser15: '/assets/setup-refill/dispenser-s15.png',
-  phone15:   '/assets/setup-refill/phone-s15.png',
-  phone16:   '/assets/setup-refill/phone-s16.png',
-  phone18:   '/assets/setup-refill/phone-s18.png',
-  phone20:   '/assets/setup-refill/phone-s20.png',
-};
-
 const FONT = 'Inter, sans-serif';
 const HEADING_STYLE = { fontFamily: FONT, fontWeight: 500, fontSize: 24, lineHeight: '32px', color: '#000' };
 const BODY_STYLE = { fontFamily: FONT, fontWeight: 300, fontSize: 20, lineHeight: '28px', letterSpacing: '0.324px', color: '#000' };
@@ -130,7 +108,28 @@ function CoverImg({ innerRef, src, extra }) {
 }
 
 export default function SetupRefillJourneyMobile() {
-  const { setupRefillJourney } = useContent();
+  const { setupRefillJourney, images } = useContent();
+  const ASSETS = {
+    bg:        images['setup-refill-set-refill-reimagined-mobile-blue-bg'],
+    bg18:      images['setup-refill-set-refill-reimagined-mobile-green-bg-img'],
+    rxCard:    images['setup-refill-rx-card'],
+    phone1:    images['setup-refill-phone1'],
+    phone2:    images['setup-refill-phone2-s2'],
+    phone3:    images['setup-refill-phone3-s3'],
+    phone4:    images['setup-refill-phone4-s4'],
+    person6:   images['setup-refill-person-s6'],
+    dispenserEmpty:  images['setup-refill-pill-dispenser-s8'],
+    dispenserFilled: images['setup-refill-pill-dispenser-s9'],
+    phone10:   images['setup-refill-phone-s10'],
+    phone13:   images['setup-refill-phone-s13'],
+    dispenser14: images['setup-refill-dispenser-s14'],
+    phone14:   images['setup-refill-phone-s14'],
+    dispenser15: images['setup-refill-dispenser-s15'],
+    phone15:   images['setup-refill-phone-s15'],
+    phone16:   images['setup-refill-phone-s16'],
+    phone18:   images['setup-refill-phone-s18'],
+    phone20:   images['setup-refill-phone-s20'],
+  };
   const stepByKey = Object.fromEntries(setupRefillJourney.steps.map((s) => [s.step_key, s]));
   const textByKey = (step) => Object.fromEntries(step.texts.map((t) => [t.text_key, t.body]));
   const scheduleTexts = textByKey(stepByKey.schedule);

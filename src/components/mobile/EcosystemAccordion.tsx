@@ -18,25 +18,31 @@ type EcoItem = { key: string; title: string; body: string; note: string; plates:
 
 // Image assets per card — not part of the DB content, kept local and matched
 // to the DB rows by item_key in buildItems() below.
-const PLATES_BY_KEY: Record<string, Plate[]> = {
-  'connected-to-curebay': [{ src: '/assets/mobile/plate-curebay-connected.png', className: 'object-cover' }],
-  'works-24x7': [{ src: '/assets/mobile/plate-247.png', className: 'object-cover' }],
-  // Figma layers a transparent cut-out photo over a shared base image.
-  '30-day-slots': [
-    { src: '/assets/mobile/plate-base.jpg', className: 'object-cover' },
-    {
-      src: '/assets/mobile/plate-30day-overlay.webp',
-      style: { height: '125.73%', left: '0.07%', top: '-25.95%', width: '100%' },
-    },
-  ],
-  'medical-grade-build': [
-    { src: '/assets/mobile/plate-base.jpg', className: 'object-cover' },
-    { src: '/assets/mobile/plate-medical-overlay.webp', className: 'object-cover' },
-  ],
-  'magnetic-lock': [{ src: '/assets/mobile/plate-magnetic-lock.jpg', className: 'object-cover' }],
-};
+function getPlatesByKey(images: Record<string, string>): Record<string, Plate[]> {
+  return {
+    'connected-to-curebay': [{ src: images['mobile-plate-curebay-connected'], className: 'object-cover' }],
+    'works-24x7': [{ src: images['mobile-plate-247'], className: 'object-cover' }],
+    // Figma layers a transparent cut-out photo over a shared base image.
+    '30-day-slots': [
+      { src: images['mobile-plate-base'], className: 'object-cover' },
+      {
+        src: images['mobile-plate-30day-overlay'],
+        style: { height: '125.73%', left: '0.07%', top: '-25.95%', width: '100%' },
+      },
+    ],
+    'medical-grade-build': [
+      { src: images['mobile-plate-base'], className: 'object-cover' },
+      { src: images['mobile-plate-medical-overlay'], className: 'object-cover' },
+    ],
+    'magnetic-lock': [{ src: images['mobile-plate-magnetic-lock'], className: 'object-cover' }],
+  };
+}
 
-function buildItems(dbItems: Array<{ item_key: string; title: string; body: string; note: string; sort_order: number }>): EcoItem[] {
+function buildItems(
+  dbItems: Array<{ item_key: string; title: string; body: string; note: string; sort_order: number }>,
+  images: Record<string, string>,
+): EcoItem[] {
+  const platesByKey = getPlatesByKey(images);
   return [...dbItems]
     .sort((a, b) => a.sort_order - b.sort_order)
     .map((i) => ({
@@ -44,7 +50,7 @@ function buildItems(dbItems: Array<{ item_key: string; title: string; body: stri
       title: i.title,
       body: i.body,
       note: i.note,
-      plates: PLATES_BY_KEY[i.item_key],
+      plates: platesByKey[i.item_key],
     }));
 }
 
@@ -55,8 +61,8 @@ const CARD_SHADOW_INACTIVE =
   '0px 4px 12px rgba(0,65,114,0.08), inset 0px 0px 2px rgba(0,65,114,0.16)';
 
 export default function EcosystemAccordion() {
-  const { hero } = useContent();
-  const ITEMS = buildItems(hero.ecosystemItems);
+  const { hero, images } = useContent();
+  const ITEMS = buildItems(hero.ecosystemItems, images);
 
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -65,7 +71,7 @@ export default function EcosystemAccordion() {
       {/* Background photo (mobile-specific tall crop, Figma node 13063:4422 "State=12") +
           top-to-bottom white→#70737C gradient overlay at 32% opacity */}
       <div aria-hidden className="absolute inset-0">
-        <img src="/assets/mobile/eco-section-bg.png" alt="" className="absolute size-full max-w-none object-cover" />
+        <img src={images['mobile-eco-section-bg']} alt="" className="absolute size-full max-w-none object-cover" />
         <div
           className="absolute inset-0"
           style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.32) 21.211%, rgba(112,115,124,0.32) 39%)' }}

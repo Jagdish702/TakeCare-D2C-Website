@@ -1,5 +1,4 @@
 import { useState, type Ref } from 'react';
-import pillboxImg from '../../assets/mumdose-pillbox.png';
 import clapImg from '../../assets/mumdose-clap.svg';
 import { useContent } from '../../context/ContentContext';
 
@@ -14,7 +13,7 @@ interface AppreciationCardProps {
 }
 
 export default function AppreciationCard({ glowRef }: AppreciationCardProps = {}) {
-  const { mumTookDose } = useContent();
+  const { mumTookDose, images } = useContent();
   const { appreciationCard } = mumTookDose;
   const [hovered, setHovered] = useState(false);
   const [appreciated, setAppreciated] = useState(false);
@@ -36,7 +35,7 @@ export default function AppreciationCard({ glowRef }: AppreciationCardProps = {}
       <div className="flex gap-[15px] items-center w-full">
         <div className="relative shrink-0 w-[60px] h-[60px]">
           <img
-            src={pillboxImg}
+            src={images['mumdose-pillbox']}
             alt="TakeCare pill box"
             className="absolute inset-0 w-full h-full object-contain"
           />

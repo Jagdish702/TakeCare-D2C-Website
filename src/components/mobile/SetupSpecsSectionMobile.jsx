@@ -4,11 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { useContent } from '../../context/ContentContext';
 import iconChevronRight from '../../assets/profile-dashboard/icon-chevron-right-24.svg';
-import rxDocImg from '../../assets/setup-specs/rx-document.png';
-import phoneFillMedsImg from '../../assets/setup-specs/phone-fill-medicines.png';
-import phoneDailyScheduleImg from '../../assets/setup-specs/phone-daily-schedule.png';
-import phoneAllotmentImg from '../../assets/setup-specs/phone-allotment-success.png';
-import deviceSpecsImg from '../../assets/setup-specs/device-specs-hero.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -59,7 +54,12 @@ function cardLeft(w) { return CENTER_X - w / 2; }
 function cardTop(h) { return CARD_CENTER_Y - h / 2; }
 
 export default function SetupSpecsSectionMobile({ onExploreFlow }) {
-  const { setupSpecs } = useContent();
+  const { setupSpecs, images } = useContent();
+  const rxDocImg = images['setup-specs-rx-document'];
+  const phoneFillMedsImg = images['setup-specs-phone-fill-medicines'];
+  const phoneDailyScheduleImg = images['setup-specs-phone-daily-schedule'];
+  const phoneAllotmentImg = images['setup-specs-phone-allotment-success'];
+  const deviceSpecsImg = images['setup-specs-device-specs-hero'];
   const COPY = Object.fromEntries(
     setupSpecs.copy.map((row) => [row.act_key, {
       eyebrow: row.eyebrow,

@@ -1,6 +1,4 @@
 import { useFitScale } from '../../hooks/useFitScale';
-import productImg from '../../assets/hero-product.png';
-import mobileImg from '../../assets/hero-mobile.png';
 import { useContent } from '../../context/ContentContext';
 
 /*
@@ -9,7 +7,7 @@ import { useContent } from '../../context/ContentContext';
   straight to the 2-card subscription plans (#subscription-plans).
 */
 export default function GetTakeCareStrip() {
-  const { header } = useContent();
+  const { header, images } = useContent();
   const { promoStrip } = header;
 
   // Card is a fixed 727px-wide design; shrink it (from the bottom edge) on
@@ -41,7 +39,7 @@ export default function GetTakeCareStrip() {
       <div className="flex shrink-0 items-center px-2" style={{ gap: '8px' }}>
         <div className="relative shrink-0" style={{ width: '32.93px', height: '48px' }}>
           <img
-            src={productImg}
+            src={images['hero-product']}
             alt=""
             className="pointer-events-none absolute inset-0 size-full max-w-none object-cover"
           />
@@ -61,7 +59,7 @@ export default function GetTakeCareStrip() {
         </p>
         <div className="relative shrink-0 overflow-hidden" style={{ width: '23.442px', height: '48.367px' }}>
           <img
-            src={mobileImg}
+            src={images['hero-mobile']}
             alt=""
             className="pointer-events-none absolute max-w-none"
             style={{ left: '-0.26%', top: '-0.61%', width: '101.79%', height: '100.61%' }}

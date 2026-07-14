@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useFitScale } from '../../hooks/useFitScale';
-import mumdoseBg from '../../assets/mumdose-bg.png';
 import AppreciationCard from '../MumTookDose/AppreciationCard';
 import { useContent } from '../../context/ContentContext';
 
@@ -33,7 +32,7 @@ const CARD_SCALE = CARD_W / CARD_NATIVE_W;
  * component so copy/visuals stay in lockstep; only layout and scale differ.
  */
 export default function MumTookDoseMobile() {
-  const { mumTookDose } = useContent();
+  const { mumTookDose, images } = useContent();
   const triggerRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
@@ -106,7 +105,7 @@ export default function MumTookDoseMobile() {
           style={{ height: '51.7%' }}
         >
           <img
-            src={mumdoseBg}
+            src={images['mumdose-bg']}
             alt=""
             className="absolute inset-0 h-full w-full object-cover"
             style={{ objectPosition: 'left center' }}

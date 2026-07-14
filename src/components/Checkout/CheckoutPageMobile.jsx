@@ -119,7 +119,7 @@ function Divider() {
 }
 
 export default function CheckoutPageMobile({ plan, onBack, onContinue, isOpen }) {
-  const { checkout, subscription } = useContent();
+  const { checkout, subscription, images } = useContent();
   const section = checkout.section;
 
   if (!isOpen || !plan) return null;
@@ -147,7 +147,7 @@ export default function CheckoutPageMobile({ plan, onBack, onContinue, isOpen })
             {section.review_products_heading}
           </p>
           <ReviewCardMobile
-            image="/assets/subscription/cart-device.png"
+            image={images['subscription-cart-device']}
             title={product.name}
             tag={product.tag}
             description={product.description}
@@ -162,7 +162,7 @@ export default function CheckoutPageMobile({ plan, onBack, onContinue, isOpen })
             {section.subscriptions_heading}
           </p>
           <ReviewCardMobile
-            image="/assets/subscription/cart-mobile.png"
+            image={images['subscription-cart-mobile']}
             imageBg="radial-gradient(50% 50% at 50% 50%, #E8F1F8 0%, #fff 100%)"
             title={planName}
             tag={planDesc}

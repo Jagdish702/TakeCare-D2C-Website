@@ -69,6 +69,7 @@ function MenuTab({ text, count, active }) {
    Product card — TakeCare tablet dispenser
 ───────────────────────────────────────────── */
 function ProductCard({ product }) {
+  const { images } = useContent();
   return (
     <div
       style={{
@@ -107,7 +108,7 @@ function ProductCard({ product }) {
         }}
       >
         <img
-          src="/assets/subscription/cart-device.png"
+          src={images['subscription-cart-device']}
           alt="TakeCare tablet dispenser"
           draggable={false}
           style={{
@@ -252,6 +253,7 @@ function ProductCard({ product }) {
    Subscription card — monthly or yearly
 ───────────────────────────────────────────── */
 function SubscriptionCard({ plan, qty, onQtyChange }) {
+  const { images } = useContent();
   const isMonthly = plan.key === 'monthly';
   const planName = isMonthly ? 'TakeCare Monthly Plan' : 'TakeCare Yearly Plan';
   const price = `₹${plan.subAmount}`;
@@ -312,7 +314,7 @@ function SubscriptionCard({ plan, qty, onQtyChange }) {
           }}
         />
         <img
-          src="/assets/subscription/cart-mobile.png"
+          src={images['subscription-cart-mobile']}
           alt="TakeCare app"
           draggable={false}
           style={{

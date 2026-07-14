@@ -276,7 +276,7 @@ function PlanCard({ plan, features, content, onGetStarted }) {
 
 /* ── Section root ── */
 export default function SubscriptionSection({ onGetStarted, onOpenCart }) {
-  const { subscription } = useContent();
+  const { subscription, images } = useContent();
   const { content } = subscription;
   const { plans, features } = usePlansAndFeatures();
   const wrapperRef = useRef(null);
@@ -370,7 +370,7 @@ export default function SubscriptionSection({ onGetStarted, onOpenCart }) {
 
         {/* Device image */}
         <img
-          src="/assets/subscription/device.png"
+          src={images['subscription-device']}
           alt="TakeCare tablet dispenser and mobile app"
           draggable={false}
           style={{ width: 481, height: 479, objectFit: 'contain', flexShrink: 0 }}

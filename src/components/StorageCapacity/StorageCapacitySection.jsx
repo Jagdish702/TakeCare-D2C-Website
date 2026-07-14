@@ -10,7 +10,6 @@ const CANVAS_W = 1440;
 const CANVAS_H = 1100;
 const OUTER_H  = '300vh';
 
-const PRODUCT_IMG = '/assets/storage-capacity/product-1.png';
 const IMG_W = 979;
 const IMG_H = 1332;
 const IMG_X = 651;                      // 180(pad) + 411(text-col) + 60(gap)
@@ -47,7 +46,8 @@ function Stat({ number, unit, label }) {
 }
 
 export default function StorageCapacitySection() {
-  const { specifications } = useContent();
+  const { specifications, images } = useContent();
+  const PRODUCT_IMG = images['storage-capacity-product-1'];
   const stats = specifications.stats.filter((s) => s.group_key === 'storage-capacity');
 
   const outerRef  = useRef(null);

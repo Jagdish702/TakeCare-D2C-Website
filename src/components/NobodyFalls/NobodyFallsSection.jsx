@@ -20,16 +20,6 @@ gsap.registerPlugin(ScrollTrigger);
   device at any resolution.
 */
 
-// Top-view countdown panels (perspective-matched to the device top face).
-const FRAMES = {
-  '03':   '/assets/nobody-falls/topview/topview-03.png',
-  '02':   '/assets/nobody-falls/topview/topview-02.png',
-  '01':   '/assets/nobody-falls/topview/topview-01.png',
-  '00':   '/assets/nobody-falls/topview/topview-00.png',
-  missed: '/assets/nobody-falls/topview/topview-missed.png',
-  blank:  '/assets/nobody-falls/topview/topview-blank.png',
-};
-
 // Countdown plays once (0:03 → … → Dose Missed); after that the screen blinks.
 const COUNT = ['03', '02', '01', '00', 'missed'];
 const frameForTick = (t) =>
@@ -43,7 +33,17 @@ const PANEL = { X: 1458, Y: 660, W: 1269, H: 486 };
 const CANVAS = { w: IMG_W, h: IMG_H };
 
 export default function NobodyFallsSection() {
-  const { nobodyFalls } = useContent();
+  const { nobodyFalls, images } = useContent();
+
+  // Top-view countdown panels (perspective-matched to the device top face).
+  const FRAMES = {
+    '03':   images['nobody-falls-topview-topview-03'],
+    '02':   images['nobody-falls-topview-topview-02'],
+    '01':   images['nobody-falls-topview-topview-01'],
+    '00':   images['nobody-falls-topview-topview-00'],
+    missed: images['nobody-falls-topview-topview-missed'],
+    blank:  images['nobody-falls-topview-topview-blank'],
+  };
 
   const outerRef   = useRef(null);
   const bg0Ref     = useRef(null);
@@ -62,7 +62,7 @@ export default function NobodyFallsSection() {
   /* ── Preload countdown panels ── */
   useEffect(() => {
     Object.values(FRAMES).forEach((src) => { const i = new Image(); i.src = src; });
-  }, []);
+  }, [images]);
 
   /* ── Track viewport for card placement ── */
   useEffect(() => {
@@ -175,7 +175,7 @@ export default function NobodyFallsSection() {
         {/* State 0 — sleeping scene */}
         <img
           ref={bg0Ref}
-          src="/assets/nobody-falls/nobody-falls-scene.png"
+          src={images['nobody-falls-nobody-falls-scene']}
           alt=""
           draggable={false}
           style={{
@@ -188,7 +188,7 @@ export default function NobodyFallsSection() {
         {/* State 2 — pill-box dispenser + countdown + alert cards */}
         <div ref={bg2WrapRef} style={{ position: 'absolute', inset: 0, willChange: 'opacity, transform' }}>
           <img
-            src="/assets/nobody-falls/nobody-falls-state2.png"
+            src={images['nobody-falls-nobody-falls-state2']}
             alt=""
             draggable={false}
             style={{

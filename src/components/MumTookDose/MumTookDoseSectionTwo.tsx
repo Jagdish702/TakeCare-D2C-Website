@@ -21,7 +21,6 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useFitScale } from '../../hooks/useFitScale';
-import mumdoseBg from '../../assets/Background mumtookdosetwo.png';
 import FeatureCard from './FeatureCard';
 import { useContent } from '../../context/ContentContext';
 
@@ -30,7 +29,7 @@ gsap.registerPlugin(ScrollTrigger);
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function MumTookDoseSectionTwo() {
-  const { mumTookDose } = useContent();
+  const { mumTookDose, images } = useContent();
   // Outer: ScrollTrigger pins this; also receives the viewport-entry fade
   const triggerRef  = useRef<HTMLDivElement>(null);
 
@@ -163,7 +162,7 @@ export default function MumTookDoseSectionTwo() {
           aria-hidden="true"
         >
           <img
-            src={mumdoseBg}
+            src={images['background-mumtookdosetwo']}
             alt=""
             className="absolute inset-0 h-full w-full object-cover object-top"
           />

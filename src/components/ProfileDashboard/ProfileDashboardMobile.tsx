@@ -2,7 +2,8 @@ import { Fragment, useState } from 'react';
 import { useContent } from '../../context/ContentContext';
 import IconSlot from '../common/IconSlot';
 import PrimaryButton from '../common/PrimaryButton';
-import avatarPhoto from '../../assets/profile-dashboard/avatar-photo.png';
+import { onImageError } from '../../utils/imageFallback';
+import avatarPhotoFallback from '../../assets/profile-dashboard/avatar-photo.png';
 import iconCamera from '../../assets/profile-dashboard/icon-camera.svg';
 import iconEditPencil from '../../assets/profile-dashboard/icon-edit-pencil.svg';
 import iconBreadcrumbChevron from '../../assets/profile-dashboard/icon-breadcrumb-chevron.svg';
@@ -101,7 +102,7 @@ function SectionCard({
 // ─── Avatar + Welcome row ────────────────────────────────────────────────────
 
 function AvatarWelcomeRow({ formData }: { formData: ProfileFormData | null }) {
-  const { profile } = useContent();
+  const { profile, images } = useContent();
   const dashboard = profile.dashboard;
   return (
     <div className="flex w-full shrink-0 items-center gap-6">
@@ -109,7 +110,12 @@ function AvatarWelcomeRow({ formData }: { formData: ProfileFormData | null }) {
         className="relative size-[80px] shrink-0 overflow-hidden rounded-full"
         style={{ boxShadow: '0px 2px 16px rgba(0,65,114,0.08), inset 0px 0px 2px rgba(0,65,114,0.16)' }}
       >
-        <img src={avatarPhoto} alt="" className="size-full object-cover" />
+        <img
+          src={images['profile-dashboard-avatar-photo']}
+          onError={onImageError(avatarPhotoFallback)}
+          alt=""
+          className="size-full object-cover"
+        />
       </div>
       <div className="flex min-w-0 flex-1 flex-col items-start gap-3">
         <p

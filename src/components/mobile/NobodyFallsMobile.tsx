@@ -55,14 +55,6 @@ const HEADER_H = 54;
 const TEXT_TOP_PAD = 10;
 const BOTTOM_SAFE = 28;
 
-const FRAMES: Record<string, string> = {
-  '03': '/assets/nobody-falls/topview/topview-03.png',
-  '02': '/assets/nobody-falls/topview/topview-02.png',
-  '01': '/assets/nobody-falls/topview/topview-01.png',
-  '00': '/assets/nobody-falls/topview/topview-00.png',
-  missed: '/assets/nobody-falls/topview/topview-missed.png',
-  blank: '/assets/nobody-falls/topview/topview-blank.png',
-};
 const COUNT = ['03', '02', '01', '00', 'missed'];
 const frameForTick = (t: number) =>
   t < COUNT.length ? COUNT[t] : (t - COUNT.length) % 2 === 0 ? 'blank' : 'missed';
@@ -92,8 +84,17 @@ const CARD_W = 344;
 const CARD_GAP = 24; // vertical gap between stacked cards
 
 export default function NobodyFallsMobile() {
-  const { nobodyFalls } = useContent();
+  const { nobodyFalls, images } = useContent();
   const MOBILE_CARD_ORDER = buildCards(nobodyFalls.alertCards);
+
+  const FRAMES: Record<string, string> = {
+    '03': images['nobody-falls-topview-topview-03'],
+    '02': images['nobody-falls-topview-topview-02'],
+    '01': images['nobody-falls-topview-topview-01'],
+    '00': images['nobody-falls-topview-topview-00'],
+    missed: images['nobody-falls-topview-topview-missed'],
+    blank: images['nobody-falls-topview-topview-blank'],
+  };
 
   const outerRef = useRef<HTMLDivElement>(null);
   const clockRef = useRef<HTMLImageElement>(null);
@@ -119,7 +120,7 @@ export default function NobodyFallsMobile() {
       const i = new Image();
       i.src = src;
     });
-  }, []);
+  }, [images]);
 
   useEffect(() => {
     if (!started) return;
@@ -338,7 +339,7 @@ export default function NobodyFallsMobile() {
           {/* Beat 1 — clock close-up (same photo, cropped low/right on the nightstand) */}
           <img
             ref={clockRef}
-            src="/assets/nobody-falls/nobody-falls-scene.png"
+            src={images['nobody-falls-nobody-falls-scene']}
             alt=""
             draggable={false}
             style={{
@@ -350,7 +351,7 @@ export default function NobodyFallsMobile() {
           {/* Beat 2 — same photo, panned out to the sleeping head + pillow */}
           <img
             ref={sleepRef}
-            src="/assets/nobody-falls/nobody-falls-scene.png"
+            src={images['nobody-falls-nobody-falls-scene']}
             alt=""
             draggable={false}
             style={{
@@ -363,7 +364,7 @@ export default function NobodyFallsMobile() {
           <div ref={bg2WrapRef} style={{ position: 'absolute', inset: 0, background: '#000', willChange: 'opacity, transform' }}>
             <div ref={deviceLayerRef} style={{ position: 'absolute', inset: 0 }}>
               <img
-                src="/assets/nobody-falls/nobody-falls-state2.png"
+                src={images['nobody-falls-nobody-falls-state2']}
                 alt=""
                 draggable={false}
                 style={{

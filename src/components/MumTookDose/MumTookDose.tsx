@@ -2,14 +2,13 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useFitScale } from '../../hooks/useFitScale';
-import mumdoseBg from '../../assets/mum took dose Background.png';
 import AppreciationCard from './AppreciationCard';
 import { useContent } from '../../context/ContentContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function MumTookDose() {
-  const { mumTookDose } = useContent();
+  const { mumTookDose, images } = useContent();
   const triggerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const cardWrapRef = useRef<HTMLDivElement>(null);
@@ -72,7 +71,7 @@ export default function MumTookDose() {
           behind extends its backdrop over the remaining space. */}
       <div className="absolute inset-0 bg-white" />
       <img
-        src={mumdoseBg}
+        src={images['mum-took-dose-background']}
         alt=""
         aria-hidden
         className="absolute inset-0 w-full h-full object-contain pointer-events-none"

@@ -179,7 +179,7 @@ function EmptySubscriptionMobile({ title, subtitle }) {
 }
 
 export default function CartDrawerMobile({ plan, isOpen, onClose, onCheckout }) {
-  const { subscription } = useContent();
+  const { subscription, images } = useContent();
   const { cartProduct, cartStaticText } = subscription;
   const [deviceQty, setDeviceQty] = useState(1);
   const [subQty, setSubQty] = useState(1);
@@ -263,7 +263,7 @@ export default function CartDrawerMobile({ plan, isOpen, onClose, onCheckout }) 
             Products
           </p>
           <CartLineCardMobile
-            image="/assets/subscription/cart-device.png"
+            image={images['subscription-cart-device']}
             title={cartProduct.name}
             tag={cartProduct.tag}
             description={cartProduct.description}
@@ -282,7 +282,7 @@ export default function CartDrawerMobile({ plan, isOpen, onClose, onCheckout }) 
           </p>
           {plan ? (
             <CartLineCardMobile
-              image="/assets/subscription/cart-mobile.png"
+              image={images['subscription-cart-mobile']}
               imageBg="radial-gradient(50% 50% at 50% 50%, #E8F1F8 0%, #fff 100%)"
               title={planName}
               tag={planTag}

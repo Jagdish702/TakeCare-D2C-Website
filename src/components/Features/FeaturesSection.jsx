@@ -45,25 +45,25 @@ export const IconDoseManagement = (props) => (
   </svg>
 );
 
-// Icon + image assets per tab — not part of the DB content, kept local and
-// merged (by sort_order index) with the DB tab rows in buildTabs() below.
+// Icon + image assets per tab — icons stay local; the hero image per tab now
+// comes from the DB `images` map (see useContent()) via the image key below.
 // Exported so the mobile section (FeaturesSectionMobile) reuses the same assets.
 export const TAB_ASSETS = [
-  { Icon: IconDoctor, image: '/assets/features/features-state0-doctor.png' },
-  { Icon: IconMedicine, image: '/assets/features/features-state1-medicines.png' },
-  { Icon: IconLabTest, image: '/assets/features/features-state2-labtest.png' },
-  { Icon: IconSOS, image: '/assets/features/features-state3-emergency.png' },
-  { Icon: IconDoseManagement, image: '/assets/features/features-state4-dose.png' },
+  { Icon: IconDoctor, imageKey: 'features-features-state0-doctor' },
+  { Icon: IconMedicine, imageKey: 'features-features-state1-medicines' },
+  { Icon: IconLabTest, imageKey: 'features-features-state2-labtest' },
+  { Icon: IconSOS, imageKey: 'features-features-state3-emergency' },
+  { Icon: IconDoseManagement, imageKey: 'features-features-state4-dose' },
 ];
 
 // Merge DB tab rows (label/accent colors/copy/is_wide, already sort_order-ascending)
-// with the local icon/image assets above. Exported so FeaturesSectionMobile can
-// build the identical list from its own useContent() call.
-export function buildTabs(dbTabs) {
+// with the local icon assets and the DB `images` map above. Exported so
+// FeaturesSectionMobile can build the identical list from its own useContent() call.
+export function buildTabs(dbTabs, images) {
   return dbTabs.map((t, i) => ({
     label: t.label,
     Icon: TAB_ASSETS[i].Icon,
-    image: TAB_ASSETS[i].image,
+    image: images[TAB_ASSETS[i].imageKey],
     accent: t.accent_color,
     accentLight: t.accent_light_color,
     boldText: t.bold_text,
@@ -78,8 +78,8 @@ export function buildTabs(dbTabs) {
 // 'phase'      — drives CSS class on card + description
 
 export default function FeaturesSection() {
-  const { features } = useContent();
-  const TABS = buildTabs(features.tabs);
+  const { features, images } = useContent();
+  const TABS = buildTabs(features.tabs, images);
 
   const wrapperRef = useRef(null);
   const canvasRef  = useRef(null);
@@ -92,7 +92,7 @@ export default function FeaturesSection() {
   /* ── Preload all images so swaps never flash ── */
   useEffect(() => {
     TABS.forEach(t => { const img = new Image(); img.src = t.image; });
-  }, []);
+  }, [images]);
 
   /* ── Scale canvas to viewport (width + height constraint) ── */
   useEffect(() => {

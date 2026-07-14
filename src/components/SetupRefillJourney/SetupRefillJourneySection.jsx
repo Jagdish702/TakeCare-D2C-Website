@@ -6,28 +6,6 @@ import { useContent } from '../../context/ContentContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ASSETS = {
-  bg:           '/assets/setup-refill/bg-state1.png',
-  rxCard:       '/assets/setup-refill/rx-card.png',
-  phone1:       '/assets/setup-refill/phone1.png',
-  phone2:       '/assets/setup-refill/phone2-s2.png',
-  phone3:       '/assets/setup-refill/phone3-s3.png',
-  phone4:       '/assets/setup-refill/phone4-s4.png',
-  person6:      '/assets/setup-refill/person-s6.png',
-  pillDispenser: '/assets/setup-refill/pill-dispenser-s8.png',
-  pillDispenser2:'/assets/setup-refill/pill-dispenser-s9.png',
-  phone10:       '/assets/setup-refill/phone-s10.png',
-  phone13:       '/assets/setup-refill/phone-s13.png',
-  dispenser14:   '/assets/setup-refill/dispenser-s14.png',
-  phone14:       '/assets/setup-refill/phone-s14.png',
-  dispenser15:   '/assets/setup-refill/dispenser-s15.png',
-  phone15:       '/assets/setup-refill/phone-s15.png',
-  phone16:       '/assets/setup-refill/phone-s16.png',
-  bg18:          '/assets/setup-refill/bg-state18.png',
-  phone18:       '/assets/setup-refill/phone-s18.png',
-  phone20:       '/assets/setup-refill/phone-s20.png',
-};
-
 const GRAD_0 = `url("data:image/svg+xml;utf8,<svg viewBox='0 0 1440 1024' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(0.2 2.3 -3.2344 0.28125 357.5 489)'><stop stop-color='rgba(232,241,248,1)' offset='0'/><stop stop-color='rgba(255,255,255,1)' offset='1'/></radialGradient></defs></svg>")`;
 const GRAD_1 = `url("data:image/svg+xml;utf8,<svg viewBox='0 0 1440 1024' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-0.6 29.55 -41.555 -0.84375 396 577)'><stop stop-color='rgba(232,241,248,1)' offset='0'/><stop stop-color='rgba(255,255,255,1)' offset='1'/></radialGradient></defs></svg>")`;
 const GRAD_2 = `url("data:image/svg+xml;utf8,<svg viewBox='0 0 1440 1024' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(0.8 45 -38.45 0.68356 352 461.5)'><stop stop-color='rgba(232,241,248,1)' offset='0'/><stop stop-color='rgba(255,255,255,1)' offset='1'/></radialGradient></defs></svg>")`;
@@ -168,7 +146,28 @@ const S20 = {
 };
 
 export default function SetupRefillJourneySection() {
-  const { setupRefillJourney } = useContent();
+  const { setupRefillJourney, images } = useContent();
+  const ASSETS = {
+    bg:           images['setup-refill-bg-state1'],
+    rxCard:       images['setup-refill-rx-card'],
+    phone1:       images['setup-refill-phone1'],
+    phone2:       images['setup-refill-phone2-s2'],
+    phone3:       images['setup-refill-phone3-s3'],
+    phone4:       images['setup-refill-phone4-s4'],
+    person6:      images['setup-refill-person-s6'],
+    pillDispenser: images['setup-refill-pill-dispenser-s8'],
+    pillDispenser2:images['setup-refill-pill-dispenser-s9'],
+    phone10:       images['setup-refill-phone-s10'],
+    phone13:       images['setup-refill-phone-s13'],
+    dispenser14:   images['setup-refill-dispenser-s14'],
+    phone14:       images['setup-refill-phone-s14'],
+    dispenser15:   images['setup-refill-dispenser-s15'],
+    phone15:       images['setup-refill-phone-s15'],
+    phone16:       images['setup-refill-phone-s16'],
+    bg18:          images['setup-refill-bg-state18'],
+    phone18:       images['setup-refill-phone-s18'],
+    phone20:       images['setup-refill-phone-s20'],
+  };
   const stepByKey = Object.fromEntries(setupRefillJourney.steps.map((s) => [s.step_key, s]));
   const textByKey = (step) => Object.fromEntries(step.texts.map((t) => [t.text_key, t.body]));
   const scheduleTexts = textByKey(stepByKey.schedule);

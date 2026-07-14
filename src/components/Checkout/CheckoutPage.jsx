@@ -169,11 +169,11 @@ const priceStyle = {
 
 /* ── Product review card ── */
 function ProductReviewCard() {
-  const { subscription } = useContent();
+  const { subscription, images } = useContent();
   const product = subscription.cartProduct;
   return (
     <ReviewCard>
-      <ImageBox src="/assets/subscription/cart-device.png" alt={product.name} />
+      <ImageBox src={images['subscription-cart-device']} alt={product.name} />
       <div style={textColStyle}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <p style={nameStyle}>{product.name}</p>
@@ -211,14 +211,14 @@ function ProductReviewCard() {
 
 /* ── Subscription review card ── */
 function SubscriptionReviewCard({ plan }) {
-  const { subscription } = useContent();
+  const { subscription, images } = useContent();
   const isMonthly = plan.key === 'monthly';
   const dbPlan = subscription.plans.find((p) => p.plan_key === (isMonthly ? 'monthly' : 'yearly'));
   const price = `₹${plan.subAmount}`;
 
   return (
     <ReviewCard>
-      <ImageBox src="/assets/subscription/cart-mobile.png" alt="TakeCare app" radial />
+      <ImageBox src={images['subscription-cart-mobile']} alt="TakeCare app" radial />
       <div style={textColStyle}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <p style={nameStyle}>{dbPlan.title}</p>

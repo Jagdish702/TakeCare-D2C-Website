@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useContent } from '../../context/ContentContext';
 
 /*
   Mobile "added to cart" toast — Figma node 12457:8710 (FeedbackNotificationCard,
@@ -9,6 +10,7 @@ import { useEffect } from 'react';
 */
 
 export default function CartPopupMobile({ plan, onClose, onViewCart }) {
+  const { images } = useContent();
   useEffect(() => {
     const t = setTimeout(onClose, 3000);
     return () => clearTimeout(t);
@@ -46,7 +48,7 @@ export default function CartPopupMobile({ plan, onClose, onViewCart }) {
         }}
       >
         <img
-          src="/assets/subscription/device.png"
+          src={images['subscription-device']}
           alt="TakeCare device"
           draggable={false}
           style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', maxWidth: 'none' }}
