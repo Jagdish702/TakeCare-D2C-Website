@@ -12,7 +12,6 @@ import { useRef, useEffect } from 'react';
   - Bottom edge of the card group sits at 96% of viewport height
 */
 
-const FIGMA_CARD_W = 340;  // equal width for every card (px at natural Figma scale)
 const FIGMA_GAP    = 80;   // gap between card columns in Figma
 const FIGMA_REF_W  = 1440; // Figma design frame width
 
@@ -33,17 +32,19 @@ export interface CardDef {
   body: string;
   primaryBtn: string;
   primaryIcon: boolean;
+  iconStroke?: string;
   secondaryBtn: string;
   secondaryColor?: string;
 }
 
 // Exported so the mobile section (NobodyFallsMobile) reuses the same copy.
+// Card widths are NOT uniform in Figma — 317 / 340 / 344 px respectively.
 export const CARDS: CardDef[] = [
   /* LEFT — Patient — pops last (400 ms) */
   {
     key: 'left',
     label: 'Patient',
-    figmaW: FIGMA_CARD_W,
+    figmaW: 317,
     delay: 400,
     titleMultiline: true,
     title: 'Slot 1,5 & 7 : \nCritical Dose Missed',
@@ -57,7 +58,7 @@ export const CARDS: CardDef[] = [
   {
     key: 'middle',
     label: 'Caregiver',
-    figmaW: FIGMA_CARD_W,
+    figmaW: 340,
     delay: 200,
     titleMultiline: true,
     title: 'Slot 1,5 & 7 : \nCritical Dose Missed',
@@ -65,6 +66,7 @@ export const CARDS: CardDef[] = [
     body: 'Please check on your loved one to ensure they have taken their medication and are safe.',
     primaryBtn: 'Contact Patient',
     primaryIcon: true,
+    iconStroke: '#e5e5e5',
     secondaryBtn: 'Contact Us',
     secondaryColor: '#e5e5e5',
   },
@@ -72,13 +74,14 @@ export const CARDS: CardDef[] = [
   {
     key: 'right',
     label: 'Command Centre',
-    figmaW: FIGMA_CARD_W,
+    figmaW: 344,
     delay: 0,
     title: 'Immediate Follow-up Required',
     subtitle: 'Patient missed a critical scheduled dose.',
     body: 'Medicine Slot: 1, 5 & 7\nAlert Level: High Priority',
     primaryBtn: 'Contact Patient',
     primaryIcon: true,
+    iconStroke: '#fff',
     secondaryBtn: 'Schedule Home Visit',
   },
 ];
@@ -117,8 +120,8 @@ export default function AlertCards({ visible, vpSize }: Props) {
     /* Final groupTop: push cards below the text, anchored to 96 % of vh */
     const groupTop = Math.max(vh * MIN_TOP_FRAC, vh * 0.96 - scaledColH);
 
-    /* All cards same width → total = 3 × FIGMA_CARD_W + 2 × gap */
-    const naturalTotal = FIGMA_CARD_W * 3 + FIGMA_GAP * 2;
+    /* Cards are NOT equal width in Figma → total = sum(figmaW) + 2 × gap */
+    const naturalTotal = CARDS.reduce((sum, c) => sum + c.figmaW, 0) + FIGMA_GAP * 2;
     const scaledTotal  = naturalTotal * scale;
     const groupLeft    = (vw - scaledTotal) / 2;
 
@@ -129,7 +132,7 @@ export default function AlertCards({ visible, vpSize }: Props) {
       el.style.left      = `${cursorX}px`;
       el.style.top       = `${groupTop}px`;
       el.style.transform = `scale(${scale})`;
-      cursorX += (FIGMA_CARD_W + FIGMA_GAP) * scale;
+      cursorX += (card.figmaW + FIGMA_GAP) * scale;
     });
   }, [vpSize]);
 
@@ -142,7 +145,7 @@ export default function AlertCards({ visible, vpSize }: Props) {
           style={{
             position: 'absolute',
             transformOrigin: 'top left',
-            width: FIGMA_CARD_W,
+            width: card.figmaW,
           }}
         >
           {/* Animation wrapper */}
@@ -158,7 +161,6 @@ export default function AlertCards({ visible, vpSize }: Props) {
               flexDirection: 'column',
               alignItems: 'center',
               gap: 12,
-              width: FIGMA_CARD_W,
               filter: 'drop-shadow(0 10px 26px rgba(0,0,0,0.35))',
             }}
           >
@@ -188,10 +190,10 @@ export default function AlertCards({ visible, vpSize }: Props) {
 }
 
 /* ── Single card box — pixel-perfect Figma values ─────────────────── */
-function PhoneIcon() {
+function PhoneIcon({ stroke = '#E5E5E5' }: { stroke?: string }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
-      <path d="M13.9104 6.56394C14.6586 6.70991 15.3462 7.07582 15.8852 7.61483C16.4242 8.15383 16.7901 8.84142 16.9361 9.58959M13.9104 3.5C15.4648 3.67268 16.9143 4.36876 18.0209 5.47395C19.1275 6.57914 19.8254 8.02775 20 9.58193M19.234 15.6945V17.9925C19.2349 18.2058 19.1912 18.4169 19.1057 18.6124C19.0203 18.8079 18.8949 18.9833 18.7377 19.1275C18.5805 19.2718 18.3949 19.3816 18.1928 19.4499C17.9908 19.5182 17.7766 19.5436 17.5642 19.5244C15.2071 19.2683 12.943 18.4629 10.9537 17.1728C9.10295 15.9968 7.53384 14.4277 6.35779 12.5769C5.06326 10.5786 4.25765 8.30349 4.00622 5.93583C3.98708 5.72401 4.01225 5.51053 4.08014 5.30897C4.14802 5.10741 4.25713 4.9222 4.40052 4.76512C4.54391 4.60804 4.71843 4.48254 4.91298 4.3966C5.10753 4.31067 5.31785 4.26619 5.53053 4.26599H7.82849C8.20022 4.26233 8.56061 4.39397 8.84247 4.63636C9.12433 4.87876 9.30843 5.21538 9.36046 5.58348C9.45745 6.31888 9.63732 7.04094 9.89665 7.7359C9.99971 8.01007 10.022 8.30803 9.96092 8.59448C9.89983 8.88093 9.7579 9.14387 9.55195 9.35213L8.57915 10.3249C9.66958 12.2426 11.2574 13.8304 13.1751 14.9208L14.1479 13.948C14.3561 13.7421 14.6191 13.6002 14.9055 13.5391C15.192 13.478 15.4899 13.5003 15.7641 13.6034C16.4591 13.8627 17.1811 14.0426 17.9165 14.1395C18.2886 14.192 18.6284 14.3795 18.8713 14.6662C19.1143 14.9529 19.2433 15.3188 19.234 15.6945Z" stroke="#E5E5E5" strokeWidth="1.53197" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M13.9104 6.56394C14.6586 6.70991 15.3462 7.07582 15.8852 7.61483C16.4242 8.15383 16.7901 8.84142 16.9361 9.58959M13.9104 3.5C15.4648 3.67268 16.9143 4.36876 18.0209 5.47395C19.1275 6.57914 19.8254 8.02775 20 9.58193M19.234 15.6945V17.9925C19.2349 18.2058 19.1912 18.4169 19.1057 18.6124C19.0203 18.8079 18.8949 18.9833 18.7377 19.1275C18.5805 19.2718 18.3949 19.3816 18.1928 19.4499C17.9908 19.5182 17.7766 19.5436 17.5642 19.5244C15.2071 19.2683 12.943 18.4629 10.9537 17.1728C9.10295 15.9968 7.53384 14.4277 6.35779 12.5769C5.06326 10.5786 4.25765 8.30349 4.00622 5.93583C3.98708 5.72401 4.01225 5.51053 4.08014 5.30897C4.14802 5.10741 4.25713 4.9222 4.40052 4.76512C4.54391 4.60804 4.71843 4.48254 4.91298 4.3966C5.10753 4.31067 5.31785 4.26619 5.53053 4.26599H7.82849C8.20022 4.26233 8.56061 4.39397 8.84247 4.63636C9.12433 4.87876 9.30843 5.21538 9.36046 5.58348C9.45745 6.31888 9.63732 7.04094 9.89665 7.7359C9.99971 8.01007 10.022 8.30803 9.96092 8.59448C9.89983 8.88093 9.7579 9.14387 9.55195 9.35213L8.57915 10.3249C9.66958 12.2426 11.2574 13.8304 13.1751 14.9208L14.1479 13.948C14.3561 13.7421 14.6191 13.6002 14.9055 13.5391C15.192 13.478 15.4899 13.5003 15.7641 13.6034C16.4591 13.8627 17.1811 14.0426 17.9165 14.1395C18.2886 14.192 18.6284 14.3795 18.8713 14.6662C19.1143 14.9529 19.2433 15.3188 19.234 15.6945Z" stroke={stroke} strokeWidth="1.53197" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }
@@ -216,14 +218,28 @@ export function CardBox({ card }: { card: CardDef }) {
         fontFamily: 'Inter, sans-serif',
       }}
     >
-      {/* ── Header: pill icon + title + subtitle ── */}
+      {/* ── Header: device icon (radial-gradient tile) + title + subtitle ── */}
       <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-        <img
-          src="/assets/nobody-falls/cards/alert-pillbox.png"
-          alt=""
-          draggable={false}
-          style={{ width: 48, height: 48, objectFit: 'contain', flexShrink: 0 }}
-        />
+        <div
+          style={{
+            width: 60,
+            height: 60,
+            flexShrink: 0,
+            padding: 4.8,
+            boxSizing: 'border-box',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'radial-gradient(ellipse at 50% 50%, #e8f1f8 0%, #ffffff 100%)',
+          }}
+        >
+          <img
+            src="/assets/nobody-falls/cards/pill-dispenser-icon.png"
+            alt=""
+            draggable={false}
+            style={{ width: 37.4, height: 55.2, objectFit: 'contain' }}
+          />
+        </div>
         <div
           style={{
             flex: 1,
@@ -297,7 +313,7 @@ export function CardBox({ card }: { card: CardDef }) {
           cursor: 'pointer',
         }}
       >
-        {card.primaryIcon && <PhoneIcon />}
+        {card.primaryIcon && <PhoneIcon stroke={card.iconStroke} />}
         <span
           style={{
             fontWeight: 500,
