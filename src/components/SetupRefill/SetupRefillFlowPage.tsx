@@ -5,7 +5,6 @@ import SetupRefillJourneySection from '../SetupRefillJourney/SetupRefillJourneyS
 import SpecificationsSection from '../Specifications/SpecificationsSection';
 import SetupRefillJourneyMobile from '../mobile/SetupRefillJourneyMobile';
 import SpecificationsMobile from '../mobile/SpecificationsMobile';
-import Footer from '../Footer/Footer';
 
 /**
  * "Set Up, Refill & Specifications" flow page — Figma node 13222:18278
@@ -42,7 +41,6 @@ export default function SetupRefillFlowPage({ onBackHome }: SetupRefillFlowPageP
           <SpecificationsSection />
         </>
       )}
-      <Footer />
     </div>
   );
 }
