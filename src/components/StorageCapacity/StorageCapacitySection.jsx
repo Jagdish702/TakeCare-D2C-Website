@@ -2,6 +2,8 @@ import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { useContent } from '../../context/ContentContext';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const CANVAS_W = 1440;
@@ -45,6 +47,9 @@ function Stat({ number, unit, label }) {
 }
 
 export default function StorageCapacitySection() {
+  const { specifications } = useContent();
+  const stats = specifications.stats.filter((s) => s.group_key === 'storage-capacity');
+
   const outerRef  = useRef(null);
   const canvasRef = useRef(null);
   const leftRef   = useRef(null);
@@ -116,20 +121,20 @@ export default function StorageCapacitySection() {
                   className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                   style={{ fontSize: 48, fontWeight: 500, fontFamily: 'Inter, sans-serif', color: '#000', lineHeight: 1, margin: 0 }}
                 >
-                  Flexible Storage Capacity
+                  {specifications.storageCapacity.heading}
                 </h2>
                 <p
                   className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                   style={{ fontSize: 18, fontWeight: 300, fontFamily: 'Inter, sans-serif', color: '#4D4D4D', letterSpacing: '0.5825px', lineHeight: '28px', margin: 0 }}
                 >
-                  Six compartments are sized for routine medication schedules, while the two larger compartments offer up to three times the storage capacity — ideal for higher-volume medications, larger tablets, or extended dosing needs.
+                  {specifications.storageCapacity.body}
                 </p>
               </div>
 
               {/* Stats row */}
               <div style={{ display: 'flex', gap: 48, alignItems: 'flex-start' }}>
-                <Stat number="24" unit="mm Height" label="6 compartments" />
-                <Stat number="48" unit="mm height" label="2 compartments" />
+                <Stat number={stats[0].number} unit={stats[0].unit} label={stats[0].label} />
+                <Stat number={stats[1].number} unit={stats[1].unit} label={stats[1].label} />
               </div>
 
             </div>

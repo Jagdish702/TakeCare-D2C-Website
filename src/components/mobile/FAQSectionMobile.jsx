@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FAQ_ITEMS } from '../FAQ/faqData';
+import { useContent } from '../../context/ContentContext';
 import { XCircleIcon, PlusCircleIcon } from '../FAQ/QnAIcons';
 
 /*
@@ -61,6 +61,7 @@ function QAItemMobile({ item, isOpen, onToggle }) {
 }
 
 export default function FAQSectionMobile() {
+  const { faq } = useContent();
   // Single-open accordion: opening a question closes whichever one was open.
   const [openIndex, setOpenIndex] = useState(null);
 
@@ -97,12 +98,12 @@ export default function FAQSectionMobile() {
           whiteSpace: 'nowrap',
         }}
       >
-        <p style={{ margin: 0, color: '#808080' }}>Question ?</p>
-        <p style={{ margin: 0, color: '#fff' }}>Answers</p>
+        <p style={{ margin: 0, color: '#808080' }}>{faq.content.heading_line1}</p>
+        <p style={{ margin: 0, color: '#fff' }}>{faq.content.heading_line2}</p>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 60, alignItems: 'flex-start', width: '100%' }}>
-        {FAQ_ITEMS.map((item, i) => (
+        {faq.items.map((item, i) => (
           <QAItemMobile key={item.question} item={item} isOpen={openIndex === i} onToggle={() => toggle(i)} />
         ))}
       </div>

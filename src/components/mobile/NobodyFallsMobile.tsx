@@ -1,7 +1,8 @@
 import { useRef, useEffect, useLayoutEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { CARDS, CardBox, type CardDef } from '../NobodyFalls/AlertCards';
+import { buildCards, CardBox } from '../NobodyFalls/AlertCards';
+import { useContent } from '../../context/ContentContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -83,12 +84,17 @@ const CROP_CENTER_X = 1900;
 // static (no scroll-driven movement); whatever extends past the one-screen
 // frame's bottom edge extends the SECTION instead of clipping, and is
 // reached by normal page scrolling once the pin releases.
-const MOBILE_CARD_ORDER: CardDef[] = [CARDS[0], CARDS[1], CARDS[2]];
+// MOBILE_CARD_ORDER is built inside the component from buildCards(), which
+// already sorts by sort_order — Patient, Caregiver, Command Centre, top to
+// bottom — the exact order this stack needs.
 const CARDS_GAP_FROM_TEXT = 200; // gap between the subheading and the top card
 const CARD_W = 344;
 const CARD_GAP = 24; // vertical gap between stacked cards
 
 export default function NobodyFallsMobile() {
+  const { nobodyFalls } = useContent();
+  const MOBILE_CARD_ORDER = buildCards(nobodyFalls.alertCards);
+
   const outerRef = useRef<HTMLDivElement>(null);
   const clockRef = useRef<HTMLImageElement>(null);
   const sleepRef = useRef<HTMLImageElement>(null);
@@ -417,11 +423,11 @@ export default function NobodyFallsMobile() {
                 color: '#fff', lineHeight: 1.1, margin: 0,
               }}
             >
-              Nobody falls through the cracks.
+              {nobodyFalls.content.heading}
             </p>
             <div style={{ fontSize: 24, fontWeight: 300, fontFamily: 'Inter, sans-serif', color: '#b2b2b2', lineHeight: '28px' }}>
-              <p style={{ margin: 0 }}>One missed dose triggers</p>
-              <p style={{ margin: 0 }}>three parallel alerts.</p>
+              <p style={{ margin: 0 }}>{nobodyFalls.content.subtext_line1}</p>
+              <p style={{ margin: 0 }}>{nobodyFalls.content.subtext_line2}</p>
             </div>
           </div>
 

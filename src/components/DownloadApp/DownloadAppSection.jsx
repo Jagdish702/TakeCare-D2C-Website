@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useContent } from '../../context/ContentContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,6 +21,14 @@ const SECTION_BG =
 
 
 export default function DownloadAppSection() {
+  const { downloadApp } = useContent();
+  const {
+    headline,
+    subheading_line1: subheadingLine1,
+    subheading_line2: subheadingLine2,
+    qr_caption: qrCaption,
+  } = downloadApp.find((row) => row.variant === 'desktop');
+
   const outerRef = useRef(null);
   const cardRef  = useRef(null);
 
@@ -194,7 +203,7 @@ export default function DownloadAppSection() {
                 whiteSpace: 'pre',
               }}
             >
-              {'Get the  TakeCare app now !'}
+              {headline}
             </p>
             <div
               style={{
@@ -206,8 +215,8 @@ export default function DownloadAppSection() {
                 lineHeight: '28px',
               }}
             >
-              <p style={{ margin: 0 }}>Peace of mind for you. </p>
-              <p style={{ margin: 0 }}>Timely medication support for your loved ones.</p>
+              <p style={{ margin: 0 }}>{subheadingLine1}</p>
+              <p style={{ margin: 0 }}>{subheadingLine2}</p>
             </div>
           </div>
 
@@ -295,7 +304,7 @@ export default function DownloadAppSection() {
                 flexShrink: 0,
               }}
             >
-              Scan to download the TakeCare app
+              {qrCaption}
             </p>
           </div>
         </div>

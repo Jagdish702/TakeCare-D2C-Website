@@ -2,6 +2,8 @@ import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { useContent } from '../../context/ContentContext';
+
 gsap.registerPlugin(ScrollTrigger);
 
 // Mobile "Set up & Refill Reimagined" scroll-scrubbed journey — Figma section
@@ -128,6 +130,17 @@ function CoverImg({ innerRef, src, extra }) {
 }
 
 export default function SetupRefillJourneyMobile() {
+  const { setupRefillJourney } = useContent();
+  const stepByKey = Object.fromEntries(setupRefillJourney.steps.map((s) => [s.step_key, s]));
+  const textByKey = (step) => Object.fromEntries(step.texts.map((t) => [t.text_key, t.body]));
+  const scheduleTexts = textByKey(stepByKey.schedule);
+  const loadTexts = textByKey(stepByKey.load);
+  const doneTexts = textByKey(stepByKey.done);
+  const refillTexts = textByKey(stepByKey.refill);
+  // Mobile renders single flowing paragraphs (no whiteSpace:pre), unlike the desktop
+  // timeline's forced multi-line breaks — collapse the DB's explicit "\n" breaks to spaces.
+  const flatten = (s) => s.replace(/\n/g, ' ');
+
   const outerRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -375,16 +388,16 @@ export default function SetupRefillJourneyMobile() {
               background: 'rgba(215,234,249,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >
-            <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 32, color: '#00345b' }}>1</span>
+            <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 32, color: '#00345b' }}>{stepByKey.schedule.badge_number}</span>
           </div>
           <p ref={headScheduleRef} style={{ position: 'absolute', left: `calc(50% + ${HEAD_SCHEDULE.x}px)`, top: `calc(50% + ${HEAD_SCHEDULE.y}px)`, width: HEAD_SCHEDULE.w, margin: 0, ...HEADING_STYLE }}>
-            Schedule
+            {stepByKey.schedule.heading}
           </p>
           <p ref={list1Ref} style={{ position: 'absolute', left: `calc(50% + ${LIST1.x}px)`, top: `calc(50% + ${LIST1.y}px)`, width: LIST1.w, margin: 0, paddingLeft: 24, ...BODY_STYLE }}>
-            1. Open the TakeCare app and upload the prescription.
+            1. {scheduleTexts.item1}
           </p>
           <p ref={list2Ref} style={{ position: 'absolute', left: `calc(50% + ${LIST2.x}px)`, top: `calc(50% + ${LIST2.y}px)`, width: LIST2.w, margin: 0, paddingLeft: 24, ...BODY_STYLE }}>
-            2. Define your meal time &amp; App configures schedule.
+            2. {scheduleTexts.item2}
           </p>
 
           {/* ── Load (badge 2) ── */}
@@ -405,16 +418,16 @@ export default function SetupRefillJourneyMobile() {
               background: '#d7eaf9', display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >
-            <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 32, color: '#000' }}>2</span>
+            <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 32, color: '#000' }}>{stepByKey.load.badge_number}</span>
           </div>
           <p ref={headLoadRef} style={{ position: 'absolute', left: `calc(50% + ${HEAD_LOAD.x}px)`, top: `calc(50% + ${HEAD_LOAD.y}px)`, width: HEAD_LOAD.w, margin: 0, ...HEADING_STYLE }}>
-            Load
+            {stepByKey.load.heading}
           </p>
           <p ref={loadP1Ref} style={{ position: 'absolute', left: `calc(50% + ${LOAD_P1.x}px)`, top: `calc(50% + ${LOAD_P1.y}px)`, width: LOAD_P1.w, margin: 0, ...BODY_STYLE }}>
-            Our Pharmacy fulfils order. CureBay medicines dispatched to door.
+            {loadTexts.text2}
           </p>
           <p ref={loadP2Ref} style={{ position: 'absolute', left: `calc(50% + ${LOAD_P2.x}px)`, top: `calc(50% + ${LOAD_P2.y}px)`, width: LOAD_P2.w, margin: 0, ...BODY_STYLE }}>
-            Fill the numbered compartments with medicines once a month or our Swasth Mitra will fill for you.
+            {loadTexts.text3}
           </p>
 
           {/* ── Done (badge 3) ── */}
@@ -441,16 +454,16 @@ export default function SetupRefillJourneyMobile() {
               background: '#d7eaf9', display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >
-            <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 32, color: '#004172' }}>3</span>
+            <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 32, color: '#004172' }}>{stepByKey.done.badge_number}</span>
           </div>
           <p ref={headDoneRef} style={{ position: 'absolute', left: `calc(50% + ${HEAD_DONE.x}px)`, top: `calc(50% + ${HEAD_DONE.y}px)`, width: HEAD_DONE.w, margin: 0, ...HEADING_STYLE }}>
-            Done
+            {stepByKey.done.heading}
           </p>
           <p ref={doneP1Ref} style={{ position: 'absolute', left: `calc(50% + ${DONE_P1.x}px)`, top: `calc(50% + ${DONE_P1.y}px)`, width: DONE_P1.w, margin: 0, ...BODY_STYLE }}>
-            Take the medicine from the green-lit slot. Close it after use—the magnetic lid shuts automatically, and the light turns off to confirm it&apos;s closed.
+            {flatten(doneTexts.text3_done)}
           </p>
           <p ref={doneP2Ref} style={{ position: 'absolute', left: `calc(50% + ${DONE_P2.x}px)`, top: `calc(50% + ${DONE_P2.y}px)`, width: DONE_P2.w, margin: 0, ...BODY_STYLE }}>
-            Your Caregiver and Concierge Service are notified instantly.
+            {doneTexts.caregiver_text}
           </p>
 
           {/* ── Refill (badge 4) ── */}
@@ -467,16 +480,16 @@ export default function SetupRefillJourneyMobile() {
               background: '#C4EADA', display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}
           >
-            <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 32, color: '#003D2E' }}>4</span>
+            <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 32, color: '#003D2E' }}>{stepByKey.refill.badge_number}</span>
           </div>
           <p ref={headRefillRef} style={{ position: 'absolute', left: `calc(50% + ${HEAD_REFILL.x}px)`, top: `calc(50% + ${HEAD_REFILL.y}px)`, width: HEAD_REFILL.w, margin: 0, ...HEADING_STYLE }}>
-            Refill
+            {stepByKey.refill.heading}
           </p>
           <p ref={refillP1Ref} style={{ position: 'absolute', left: `calc(50% + ${REFILL_P1.x}px)`, top: `calc(50% + ${REFILL_P1.y}px)`, width: REFILL_P1.w, margin: 0, ...BODY_STYLE }}>
-            Both the patient and caregiver apps show each slot&apos;s stock, so either of you can reorder a full month&apos;s medicines before a slot empties.
+            {refillTexts.refill_text}
           </p>
           <p ref={refillP2Ref} style={{ position: 'absolute', left: `calc(50% + ${REFILL_P2.x}px)`, top: `calc(50% + ${REFILL_P2.y}px)`, width: REFILL_P2.w, margin: 0, ...BODY_STYLE }}>
-            When it arrives, refill it yourself — or Swasth Mitra does it for you.{' '}
+            {flatten(refillTexts.refill_text2)}
             <strong
               style={{
                 fontWeight: 700,
@@ -484,7 +497,7 @@ export default function SetupRefillJourneyMobile() {
                 WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
               }}
             >
-              Just once a month.
+              {refillTexts.refill_text2_emphasis}
             </strong>
           </p>
         </div>

@@ -1,4 +1,4 @@
-const STEPS = ['Purchase Summery', 'User Details & shipping address', 'Payment'];
+import { useContent } from '../../context/ContentContext';
 
 // Per-step progress-ring background (Figma "Mobile" component's ring graphic
 // grows a green arc further around per step). No distinct asset exists yet
@@ -13,6 +13,8 @@ const STEP_RINGS = ['/assets/checkout/step-ring.svg', '/assets/checkout/step-rin
   0-indexed, matching CheckoutStepper's convention.
 */
 export default function CheckoutStepperMobile({ currentStep = 0 }) {
+  const { checkout } = useContent();
+  const STEPS = [...checkout.steps].sort((a, b) => a.sort_order - b.sort_order).map((s) => s.label);
   const title = STEPS[currentStep];
   const next = STEPS[currentStep + 1];
 

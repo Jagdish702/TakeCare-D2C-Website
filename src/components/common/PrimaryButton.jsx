@@ -7,7 +7,7 @@
     onClick    — click handler (optional)
 */
 
-export default function PrimaryButton({ children, fullWidth = false, onClick }) {
+export default function PrimaryButton({ children, fullWidth = false, onClick = () => {} }) {
   return (
     <div
       role="button"

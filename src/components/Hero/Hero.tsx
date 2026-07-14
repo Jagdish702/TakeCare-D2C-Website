@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { useContent } from '../../context/ContentContext';
 import { useFitScale } from '../../hooks/useFitScale';
 import bgNight from '../../assets/figma-hero/bg-night.png';
 import bgLiving from '../../assets/figma-hero/bg-living.png';
@@ -89,6 +90,11 @@ const ECO_CARD_LABEL_STYLE: React.CSSProperties = {
 };
 
 export default function Hero() {
+  const { hero } = useContent();
+  // Ecosystem card labels — image assets stay local; only the label text and
+  // its order come from the DB (already sort_order-ascending).
+  const ecosystemCards = [...hero.ecosystemCards].sort((a, b) => a.sort_order - b.sort_order);
+
   // Outer wrapper – gets pinned by ScrollTrigger
   const triggerRef = useRef<HTMLDivElement>(null);
 
@@ -381,7 +387,7 @@ export default function Hero() {
               textShadow: '0px 2px 20px rgba(0,65,114,0.08)',
             }}
           >
-            It dispenses, reminds &amp; confirms.
+            {hero.content.subtitle}
           </p>
         </div>
 
@@ -406,7 +412,7 @@ export default function Hero() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-            }}>Take Care</span>
+            }}>{hero.content.heading}</span>
           </p>
         </div>
 
@@ -473,7 +479,7 @@ export default function Hero() {
             className="shrink-0 whitespace-pre-line text-center font-inter font-light not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
             style={CHIP_TEXT_STYLE}
           >
-            {'Your medicines. \nOn time. Every time.'}
+            {hero.content.chip_right_text}
           </p>
         </div>
 
@@ -492,7 +498,7 @@ export default function Hero() {
             className="shrink-0 whitespace-pre-line text-center font-inter font-light not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
             style={CHIP_TEXT_STYLE}
           >
-            {'Peace of mind for you. \nTimely medication support \nfor your loved ones.'}
+            {hero.content.chip_left_text}
           </p>
         </div>
 
@@ -521,11 +527,12 @@ export default function Hero() {
               className="font-inter font-light not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
               style={CHIP_TEXT_STYLE}
             >
-              Conceptualised.
-              <br />
-              Designed.
-              <br />
-              Made in <span style={{ fontWeight: 700 }}>India</span>.
+              {hero.content.chip_india_text.split('\n').map((line: string, i: number, lines: string[]) => (
+                <span key={i}>
+                  {line}
+                  {i < lines.length - 1 && <br />}
+                </span>
+              ))}
             </p>
           </div>
         </div>
@@ -557,7 +564,7 @@ export default function Hero() {
               className="min-w-full font-inter font-light not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
               style={{ ...CHIP_TEXT_STYLE, width: 'min-content' }}
             >
-              Scan the QR code to download the app.
+              {hero.content.chip_qr_caption}
             </p>
             <div className="flex items-center gap-4">
               <img src={iconApple} alt="iOS" className="size-6 max-w-none" />
@@ -589,7 +596,7 @@ export default function Hero() {
               textShadow: '0px 2px 8px rgba(0,65,114,0.08)',
             }}
           >
-            {"You can't be there every moment. \nTake Care can."}
+            {hero.content.ecosystem_heading}
           </p>
 
           <div
@@ -600,28 +607,28 @@ export default function Hero() {
             <div className="relative flex items-end justify-center self-stretch overflow-hidden" style={{ borderRadius: 32, paddingTop: 16, paddingBottom: 16 }}>
               <img src={ecoCardDispenser} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
               <p className={ECO_CARD_LABEL_CLASS} style={ECO_CARD_LABEL_STYLE}>
-                {'Smart \nDispenser'}
+                {ecosystemCards[0].label}
               </p>
             </div>
             {/* Takecare App */}
             <div className="relative flex items-end justify-center self-stretch overflow-hidden" style={{ borderRadius: 32, paddingTop: 16, paddingBottom: 16 }}>
               <img src={ecoCardApp} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
               <p className={ECO_CARD_LABEL_CLASS} style={ECO_CARD_LABEL_STYLE}>
-                {'Take Care \nApp'}
+                {ecosystemCards[1].label}
               </p>
             </div>
             {/* CureBay Services */}
             <div className="relative flex items-end justify-center self-stretch overflow-hidden" style={{ borderRadius: 32, paddingTop: 16, paddingBottom: 16 }}>
               <img src={ecoCardCurebay} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
               <p className={ECO_CARD_LABEL_CLASS} style={ECO_CARD_LABEL_STYLE}>
-                {'CureBay \nServices'}
+                {ecosystemCards[2].label}
               </p>
             </div>
             {/* 24×7 Command Centre */}
             <div className="relative flex items-end justify-center self-stretch overflow-hidden" style={{ borderRadius: 32, paddingTop: 16, paddingBottom: 16 }}>
               <img src={ecoCardCommand} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
               <p className={ECO_CARD_LABEL_CLASS} style={ECO_CARD_LABEL_STYLE}>
-                {'24x7 \nCommand Centre'}
+                {ecosystemCards[3].label}
               </p>
             </div>
           </div>
@@ -636,7 +643,7 @@ export default function Hero() {
               textShadow: '0px 2px 8px rgba(0,65,114,0.08)',
             }}
           >
-            {'Connect yourself to \na real-world healthcare ecosystem'}
+            {hero.content.ecosystem_footer_caption}
           </p>
         </div>
 
@@ -674,7 +681,7 @@ export default function Hero() {
               textShadow: '0px 2.979px 8.936px rgba(0,65,114,0.08)',
             }}
           >
-            {'Yaa ! It comes with the specially curated \nTakeCare App for you'}
+            {hero.content.phone_caption}
           </p>
         </div>
         </div>

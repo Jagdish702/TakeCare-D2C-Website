@@ -23,35 +23,14 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useFitScale } from '../../hooks/useFitScale';
 import mumdoseBg from '../../assets/Background mumtookdosetwo.png';
 import FeatureCard from './FeatureCard';
+import { useContent } from '../../context/ContentContext';
 
 gsap.registerPlugin(ScrollTrigger);
-
-// ─── Copy (verified from Figma screenshots) ───────────────────────────────────
-
-const PARA =
-  "Over 55% of elderly patients managing chronic conditions miss doses regularly — most without their family's knowledge. Medication non-adherence causes more than 1,25,000 preventable hospitalisations in India each year. Take Care gives you real-time visibility without requiring you to be there.";
-
-const CARDS = [
-  {
-    icon: 'bell' as const,
-    title: 'Dose confirmed. Instantly.',
-    body: 'To eliminate follow-up calls, Take Care notifies you the moment a dose is taken or missed — medicine name, slot number, timestamp. The device syncs to the TakeCare app in under 30 seconds over Wi-Fi.',
-  },
-  {
-    icon: 'people' as const,
-    title: 'Handles up to 8 medicines at once.',
-    body: 'To manage complex multi-drug regimens, each numbered compartment maps to one medicine and one time slot. The dispenser opens only the right drawer at the right time. No mix-ups. No double doses.',
-  },
-  {
-    icon: 'calendar' as const,
-    title: 'Configure full schedule from your phone.',
-    body: "Upload the prescription to set up care without a visit. CureBay verifies it, schedules, and delivers medicines to your parent's door. You manage timings, refill alerts, and caregiver access. Your parent presses TAKEN, and you see it instantly.",
-  },
-] as const;
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function MumTookDoseSectionTwo() {
+  const { mumTookDose } = useContent();
   // Outer: ScrollTrigger pins this; also receives the viewport-entry fade
   const triggerRef  = useRef<HTMLDivElement>(null);
 
@@ -237,7 +216,7 @@ export default function MumTookDoseSectionTwo() {
             letterSpacing: '0.389px',
           }}
         >
-          {PARA}
+          {mumTookDose.content.paragraph}
         </p>
 
         {/* ── Three feature cards ───────────────────────────────────────────── */}
@@ -266,9 +245,9 @@ export default function MumTookDoseSectionTwo() {
               gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
             }}
           >
-            <FeatureCard ref={card1Ref} {...CARDS[0]} />
-            <FeatureCard ref={card2Ref} {...CARDS[1]} />
-            <FeatureCard ref={card3Ref} {...CARDS[2]} />
+            <FeatureCard ref={card1Ref} {...mumTookDose.cards[0]} />
+            <FeatureCard ref={card2Ref} {...mumTookDose.cards[1]} />
+            <FeatureCard ref={card3Ref} {...mumTookDose.cards[2]} />
           </div>
         </div>
 

@@ -5,9 +5,20 @@
 // Figma; the CureBay wordmark SVG is copied from the desktop component
 // (same asset) rather than re-downloaded.
 
+import { useContent } from '../../context/ContentContext';
+
 const PHONE_FRAME_IMG = '/assets/download-app/phone-frame.png';
 
 export default function DownloadAppSectionMobile() {
+  const { downloadApp } = useContent();
+  const {
+    headline,
+    subheading_line1: subheadingLine1,
+    subheading_line2: subheadingLine2,
+    cta_label_line1: ctaLabelLine1,
+    cta_label_line2: ctaLabelLine2,
+  } = downloadApp.find((row) => row.variant === 'mobile');
+
   return (
     <div
       className="md:hidden"
@@ -106,9 +117,9 @@ export default function DownloadAppSectionMobile() {
                   lineHeight: 'normal',
                 }}
               >
-                Tap to Download
+                {ctaLabelLine1}
                 <br />
-                the Take Care app
+                {ctaLabelLine2}
               </p>
             </div>
           </div>
@@ -154,11 +165,11 @@ export default function DownloadAppSectionMobile() {
             <path d="M84.0432 29.234C84.3204 29.1763 84.5949 29.3441 84.6695 29.6172C84.7442 29.8902 84.5935 30.1743 84.3258 30.2657C84.1368 30.3299 83.9282 30.2842 83.7836 30.147C83.6396 30.0097 83.5831 29.8036 83.6376 29.6119C83.6921 29.4202 83.8482 29.2746 84.0432 29.234Z" fill="white"/>
           </svg>
           <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 24, lineHeight: '32px', color: '#33C1E4' }}>
-            {'Get the  TakeCare app now !'}
+            {headline}
           </p>
           <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontSize: 16, color: '#fff', letterSpacing: '0.5178px', lineHeight: '24px' }}>
-            <p style={{ margin: 0 }}>Peace of mind for you.</p>
-            <p style={{ margin: 0 }}>Timely medication support for your loved ones.</p>
+            <p style={{ margin: 0 }}>{subheadingLine1}</p>
+            <p style={{ margin: 0 }}>{subheadingLine2}</p>
           </div>
         </div>
       </div>

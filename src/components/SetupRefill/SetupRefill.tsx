@@ -1,4 +1,9 @@
+import { useContent } from '../../context/ContentContext';
+
 export default function SetupRefill() {
+  const { setupRefillJourney } = useContent();
+  const { intro } = setupRefillJourney;
+
   return (
     <div className="bg-white w-full px-[120px] pt-[120px] pb-0 max-lg:px-[40px] max-sm:px-6 max-sm:pt-[80px]">
       <div className="flex flex-col gap-[48px] max-sm:gap-[24px] items-center text-center w-full">
@@ -8,7 +13,7 @@ export default function SetupRefill() {
         <p
           className="font-inter font-medium w-full text-[#008eb1] text-[18px] leading-[28px] tracking-[0.5825px] max-sm:text-[16px] max-sm:leading-[24px] max-sm:tracking-[0.5178px]"
         >
-          Schedule. Load. Done. Refill
+          {intro.eyebrow}
         </p>
 
         {/* Web/H0-B: Inter Bold 88px / lh normal / black */}
@@ -16,8 +21,8 @@ export default function SetupRefill() {
         <div
           className="font-inter font-bold text-black text-center w-full leading-[normal] text-[88px] max-lg:text-[64px] max-sm:text-[48px]"
         >
-          <p>Set up &amp; Refill</p>
-          <p>Reimagined.</p>
+          <p>{intro.heading_line1}</p>
+          <p>{intro.heading_line2}</p>
         </div>
 
       </div>

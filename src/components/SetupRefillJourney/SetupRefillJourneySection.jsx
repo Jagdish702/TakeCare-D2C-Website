@@ -2,6 +2,8 @@ import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { useContent } from '../../context/ContentContext';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const ASSETS = {
@@ -166,6 +168,14 @@ const S20 = {
 };
 
 export default function SetupRefillJourneySection() {
+  const { setupRefillJourney } = useContent();
+  const stepByKey = Object.fromEntries(setupRefillJourney.steps.map((s) => [s.step_key, s]));
+  const textByKey = (step) => Object.fromEntries(step.texts.map((t) => [t.text_key, t.body]));
+  const scheduleTexts = textByKey(stepByKey.schedule);
+  const loadTexts = textByKey(stepByKey.load);
+  const doneTexts = textByKey(stepByKey.done);
+  const refillTexts = textByKey(stepByKey.refill);
+
   const outerRef   = useRef(null);
   const canvasRef  = useRef(null);
 
@@ -631,7 +641,7 @@ export default function SetupRefillJourneySection() {
             }}
           >
             <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 48, fontWeight: 500, color: '#00345b', lineHeight: 1 }}>
-              1
+              {stepByKey.schedule.badge_number}
             </span>
           </div>
 
@@ -646,7 +656,7 @@ export default function SetupRefillJourneySection() {
               width: S1.head.w, lineHeight: 1, opacity: 0,
             }}
           >
-            Schedule
+            {stepByKey.schedule.heading}
           </p>
 
           {/* ── List item 1 ── */}
@@ -663,7 +673,7 @@ export default function SetupRefillJourneySection() {
               opacity: 0,
             }}
           >
-            <li>Open the TakeCare app and upload the prescription.</li>
+            <li>{scheduleTexts.item1}</li>
           </ol>
 
           {/* ── List item 2 (hidden until state 2+) ── */}
@@ -680,7 +690,7 @@ export default function SetupRefillJourneySection() {
               opacity: 0,
             }}
           >
-            <li>Define your meal time &amp; App configures schedule.</li>
+            <li>{scheduleTexts.item2}</li>
           </ol>
 
           {/* ── State 7: Badge 2 ── */}
@@ -697,7 +707,7 @@ export default function SetupRefillJourneySection() {
             }}
           >
             <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 48, fontWeight: 500, color: '#000', lineHeight: 1 }}>
-              2
+              {stepByKey.load.badge_number}
             </span>
           </div>
 
@@ -711,7 +721,7 @@ export default function SetupRefillJourneySection() {
               width: S7.head2.w, lineHeight: 1, opacity: 0,
             }}
           >
-            Load
+            {stepByKey.load.heading}
           </p>
 
           {/* ── State 7: description text ── */}
@@ -724,7 +734,7 @@ export default function SetupRefillJourneySection() {
               width: S7.text2.w, letterSpacing: 0.3888, lineHeight: 1.35, opacity: 0,
             }}
           >
-            Our Pharmacy fulfils order. CureBay medicines dispatched to door.
+            {loadTexts.text2}
           </p>
 
           {/* ── State 8: Pill dispenser device (empty) ── */}
@@ -789,7 +799,7 @@ export default function SetupRefillJourneySection() {
               width: S8.text3.w, letterSpacing: 0.3888, lineHeight: 1.35, opacity: 0,
             }}
           >
-            Fill the numbered compartments with medicines once a month or our Swasth Mitra will fill for you.
+            {loadTexts.text3}
           </p>
 
           {/* ── State 13: Single centered phone (Pill Box / Medication Status screen) ── */}
@@ -863,7 +873,7 @@ export default function SetupRefillJourneySection() {
             }}
           >
             <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 48, fontWeight: 500, color: '#004172', lineHeight: 1 }}>
-              3
+              {stepByKey.done.badge_number}
             </span>
           </div>
 
@@ -877,7 +887,7 @@ export default function SetupRefillJourneySection() {
               width: S14.head.w, lineHeight: 1, opacity: 0,
             }}
           >
-            Done
+            {stepByKey.done.heading}
           </p>
 
           {/* ── State 14: description text (explicit line breaks to match Figma's 5-line wrap;
@@ -892,11 +902,7 @@ export default function SetupRefillJourneySection() {
               whiteSpace: 'pre', opacity: 0,
             }}
           >
-{`Take the medicine from the
-green-lit slot. Close it after use
-—the magnetic lid shuts
-automatically, and the light
-turns off to confirm it's closed.`}
+            {doneTexts.text3_done}
           </p>
 
           {/* ── State 15: Pill box (richer in-use view) ── */}
@@ -960,7 +966,7 @@ turns off to confirm it's closed.`}
               width: S16.text2.w, letterSpacing: 0.3888, lineHeight: 1.35, opacity: 0,
             }}
           >
-            Your Caregiver and Concierge Service are notified instantly.
+            {doneTexts.caregiver_text}
           </p>
 
           {/* ── State 18: Centered Medicine Inventory phone ── */}
@@ -994,7 +1000,7 @@ turns off to confirm it's closed.`}
             }}
           >
             <span style={{ fontFamily: 'Inter, sans-serif', fontSize: 48, fontWeight: 500, color: '#003d2e', lineHeight: 1 }}>
-              4
+              {stepByKey.refill.badge_number}
             </span>
           </div>
 
@@ -1008,7 +1014,7 @@ turns off to confirm it's closed.`}
               width: S19.head.w, lineHeight: 1, opacity: 0,
             }}
           >
-            Refill
+            {stepByKey.refill.heading}
           </p>
 
           {/* ── State 19: description text ── */}
@@ -1021,7 +1027,7 @@ turns off to confirm it's closed.`}
               width: S19.text.w, letterSpacing: 0.3888, lineHeight: 1.35, opacity: 0,
             }}
           >
-            {`Both the patient and caregiver apps show each slot's stock, so either of you can reorder a full month's medicines before a slot empties.`}
+            {refillTexts.refill_text}
           </p>
 
           {/* ── State 20: Full-stock phone (crossfades over the State 19 phone, same spot) ── */}
@@ -1052,9 +1058,7 @@ turns off to confirm it's closed.`}
               whiteSpace: 'pre', opacity: 0,
             }}
           >
-            {`When it arrives, refill it yourself
-— or Swasth Mitra does it for
-you. `}
+            {refillTexts.refill_text2}
             <span
               style={{
                 fontWeight: 700,
@@ -1064,7 +1068,7 @@ you. `}
                 color: 'transparent',
               }}
             >
-              Just once a month.
+              {refillTexts.refill_text2_emphasis}
             </span>
           </p>
         </div>

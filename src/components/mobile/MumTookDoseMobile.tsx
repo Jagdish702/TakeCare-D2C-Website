@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useFitScale } from '../../hooks/useFitScale';
 import mumdoseBg from '../../assets/mumdose-bg.png';
 import AppreciationCard from '../MumTookDose/AppreciationCard';
+import { useContent } from '../../context/ContentContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,6 +33,7 @@ const CARD_SCALE = CARD_W / CARD_NATIVE_W;
  * component so copy/visuals stay in lockstep; only layout and scale differ.
  */
 export default function MumTookDoseMobile() {
+  const { mumTookDose } = useContent();
   const triggerRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
@@ -132,21 +134,21 @@ export default function MumTookDoseMobile() {
                 className="font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                 style={{ fontSize: 20, lineHeight: '28px', letterSpacing: '1.62px', color: '#008EB1' }}
               >
-                For the ones who care.
+                {mumTookDose.content.eyebrow}
               </p>
               <div
                 className="font-inter font-bold not-italic text-black [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                 style={{ fontSize: 48, lineHeight: 'normal' }}
               >
-                <p>Mum took</p>
-                <p>her dose.</p>
+                <p>{mumTookDose.content.heading_line1}</p>
+                <p>{mumTookDose.content.heading_line2}</p>
               </div>
               <div
                 className="font-inter font-light not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                 style={{ fontSize: 24, lineHeight: '28px', color: '#4D4D4D' }}
               >
-                <p>Know in real time.</p>
-                <p>From anywhere in the world.</p>
+                <p>{mumTookDose.content.subheading_line1}</p>
+                <p>{mumTookDose.content.subheading_line2}</p>
               </div>
             </div>
 

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useContent } from '../../context/ContentContext';
 import IconSlot from '../common/IconSlot';
 import indiaFlagImg from '../../assets/profile-modal/india-flag.png';
 import iconCheck from '../../assets/profile-modal/icon-check.svg';
@@ -105,22 +106,26 @@ function SelectField({
 }
 
 function DateField({
+  label,
   value,
   onChange,
+  placeholder,
 }: {
+  label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
 }) {
   return (
     <div className="flex min-w-0 flex-col gap-3">
-      <p className={FIELD_LABEL_CLS}>Date of Birth*</p>
+      <p className={FIELD_LABEL_CLS}>{label}</p>
       <div className={FIELD_BOX} style={PLAIN_FIELD_BORDER}>
         <IconSlot src={iconCalendar} width={16} height={17.778} shadow />
         <input
           type="text"
           value={value}
           onChange={onChange}
-          placeholder="Placeholder"
+          placeholder={placeholder}
           className={FIELD_TEXT_CLS.replace('leading-[28px]', 'leading-normal').replace('tracking-[0.5184px]', 'tracking-[0.2592px]')}
         />
         <IconSlot src={iconChevronDown} width={10} height={5} />
@@ -130,15 +135,19 @@ function DateField({
 }
 
 function PhoneField({
+  label,
   value,
   onChange,
+  placeholder,
 }: {
+  label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
 }) {
   return (
     <div className="flex min-w-0 flex-col gap-3">
-      <p className={FIELD_LABEL_CLS}>Phone Number*</p>
+      <p className={FIELD_LABEL_CLS}>{label}</p>
       <div className="flex h-11 w-full items-start">
         <div
           className="flex h-11 shrink-0 items-center gap-2 px-4"
@@ -158,7 +167,7 @@ function PhoneField({
             type="tel"
             value={value}
             onChange={onChange}
-            placeholder="E.g. 98XXXXXXXX"
+            placeholder={placeholder}
             className={FIELD_TEXT_CLS.replace('leading-[28px]', 'leading-normal').replace('tracking-[0.5184px]', 'tracking-[0.2592px]')}
           />
         </div>
@@ -214,6 +223,12 @@ export default function ProfileModal({
   onClose: () => void;
   onRequestOTP?: (phoneNumber: string, formData: ProfileFormData) => void;
 }) {
+  const { profile, checkout } = useContent();
+  const profileModal = profile.profileModal;
+  const fieldMap = Object.fromEntries(
+    checkout.formFields.filter((f: any) => f.form_key === 'profile').map((f: any) => [f.field_key, f])
+  ) as Record<string, { label: string; placeholder: string }>;
+
   const [formData, setFormData] = useState<ProfileFormData>({
     firstName: '',
     lastName: '',
@@ -262,7 +277,7 @@ export default function ProfileModal({
       {/* ── Header row ── */}
       <div className="flex w-full shrink-0 items-center justify-between">
         <h2 className="font-inter text-[32px] font-semibold leading-normal text-black [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]">
-          Create your Profile
+          {profileModal.heading}
         </h2>
         <button
           type="button"
@@ -290,43 +305,43 @@ export default function ProfileModal({
             overlaps on narrow viewports. */}
         <div className="grid w-full grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-3">
           <div className="md:col-start-1 md:row-start-1">
-            <TextField label="First Name" value={formData.firstName} onChange={handleChange('firstName')} placeholder="Enter First Name" />
+            <TextField label={fieldMap.first_name.label} value={formData.firstName} onChange={handleChange('firstName')} placeholder={fieldMap.first_name.placeholder} />
           </div>
           <div className="md:col-start-2 md:row-start-1">
-            <TextField label="Last Name" value={formData.lastName} onChange={handleChange('lastName')} placeholder="Enter Last Name" />
+            <TextField label={fieldMap.last_name.label} value={formData.lastName} onChange={handleChange('lastName')} placeholder={fieldMap.last_name.placeholder} />
           </div>
           <div className="md:col-start-3 md:row-start-1">
-            <TextField label="Gender" value={formData.gender} onChange={handleChange('gender')} placeholder="Eg. Male" />
+            <TextField label={fieldMap.gender.label} value={formData.gender} onChange={handleChange('gender')} placeholder={fieldMap.gender.placeholder} />
           </div>
 
           <div className="md:col-start-1 md:row-start-2">
-            <PhoneField value={formData.phoneNumber} onChange={handleChange('phoneNumber')} />
+            <PhoneField label={fieldMap.phone_number.label} value={formData.phoneNumber} onChange={handleChange('phoneNumber')} placeholder={fieldMap.phone_number.placeholder} />
           </div>
           <div className="md:col-start-2 md:row-start-2">
-            <DateField value={formData.dateOfBirth} onChange={handleChange('dateOfBirth')} />
+            <DateField label={fieldMap.date_of_birth.label} value={formData.dateOfBirth} onChange={handleChange('dateOfBirth')} placeholder={fieldMap.date_of_birth.placeholder} />
           </div>
           <div className="md:col-start-3 md:row-start-2">
-            <SelectField label="Blood Group" value={formData.bloodGroup} onChange={handleChange('bloodGroup')} placeholder="eg. O+" />
+            <SelectField label={fieldMap.blood_group.label} value={formData.bloodGroup} onChange={handleChange('bloodGroup')} placeholder={fieldMap.blood_group.placeholder} />
           </div>
 
           <div className="md:col-start-1 md:row-start-3">
-            <TextField label="Age*" value={formData.age} onChange={handleChange('age')} placeholder="eg. 24" />
+            <TextField label={fieldMap.age.label} value={formData.age} onChange={handleChange('age')} placeholder={fieldMap.age.placeholder} />
           </div>
           <div className="md:col-start-2 md:row-start-3">
-            <TextField label="Address 1*" value={formData.address1} onChange={handleChange('address1')} placeholder="Enter Address 1" />
+            <TextField label={fieldMap.address1.label} value={formData.address1} onChange={handleChange('address1')} placeholder={fieldMap.address1.placeholder} />
           </div>
           <div className="md:col-start-3 md:row-start-3">
-            <SelectField label="Country" value={formData.country} onChange={handleChange('country')} placeholder="eg. India" />
+            <SelectField label={fieldMap.country.label} value={formData.country} onChange={handleChange('country')} placeholder={fieldMap.country.placeholder} />
           </div>
 
           <div className="md:col-start-1 md:row-start-4">
-            <SelectField label="Pin code*" value={formData.pincode} onChange={handleChange('pincode')} placeholder="Placeholder" />
+            <SelectField label={fieldMap.pincode.label} value={formData.pincode} onChange={handleChange('pincode')} placeholder={fieldMap.pincode.placeholder} />
           </div>
           <div className="md:col-start-2 md:row-start-4">
-            <SelectField label="City*" value={formData.city} onChange={handleChange('city')} placeholder="eg. Nardana" />
+            <SelectField label={fieldMap.city.label} value={formData.city} onChange={handleChange('city')} placeholder={fieldMap.city.placeholder} />
           </div>
           <div className="md:col-start-3 md:row-start-4">
-            <SelectField label="State*" value={formData.state} onChange={handleChange('state')} placeholder="eg. Maharashtra" />
+            <SelectField label={fieldMap.state.label} value={formData.state} onChange={handleChange('state')} placeholder={fieldMap.state.placeholder} />
           </div>
         </div>
 
@@ -335,10 +350,10 @@ export default function ProfileModal({
           <CheckboxRow
             checked={checkboxes.consent}
             onToggle={toggleCheckbox('consent')}
-            text="By checking  on this you are giving consent to Take Care the access to your account and login to it."
+            text={profileModal.consent_text}
           />
-          <CheckboxRow checked={checkboxes.terms} onToggle={toggleCheckbox('terms')} text="Terms and Conditions" />
-          <CheckboxRow checked={checkboxes.privacy} onToggle={toggleCheckbox('privacy')} text="Privacy Policy" />
+          <CheckboxRow checked={checkboxes.terms} onToggle={toggleCheckbox('terms')} text={profileModal.terms_label} />
+          <CheckboxRow checked={checkboxes.privacy} onToggle={toggleCheckbox('privacy')} text={profileModal.privacy_label} />
         </div>
       </div>
 
@@ -350,7 +365,7 @@ export default function ProfileModal({
           className="flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#004172] px-4 py-3 font-inter text-[16px] font-medium leading-normal tracking-[0.2592px] text-white"
           style={{ boxShadow: '0px 2px 2px rgba(0,65,114,0.08), inset 0px 0px 2px rgba(0,65,114,0.08)' }}
         >
-          Get Consent via OTP
+          {profileModal.submit_label}
           <IconSlot src={iconChevronRight} width={5} height={10} />
         </button>
       </div>

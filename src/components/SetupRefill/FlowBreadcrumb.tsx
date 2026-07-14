@@ -1,3 +1,5 @@
+import { useContent } from '../../context/ContentContext';
+
 /**
  * Breadcrumb strip below the header on the "Set Up, Refill & Specifications"
  * flow page (Figma node 13222:18301, "Frame 77") — distinct from the site
@@ -13,6 +15,9 @@ function ChevronRightSmall() {
 }
 
 export default function FlowBreadcrumb({ onHome }: { onHome: () => void }) {
+  const { breadcrumbs } = useContent();
+  const crumb = breadcrumbs.find((b: { page_key: string }) => b.page_key === 'setup-refill-flow');
+
   return (
     <div
       className="px-[120px] max-lg:px-[40px] max-sm:px-6"
@@ -44,7 +49,7 @@ export default function FlowBreadcrumb({ onHome }: { onHome: () => void }) {
           whiteSpace: 'nowrap',
         }}
       >
-        TakeCare
+        {crumb.home_label}
       </button>
       <ChevronRightSmall />
       <p
@@ -59,7 +64,7 @@ export default function FlowBreadcrumb({ onHome }: { onHome: () => void }) {
           whiteSpace: 'nowrap',
         }}
       >
-        Set Up, Refill &amp; Specifications
+        {crumb.current_label}
       </p>
     </div>
   );

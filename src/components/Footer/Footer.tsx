@@ -5,6 +5,8 @@
 // desktop (Logo+contact | Services | About) since no separate desktop Figma
 // frame for this section has been built yet.
 
+import { useContent } from '../../context/ContentContext';
+
 const LOGO = '/assets/footer/logo-white.svg';
 const ICON_PHONE = '/assets/footer/icon-phone.svg';
 const ICON_MAIL = '/assets/footer/icon-mail.svg';
@@ -13,10 +15,7 @@ const BADGE_ISO = '/assets/footer/badge-iso.png';
 const BADGE_SOC = '/assets/footer/badge-soc.png';
 const BADGE_DIGITAL_MISSION = '/assets/footer/badge-digital-mission.png';
 
-const SERVICES = ['Membership', 'Totalcare', 'Consult a Doctor', 'Order Medicine', 'Book a Lab Test', 'Consult for Surgery', 'Concierge Services'];
-const ABOUT = ['Why CureBay', 'Our Team', 'Blogs', 'Media & News', 'Awards', 'Privacy Policy', 'Terms of Use', 'Return and Refund Policy', 'Medicine Delivery Policy', 'Careers'];
-
-function LinkColumn({ title, items }) {
+function LinkColumn({ title, items }: { title: string; items: string[] }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 159.5 }}>
       <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 18, lineHeight: '28px', color: '#fff' }}>{title}</p>
@@ -32,6 +31,9 @@ function LinkColumn({ title, items }) {
 }
 
 export default function Footer() {
+  const { footer } = useContent();
+  const { linkGroups, companyInfo } = footer;
+
   return (
     <footer style={{ background: '#004172', width: '100%' }}>
       <div
@@ -42,35 +44,36 @@ export default function Footer() {
         <div className="flex flex-col gap-1 md:max-w-[380px]">
           <img src={LOGO} alt="CureBay" draggable={false} style={{ width: 106.378, height: 32 }} />
           <p style={{ margin: 0, marginTop: 4, fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 16, lineHeight: '18.4px', color: '#42BA85' }}>
-            CureBay Pharmacy Pvt. Ltd.
+            {companyInfo.company_name}
           </p>
           <p style={{ margin: 0, marginTop: 16, fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 14, lineHeight: '20px', color: '#fff', maxWidth: 319 }}>
-            Plot No-A-98, Laxmi Sagar, Budha Nagar, Bhubaneswar, Khordha, Odisha, 751006
+            {companyInfo.address}
           </p>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 20 }}>
             <img src={ICON_PHONE} alt="" draggable={false} style={{ width: 24, height: 24 }} />
             <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 16, lineHeight: '18.4px', color: '#fff', whiteSpace: 'nowrap' }}>
-              +91-8335 000 999
+              {companyInfo.phone}
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginTop: 12 }}>
             <img src={ICON_MAIL} alt="" draggable={false} style={{ width: 16, height: 16, marginTop: 1 }} />
             <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 14, lineHeight: '20px', color: '#fff', whiteSpace: 'nowrap' }}>
-              contact@curebay.com
+              {companyInfo.email_primary}
             </p>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginTop: 12 }}>
             <img src={ICON_MAIL} alt="" draggable={false} style={{ width: 16, height: 16, marginTop: 1 }} />
             <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 14, lineHeight: '20px', color: '#fff', whiteSpace: 'nowrap' }}>
-              support@curebay.com
+              {companyInfo.email_secondary}
             </p>
           </div>
         </div>
 
         {/* Services + About */}
         <div className="flex gap-8 md:gap-16">
-          <LinkColumn title="Services" items={SERVICES} />
-          <LinkColumn title="About" items={ABOUT} />
+          {linkGroups.map((group: any) => (
+            <LinkColumn key={group.id} title={group.title} items={group.links.map((link: any) => link.label)} />
+          ))}
         </div>
 
         {/* Certification badges */}
@@ -90,9 +93,9 @@ export default function Footer() {
 
       <div style={{ borderTop: '1px solid rgba(255,255,255,0.37)', marginTop: 32 }} className="mx-6 md:mx-[120px]">
         <p style={{ margin: 0, padding: '33px 0 32px', textAlign: 'center', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 12, lineHeight: '16px', color: '#fff' }}>
-          Copyright © 2024
+          Copyright © {companyInfo.copyright_year}
           <br />
-          All Rights Reserved by CureBay Pharmacy Pvt. Ltd.
+          {companyInfo.copyright_text}
         </p>
       </div>
     </footer>

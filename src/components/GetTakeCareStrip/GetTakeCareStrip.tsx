@@ -1,6 +1,7 @@
 import { useFitScale } from '../../hooks/useFitScale';
 import productImg from '../../assets/hero-product.png';
 import mobileImg from '../../assets/hero-mobile.png';
+import { useContent } from '../../context/ContentContext';
 
 /*
   "Get_TakeCare_bottom_Strip" — Figma node 12323:7048.
@@ -8,12 +9,15 @@ import mobileImg from '../../assets/hero-mobile.png';
   straight to the 2-card subscription plans (#subscription-plans).
 */
 export default function GetTakeCareStrip() {
+  const { header } = useContent();
+  const { promoStrip } = header;
+
   // Card is a fixed 727px-wide design; shrink it (from the bottom edge) on
   // narrower viewports instead of letting it overflow off-screen.
   const scale = useFitScale(727 + 32);
 
   const scrollToPlans = () => {
-    document.getElementById('subscription-plans')
+    document.getElementById(promoStrip.scroll_target_id)
       ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
@@ -46,14 +50,14 @@ export default function GetTakeCareStrip() {
           className="shrink-0 whitespace-nowrap font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] [word-break:break-word]"
           style={{ fontSize: '14px', color: '#808080', letterSpacing: '0.4536px' }}
         >
-          <p className="mb-0 whitespace-pre" style={{ lineHeight: '24px' }}>Tablet dispenser </p>
-          <p className="whitespace-pre" style={{ lineHeight: '24px' }}>(one time cost)</p>
+          <p className="mb-0 whitespace-pre" style={{ lineHeight: '24px' }}>{promoStrip.device_label_line1}</p>
+          <p className="whitespace-pre" style={{ lineHeight: '24px' }}>{promoStrip.device_label_line2}</p>
         </div>
         <p
           className="shrink-0 whitespace-nowrap font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] [word-break:break-word]"
           style={{ fontSize: '12px', color: '#4D4D4D', letterSpacing: '0.3883px', lineHeight: '1.5' }}
         >
-          +
+          {promoStrip.separator_symbol_1}
         </p>
         <div className="relative shrink-0 overflow-hidden" style={{ width: '23.442px', height: '48.367px' }}>
           <img
@@ -67,8 +71,8 @@ export default function GetTakeCareStrip() {
           className="shrink-0 whitespace-nowrap font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] [word-break:break-word]"
           style={{ fontSize: '14px', color: '#808080', letterSpacing: '0.4536px' }}
         >
-          <p className="mb-0 whitespace-pre" style={{ lineHeight: '24px' }}>Subscription </p>
-          <p className="whitespace-pre" style={{ lineHeight: '24px' }}>Cost</p>
+          <p className="mb-0 whitespace-pre" style={{ lineHeight: '24px' }}>{promoStrip.subscription_label_line1}</p>
+          <p className="whitespace-pre" style={{ lineHeight: '24px' }}>{promoStrip.subscription_label_line2}</p>
         </div>
       </div>
 
@@ -78,7 +82,7 @@ export default function GetTakeCareStrip() {
           className="shrink-0 whitespace-nowrap text-center font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] [word-break:break-word]"
           style={{ fontSize: '24px', color: '#000000', letterSpacing: '0.3888px', lineHeight: 'normal' }}
         >
-          ₹1,698
+          {promoStrip.price}
         </p>
         <button
           type="button"
@@ -98,7 +102,7 @@ export default function GetTakeCareStrip() {
             className="font-inter font-medium not-italic text-white [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] [word-break:break-word]"
             style={{ fontSize: '16px', letterSpacing: '0.2592px', lineHeight: 'normal' }}
           >
-            Get Take Care
+            {promoStrip.cta_label}
           </span>
         </button>
       </div>

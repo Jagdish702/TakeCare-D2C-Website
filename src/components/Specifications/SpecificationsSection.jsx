@@ -2,6 +2,8 @@ import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { useContent } from '../../context/ContentContext';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const CANVAS_W = 1440;
@@ -42,56 +44,34 @@ const OUTER_H = '1200vh';
 
 const GRID_L = (CANVAS_W - 1000) / 2;  // 220
 
-const CARDS = [
-  {
-    col: 1, row: 1,
-    icon: '/assets/specifications/icons/magnetic-lock.svg',
-    title: 'Magnetic Lock',
-    body: (
-      <>
-        A magnetic lock secures the slot with a single push, at dose time the right slot glows green.
-        Take it and shut the slot; that close is the confirmation,{' '}
-        <strong style={{ fontWeight: 700 }}>IR sensors confirm each dose is taken.</strong>
-      </>
-    ),
-    fontSize: 18, tracking: '0.5825px',
-  },
-  {
-    col: 2, row: 1,
-    icon: '/assets/specifications/icons/medical-grade.svg',
-    title: 'Medical-grade build.',
-    body: 'Super White ABS / polycarbonate with a matte, anti-microbial finish — non-reflective and easy to wipe clean.',
-    fontSize: 18, tracking: '0.5825px',
-  },
-  {
-    col: 3, row: 1,
-    icon: '/assets/specifications/icons/marked-for-everyone.svg',
-    title: 'Marked for everyone',
-    body: 'Each slot carries a number, a pull-arrow, and a Braille mark — moulded into the surface, never printed, so they never rub off. Built so low-vision and blind users find the right slot by touch.',
-    fontSize: 16, tracking: '0.5184px',
-  },
-  {
-    col: 1, row: 2,
-    icon: '/assets/specifications/icons/see-whats-left.svg',
-    title: "See what's left",
-    body: 'A clear window on the front of each slot, with a slight inward tilt that nudges pills forward, shows how much medicine remains at a glance.',
-    fontSize: 16, tracking: '0.5184px',
-  },
-  {
-    col: 2, row: 2,
-    icon: '/assets/specifications/icons/made-for-older-hands.svg',
-    title: 'Made for older hands',
-    body: "The two everyday keys — Taken and Snooze — sit raised for a confident press; the rest stay flush so they're never hit by accident.",
-    fontSize: 16, tracking: '0.5184px',
-  },
-  {
-    col: 3, row: 2,
-    icon: '/assets/specifications/icons/stable-base.svg',
-    title: 'Stable base',
-    body: 'A 1 mm rubber mat grips the surface and seals each slot, blocking light bleed between stacked trays.',
-    fontSize: 18, tracking: '0.5825px',
-  },
-];
+// icon_key -> local icon asset + typography (fontSize/tracking alternate per card
+// in the Figma grid; not represented in the DB, so kept as a local lookup keyed
+// off the same icon_key the DB rows carry).
+const ICON_META = {
+  'magnetic-lock':          { icon: '/assets/specifications/icons/magnetic-lock.svg', fontSize: 18, tracking: '0.5825px' },
+  'medical-grade':          { icon: '/assets/specifications/icons/medical-grade.svg', fontSize: 18, tracking: '0.5825px' },
+  'marked-for-everyone':    { icon: '/assets/specifications/icons/marked-for-everyone.svg', fontSize: 16, tracking: '0.5184px' },
+  'see-whats-left':         { icon: '/assets/specifications/icons/see-whats-left.svg', fontSize: 16, tracking: '0.5184px' },
+  'made-for-older-hands':   { icon: '/assets/specifications/icons/made-for-older-hands.svg', fontSize: 16, tracking: '0.5184px' },
+  'stable-base':            { icon: '/assets/specifications/icons/stable-base.svg', fontSize: 18, tracking: '0.5825px' },
+};
+
+// The "Magnetic Lock" card body ends with a bolded sentence in the Figma design.
+// The DB stores the card body as one plain-text field (no rich-text markup), so
+// the bold tail is re-applied here by locating the known trailing sentence —
+// the copy itself still comes from the DB row, only the emphasis split is local.
+const MAGNETIC_LOCK_BOLD_TAIL = 'IR sensors confirm each dose is taken.';
+
+function withBoldTail(body, tail, strongStyle) {
+  const idx = body.lastIndexOf(tail);
+  if (idx === -1) return body;
+  return (
+    <>
+      {body.slice(0, idx)}
+      <strong style={strongStyle}>{tail}</strong>
+    </>
+  );
+}
 
 function StatItem({ number, unit, label }) {
   return (
@@ -122,6 +102,29 @@ function StatItem({ number, unit, label }) {
 }
 
 export default function SpecificationsSection() {
+  const { specifications } = useContent();
+  const cardsByState = (key) => specifications.cards.filter((c) => c.state_key === key);
+  const state8ByIcon = Object.fromEntries(cardsByState('state8').map((c) => [c.icon_key, c]));
+  const CARDS = cardsByState('state3').map((row) => {
+    const meta = ICON_META[row.icon_key];
+    return {
+      col: row.col, row: row.row,
+      icon: meta.icon,
+      title: row.title,
+      body: row.icon_key === 'magnetic-lock'
+        ? withBoldTail(row.body, MAGNETIC_LOCK_BOLD_TAIL, { fontWeight: 700 })
+        : row.body,
+      fontSize: meta.fontSize, tracking: meta.tracking,
+    };
+  });
+  const specStats = specifications.stats.filter((s) => s.group_key === 'specifications');
+  const connectivityCards = specifications.connectivityCards.filter((c) => c.variant === 'desktop');
+  const CONNECTIVITY_ICON = {
+    Connectivity: '/assets/specifications/icons/connectivity.svg',
+    'Charging Input': '/assets/specifications/icons/charging-input.svg',
+    'Audio Integration': '/assets/specifications/icons/audio-integration.svg',
+  };
+
   const outerRef     = useRef(null);
   const canvasRef    = useRef(null);
   const specRef      = useRef(null);
@@ -296,20 +299,20 @@ export default function SpecificationsSection() {
               className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
               style={{ color: '#008EB1', fontSize: 24, fontWeight: 500, fontFamily: 'Inter, sans-serif', letterSpacing: '0.3888px', lineHeight: 1, margin: 0 }}
             >
-              Specifications
+              {specifications.content.eyebrow}
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 48 }}>
               <h2
                 className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                 style={{ fontSize: 88, fontWeight: 700, color: '#000', fontFamily: 'Inter, sans-serif', lineHeight: 1, whiteSpace: 'nowrap', margin: 0, textShadow: '0px 2px 20px rgba(0,65,114,0.08)' }}
               >
-                Engineered to last.
+                {specifications.content.heading}
               </h2>
               <p
                 className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                 style={{ fontSize: 24, fontWeight: 500, color: '#808080', fontFamily: 'Inter, sans-serif', letterSpacing: '0.3888px', lineHeight: 1, whiteSpace: 'nowrap', margin: 0 }}
               >
-                Precision, inside out. · Proof in every detail.
+                {specifications.content.subhead}
               </p>
             </div>
           </div>
@@ -386,8 +389,11 @@ export default function SpecificationsSection() {
                   className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                   style={{ fontSize: 48, fontWeight: 500, fontFamily: 'Inter, sans-serif', color: '#000', lineHeight: 1, margin: 0 }}
                 >
-                  Flexible Storage Capacity
+                  {specifications.storageCapacity.heading}
                 </h2>
+                {/* This paragraph's bespoke wording (with inline emphasis) has no matching DB
+                    field — specifications.storageCapacity.body holds the shorter, plain-text
+                    version used by the standalone StorageCapacitySection instead. Kept hardcoded. */}
                 <p
                   className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                   style={{ fontSize: 18, fontWeight: 300, fontFamily: 'Inter, sans-serif', color: '#4D4D4D', letterSpacing: '0.5825px', lineHeight: '28px', margin: 0 }}
@@ -399,8 +405,8 @@ export default function SpecificationsSection() {
                 </p>
               </div>
               <div style={{ display: 'flex', gap: 48, alignItems: 'flex-start' }}>
-                <StatItem number="24" unit="mm Height" label="6 compartments" />
-                <StatItem number="48" unit="mm height" label="2 compartments" />
+                <StatItem number={specStats[0].number} unit={specStats[0].unit} label={specStats[0].label} />
+                <StatItem number={specStats[1].number} unit={specStats[1].unit} label={specStats[1].label} />
               </div>
             </div>
           </div>
@@ -431,61 +437,37 @@ export default function SpecificationsSection() {
               ref={leftText3Ref}
               style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', columnGap: 60, rowGap: 60, opacity: 0 }}
             >
-              {/* Card 1: Connectivity */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <img src="/assets/specifications/icons/connectivity.svg" alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
-                <p
-                  className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
-                  style={{ fontSize: 24, fontWeight: 500, fontFamily: 'Inter, sans-serif', color: '#000', letterSpacing: '0.3888px', lineHeight: 'normal', margin: 0 }}
-                >
-                  Connectivity
-                </p>
-                <p
-                  className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
-                  style={{ fontSize: 18, fontWeight: 300, fontFamily: 'Inter, sans-serif', color: '#4D4D4D', letterSpacing: '0.5825px', lineHeight: '28px', margin: 0 }}
-                >
-                  4G connectivity and nano-SIM tray with pin-hole release; high-tolerance fit.
-                </p>
-              </div>
-
-              {/* Card 2: Charging Input */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <img src="/assets/specifications/icons/charging-input.svg" alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
-                <p
-                  className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
-                  style={{ fontSize: 24, fontWeight: 500, fontFamily: 'Inter, sans-serif', color: '#000', letterSpacing: '0.3888px', lineHeight: 'normal', margin: 0 }}
-                >
-                  Charging Input
-                </p>
-                <p
-                  className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
-                  style={{ fontSize: 18, fontWeight: 300, fontFamily: 'Inter, sans-serif', color: '#4D4D4D', letterSpacing: '0.5825px', lineHeight: '28px', margin: 0 }}
-                >
-                  Side-mounted charging input on the top-right panel.
-                </p>
-              </div>
-
-              {/* Card 3: Audio Integration */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <img src="/assets/specifications/icons/audio-integration.svg" alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
-                <p
-                  className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
-                  style={{ fontSize: 24, fontWeight: 500, fontFamily: 'Inter, sans-serif', color: '#000', letterSpacing: '0.3888px', lineHeight: 'normal', margin: 0 }}
-                >
-                  Audio Integration
-                </p>
-                <p
-                  className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
-                  style={{
-                    fontSize: 18, fontWeight: 300, fontFamily: 'Inter, sans-serif',
-                    letterSpacing: '0.5825px', lineHeight: '28px', margin: 0,
-                    background: 'linear-gradient(to bottom, #ff9191, #ba0000)',
-                    WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
-                  }}
-                >
-                  Audio Integration
-                </p>
-              </div>
+              {connectivityCards.map((card) => (
+                <div key={card.title} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                  <img src={CONNECTIVITY_ICON[card.title]} alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
+                  <p
+                    className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
+                    style={{ fontSize: 24, fontWeight: 500, fontFamily: 'Inter, sans-serif', color: '#000', letterSpacing: '0.3888px', lineHeight: 'normal', margin: 0 }}
+                  >
+                    {card.title}
+                  </p>
+                  {card.is_placeholder ? (
+                    <p
+                      className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
+                      style={{
+                        fontSize: 18, fontWeight: 300, fontFamily: 'Inter, sans-serif',
+                        letterSpacing: '0.5825px', lineHeight: '28px', margin: 0,
+                        background: 'linear-gradient(to bottom, #ff9191, #ba0000)',
+                        WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
+                      }}
+                    >
+                      {card.title}
+                    </p>
+                  ) : (
+                    <p
+                      className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
+                      style={{ fontSize: 18, fontWeight: 300, fontFamily: 'Inter, sans-serif', color: '#4D4D4D', letterSpacing: '0.5825px', lineHeight: '28px', margin: 0 }}
+                    >
+                      {card.body}
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -507,53 +489,52 @@ export default function SpecificationsSection() {
 
               {/* Card 1: Magnetic Lock */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <img src="/assets/specifications/icons/magnetic-lock.svg" alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
+                <img src={ICON_META['magnetic-lock'].icon} alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
                 <p
                   className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                   style={{ fontSize: 24, fontWeight: 500, fontFamily: 'Inter, sans-serif', color: '#000', letterSpacing: '0.3888px', lineHeight: 'normal', margin: 0 }}
                 >
-                  Magnetic Lock
+                  {state8ByIcon['magnetic-lock'].title}
                 </p>
                 <p
                   className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                   style={{ fontSize: 18, fontWeight: 300, fontFamily: 'Inter, sans-serif', color: '#4D4D4D', letterSpacing: '0.5825px', lineHeight: '28px', margin: 0 }}
                 >
-                  A magnetic lock secures the slot with a single push, at dose time the right slot glows green — no labels to read. Take it and shut the slot; that close is the confirmation,{' '}
-                  <strong style={{ fontWeight: 700, color: '#000' }}>IR sensors confirm each dose is taken.</strong>
+                  {withBoldTail(state8ByIcon['magnetic-lock'].body, MAGNETIC_LOCK_BOLD_TAIL, { fontWeight: 700, color: '#000' })}
                 </p>
               </div>
 
               {/* Card 2: Medical-grade build. */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <img src="/assets/specifications/icons/medical-grade.svg" alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
+                <img src={ICON_META['medical-grade'].icon} alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
                 <p
                   className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                   style={{ fontSize: 24, fontWeight: 500, fontFamily: 'Inter, sans-serif', color: '#000', letterSpacing: '0.3888px', lineHeight: 'normal', margin: 0 }}
                 >
-                  Medical-grade build.
+                  {state8ByIcon['medical-grade'].title}
                 </p>
                 <p
                   className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                   style={{ fontSize: 18, fontWeight: 300, fontFamily: 'Inter, sans-serif', color: '#4D4D4D', letterSpacing: '0.5825px', lineHeight: '28px', margin: 0 }}
                 >
-                  Super White ABS / polycarbonate with a matte, anti-microbial finish — non-reflective and easy to wipe clean.
+                  {state8ByIcon['medical-grade'].body}
                 </p>
               </div>
 
               {/* Card 3: Stable base */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <img src="/assets/specifications/icons/stable-base.svg" alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
+                <img src={ICON_META['stable-base'].icon} alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
                 <p
                   className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                   style={{ fontSize: 24, fontWeight: 500, fontFamily: 'Inter, sans-serif', color: '#000', letterSpacing: '0.3888px', lineHeight: 'normal', margin: 0 }}
                 >
-                  Stable base
+                  {state8ByIcon['stable-base'].title}
                 </p>
                 <p
                   className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                   style={{ fontSize: 18, fontWeight: 300, fontFamily: 'Inter, sans-serif', color: '#4D4D4D', letterSpacing: '0.5825px', lineHeight: '28px', margin: 0 }}
                 >
-                  A 1 mm rubber mat grips the surface and seals each slot, blocking light bleed between stacked trays.
+                  {state8ByIcon['stable-base'].body}
                 </p>
               </div>
 

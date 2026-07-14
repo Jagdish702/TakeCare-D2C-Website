@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { useContent } from '../../context/ContentContext';
 import iconChevronRight from '../../assets/profile-dashboard/icon-chevron-right-24.svg';
 import rxDocImg from '../../assets/setup-specs/rx-document.png';
 import phoneFillMedsImg from '../../assets/setup-specs/phone-fill-medicines.png';
@@ -39,19 +40,6 @@ const CANVAS_W = 1440;
 const CANVAS_H = 800;
 const OUTER_H = '800vh'; // 8 transitions x 100vh
 
-const COPY = {
-  setup: {
-    eyebrow: 'Set Up & Refill',
-    heading: ['Load once. ', 'Forget for 30 days.'],
-    body: ['See how prescription upload, scheduling, ', 'and monthly refill work — step by step.'],
-  },
-  specs: {
-    eyebrow: 'Specifications',
-    heading: ['Engineered ', 'to Last'],
-    body: ['Dimensions, materials, connectivity, and', 'what makes the device built to last.'],
-  },
-};
-
 const CARD_CENTER_X = CANVAS_W / 2; // 720
 const CARD_TOP = 150;
 const CARD_H = 500;
@@ -59,6 +47,16 @@ const CARD_H = 500;
 function cardLeft(w) { return CARD_CENTER_X - w / 2; }
 
 export default function SetupSpecsSection({ onExploreFlow }) {
+  const { setupSpecs } = useContent();
+  const COPY = Object.fromEntries(
+    setupSpecs.copy.map((row) => [row.act_key, {
+      eyebrow: row.eyebrow,
+      heading: [row.heading_line1, row.heading_line2],
+      body: [row.body_line1, row.body_line2],
+      cta: row.cta_label,
+    }])
+  );
+
   const wrapperRef = useRef(null);
   const canvasRef = useRef(null);
   const cardRef = useRef(null);
@@ -69,6 +67,7 @@ export default function SetupSpecsSection({ onExploreFlow }) {
   const headingRef = useRef(null);
   const bodyRef = useRef(null);
   const ctaRef = useRef(null);
+  const ctaLabelRef = useRef(null);
 
   const setCopy = (key) => {
     const c = COPY[key];
@@ -79,6 +78,7 @@ export default function SetupSpecsSection({ onExploreFlow }) {
     if (bodyRef.current) {
       bodyRef.current.innerHTML = `<p style="margin:0">${c.body[0]}</p><p style="margin:0">${c.body[1]}</p>`;
     }
+    if (ctaLabelRef.current) ctaLabelRef.current.textContent = c.cta;
   };
 
   /* ── Scale canvas to fit viewport (same pattern as SpecificationsSection: CSS
@@ -274,7 +274,7 @@ export default function SetupSpecsSection({ onExploreFlow }) {
               fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 16, letterSpacing: '0.2592px', color: '#004172',
             }}
           >
-            Explore the flow
+            <span ref={ctaLabelRef} />
             <img
               src={iconChevronRight}
               alt=""

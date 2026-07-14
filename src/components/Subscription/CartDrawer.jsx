@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PrimaryButton from '../common/PrimaryButton';
 import DisclaimerCard from './DisclaimerCard';
+import { useContent } from '../../context/ContentContext';
 
 const HEADER_H = 52;
 
@@ -67,7 +68,7 @@ function MenuTab({ text, count, active }) {
 /* ─────────────────────────────────────────────
    Product card — TakeCare tablet dispenser
 ───────────────────────────────────────────── */
-function ProductCard() {
+function ProductCard({ product }) {
   return (
     <div
       style={{
@@ -160,7 +161,7 @@ function ProductCard() {
               textOverflow: 'ellipsis',
             }}
           >
-            Take Care tablet dispenser
+            {product.name}
           </p>
           <p
             style={{
@@ -176,7 +177,7 @@ function ProductCard() {
               backgroundClip: 'text',
             }}
           >
-            One time payment
+            {product.tag}
           </p>
           <div
             style={{
@@ -188,7 +189,7 @@ function ProductCard() {
               lineHeight: '22px',
             }}
           >
-            <p style={{ margin: 0 }}>Take Care is the smart dispenser that doses, reminds, and confirms. So you stop worrying and start trusting.</p>
+            <p style={{ margin: 0 }}>{product.description}</p>
           </div>
         </div>
 
@@ -213,7 +214,7 @@ function ProductCard() {
                 lineHeight: '28px',
               }}
             >
-              Quantity
+              {product.qty_label}
             </span>
             <span
               style={{
@@ -239,7 +240,7 @@ function ProductCard() {
               lineHeight: '28px',
             }}
           >
-            ₹1,599
+            {product.price}
           </p>
         </div>
       </div>
@@ -255,9 +256,7 @@ function SubscriptionCard({ plan, qty, onQtyChange }) {
   const planName = isMonthly ? 'TakeCare Monthly Plan' : 'TakeCare Yearly Plan';
   const price = `₹${plan.subAmount}`;
   const descLine1 = isMonthly ? 'Monthly subscription billing.' : 'Yearly subscription billing.';
-  const descLine2 = isMonthly
-    ? 'Save up to ₹100 every month on dedicated care.'
-    : 'Save up to ₹1,000 every year on dedicated care.';
+  const descLine2 = plan.disclaimer[1];
 
   return (
     <div
@@ -500,7 +499,7 @@ function SubscriptionCard({ plan, qty, onQtyChange }) {
 /* ─────────────────────────────────────────────
    Empty state — no subscription selected
 ───────────────────────────────────────────── */
-function EmptySubscription() {
+function EmptySubscription({ title, subtitle }) {
   return (
     <div
       style={{
@@ -526,9 +525,9 @@ function EmptySubscription() {
           lineHeight: '24px',
         }}
       >
-        No subscription plan added.
+        {title}
         <br />
-        Choose Monthly or Yearly below.
+        {subtitle}
       </p>
     </div>
   );
@@ -540,6 +539,8 @@ function EmptySubscription() {
    fire in both directions without a delay hack.
 ───────────────────────────────────────────── */
 export default function CartDrawer({ plan, isOpen, onClose, onCheckout }) {
+  const { subscription } = useContent();
+  const { cartProduct, cartStaticText } = subscription;
   const [qty, setQty] = useState(1);
 
   useEffect(() => {
@@ -630,7 +631,7 @@ export default function CartDrawer({ plan, isOpen, onClose, onCheckout }) {
                 color: '#000',
               }}
             >
-              Your Cart
+              {cartStaticText.title}
             </p>
             <div style={{ display: 'flex' }}>
               <MenuTab text="Cart" count={String(cartCount)} active />
@@ -651,9 +652,9 @@ export default function CartDrawer({ plan, isOpen, onClose, onCheckout }) {
                 lineHeight: '28px',
               }}
             >
-              Product
+              {cartStaticText.products_section_label}
             </p>
-            <ProductCard />
+            <ProductCard product={cartProduct} />
           </div>
 
           {/* ── Subscription section ── */}
@@ -669,7 +670,7 @@ export default function CartDrawer({ plan, isOpen, onClose, onCheckout }) {
                 lineHeight: '28px',
               }}
             >
-              Subscriptions
+              {cartStaticText.subscriptions_section_label}
             </p>
             {plan ? (
               <>
@@ -677,7 +678,10 @@ export default function CartDrawer({ plan, isOpen, onClose, onCheckout }) {
                 <DisclaimerCard plan={plan} />
               </>
             ) : (
-              <EmptySubscription />
+              <EmptySubscription
+                title={cartStaticText.empty_subscription_title}
+                subtitle={cartStaticText.empty_subscription_subtitle}
+              />
             )}
           </div>
         </div>
@@ -721,7 +725,7 @@ export default function CartDrawer({ plan, isOpen, onClose, onCheckout }) {
             ₹{totalStr}
           </p>
           <div style={{ position: 'relative', flexShrink: 0 }}>
-            <PrimaryButton onClick={() => { onClose(); onCheckout?.(); }}>Checkout</PrimaryButton>
+            <PrimaryButton onClick={() => { onClose(); onCheckout?.(); }}>{cartStaticText.checkout_cta_label}</PrimaryButton>
           </div>
         </div>
       </div>

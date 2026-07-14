@@ -1,5 +1,6 @@
 import DisclaimerCard from '../Subscription/DisclaimerCard';
 import AvailDiscounts from './AvailDiscounts';
+import { useContent } from '../../context/ContentContext';
 
 /* ── Price row in breakdown ── */
 function PriceRow({ label, amount, bold }) {
@@ -84,13 +85,16 @@ function ChevronRight() {
    duplicated per-page.
 ══════════════════════════════════════════════ */
 export default function CheckoutSummaryPanel({ plan, onBack, onContinue }) {
+  const { checkout, subscription } = useContent();
+  const section = checkout.section;
   const isMonthly = plan.key === 'monthly';
   const devicePrice = 1599;
   const subPrice = parseInt(plan.subAmount, 10);
   const subtotal = devicePrice + subPrice;
   const delivery = 49;
   const total = subtotal + delivery;
-  const subLabel = isMonthly ? 'TakeCare Monthly Plan' : 'TakeCare Yearly Plan';
+  const dbPlan = subscription.plans.find((p) => p.plan_key === (isMonthly ? 'monthly' : 'yearly'));
+  const subLabel = dbPlan.title;
 
   return (
     <div
@@ -111,10 +115,10 @@ export default function CheckoutSummaryPanel({ plan, onBack, onContinue }) {
           two-line content. */}
       <DisclaimerCard icon="/assets/checkout/icon-delivery.svg">
         <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 12, color: '#000', letterSpacing: '0.3883px', lineHeight: '20px' }}>
-          Delivery
+          {section.delivery_label}
         </p>
         <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 12, color: '#999', letterSpacing: '0.3883px', lineHeight: '20px' }}>
-          Arrives in 2–4 days
+          {section.delivery_estimate}
         </p>
       </DisclaimerCard>
 
@@ -143,13 +147,13 @@ export default function CheckoutSummaryPanel({ plan, onBack, onContinue }) {
           boxSizing: 'border-box',
         }}
       >
-        <PriceRow label="Take Care tablet dispenser" amount={`₹${devicePrice.toLocaleString('en-IN')}`} />
+        <PriceRow label={subscription.cartProduct.name} amount={`₹${devicePrice.toLocaleString('en-IN')}`} />
         <PriceRow label={subLabel} amount={`₹${subPrice}`} />
         <Divider />
-        <PriceRow label="Subtotal" amount={`₹${subtotal.toLocaleString('en-IN')}`} />
-        <PriceRow label="Delivery charges" amount={`₹${delivery}`} />
+        <PriceRow label={section.subtotal_label} amount={`₹${subtotal.toLocaleString('en-IN')}`} />
+        <PriceRow label={section.delivery_charges_label} amount={`₹${delivery}`} />
         <Divider />
-        <PriceRow label="Estimated Total" amount={`₹${total.toLocaleString('en-IN')}`} bold />
+        <PriceRow label={section.estimated_total_label} amount={`₹${total.toLocaleString('en-IN')}`} bold />
       </div>
 
       <Divider />
@@ -211,7 +215,7 @@ export default function CheckoutSummaryPanel({ plan, onBack, onContinue }) {
             }}
           >
             <ChevronLeft />
-            Back
+            {section.back_label}
           </button>
 
           {/* Continue to Payment button — nowrap + a smaller min horizontal
@@ -240,7 +244,7 @@ export default function CheckoutSummaryPanel({ plan, onBack, onContinue }) {
               whiteSpace: 'nowrap',
             }}
           >
-            Continue to Payment
+            {section.continue_payment_label}
             <ChevronRight />
           </button>
         </div>

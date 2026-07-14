@@ -1,4 +1,4 @@
-const STEPS = ['Purchase Summery', 'User Details & shipping address', 'Payment'];
+import { useContent } from '../../context/ContentContext';
 
 /* ── Stepper step icon — inline (not <img>) so the SVG's own drop-shadow +
      inner-shadow filter can bleed past its 24×24 box; <img> would clip it
@@ -39,6 +39,9 @@ function StepIcon({ completed }) {
      in the plain grey "not yet done" style — Figma doesn't give the active
      step its own distinct look, only completed vs. not. ── */
 export default function CheckoutStepper({ currentStep = 0 }) {
+  const { checkout } = useContent();
+  const STEPS = [...checkout.steps].sort((a, b) => a.sort_order - b.sort_order).map((s) => s.label);
+
   return (
     <div
       style={{

@@ -4,6 +4,7 @@ import ProfileIcon from '../icons/ProfileIcon';
 import MenuIcon from '../icons/MenuIcon';
 import GetTakeCareBarMobile from './GetTakeCareBarMobile';
 import { useHeaderScrollSwap } from '../../hooks/useHeaderScrollSwap';
+import { useContent } from '../../context/ContentContext';
 
 interface MobileHeaderBarProps {
   onOpenCart?: () => void;
@@ -21,6 +22,10 @@ interface MobileHeaderBarProps {
  */
 export default function MobileHeaderBar({ onOpenCart, onOpenProfile, onOpenMenu }: MobileHeaderBarProps) {
   const swapped = useHeaderScrollSwap();
+  const { header } = useContent();
+  const cartLabel = header.labels.find((l: any) => l.label_key === 'cart').label_text;
+  const accountLabel = header.labels.find((l: any) => l.label_key === 'account').label_text;
+  const openMenuLabel = header.labels.find((l: any) => l.label_key === 'open_menu').label_text;
 
   return (
     <header className="sticky top-0 z-50 flex h-[54px] w-full items-center justify-between bg-white px-6 shadow-header md:hidden">
@@ -30,15 +35,15 @@ export default function MobileHeaderBar({ onOpenCart, onOpenProfile, onOpenMenu 
         <>
           <Logo />
           <div className="flex shrink-0 items-center gap-6 text-nav-inactive">
-            <button type="button" aria-label="Cart" onClick={onOpenCart} className="cursor-pointer appearance-none transition-colors duration-200 ease-out hover:text-brand-blue">
+            <button type="button" aria-label={cartLabel} onClick={onOpenCart} className="cursor-pointer appearance-none transition-colors duration-200 ease-out hover:text-brand-blue">
               <CartIcon />
             </button>
-            <button type="button" aria-label="Account" onClick={onOpenProfile} className="cursor-pointer appearance-none transition-colors duration-200 ease-out hover:text-brand-blue">
+            <button type="button" aria-label={accountLabel} onClick={onOpenProfile} className="cursor-pointer appearance-none transition-colors duration-200 ease-out hover:text-brand-blue">
               <ProfileIcon />
             </button>
             <button
               type="button"
-              aria-label="Open menu"
+              aria-label={openMenuLabel}
               onClick={onOpenMenu}
               className="cursor-pointer appearance-none text-[#666666] transition-colors duration-200 ease-out hover:text-brand-blue"
             >

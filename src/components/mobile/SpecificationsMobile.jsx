@@ -9,6 +9,8 @@
 // spec-device-mobile.png / spec-state1.png / spec-state6.png / spec-state9.png,
 // and the icons/ SVGs shared with the desktop State-8 cards.
 
+import { useContent } from '../../context/ContentContext';
+
 const SPEC_IMG_DIMENSIONED = '/assets/specifications/spec-device-mobile.png';
 const SPEC_IMG_FRONT = '/assets/specifications/spec-state1.png';
 const SPEC_IMG_EXPLODED = '/assets/specifications/spec-state6.png';
@@ -17,40 +19,25 @@ const SPEC_IMG_ANGLED = '/assets/specifications/spec-state9.png';
 const FONT = 'Inter, sans-serif';
 const textTrim = '[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]';
 
-const FEATURE_CARDS = [
-  {
-    icon: '/assets/specifications/icons/magnetic-lock.svg',
-    title: 'Magnetic Lock',
-    body: 'A magnetic lock secures the slot with a single push, at dose time the right slot glows green. Take it and shut the slot; that close is the confirmation, ',
-    bold: 'IR sensors confirm each dose is taken.',
-  },
-  {
-    icon: '/assets/specifications/icons/medical-grade.svg',
-    title: 'Medical-grade build.',
-    body: 'Super White ABS / polycarbonate with a matte, anti-microbial finish — non-reflective and easy to wipe clean.',
-  },
-  {
-    icon: '/assets/specifications/icons/see-whats-left.svg',
-    title: "See what's left",
-    body: 'A clear window on the front of each slot, with a slight inward tilt that nudges pills forward, shows how much medicine remains at a glance.',
-  },
-  {
-    icon: '/assets/specifications/icons/marked-for-everyone.svg',
-    title: 'Marked for everyone',
-    body: 'Each slot carries a number, a pull-arrow, and a Braille mark — Mounted into the surface, never printed, so they never rub off. Built so low-vision and blind users find the right slot by touch.',
-  },
-  {
-    icon: '/assets/specifications/icons/made-for-older-hands.svg',
-    title: 'Made for older hands',
-    body: "The two everyday keys — Taken and Snooze — sit raised for a confident press; the rest stay flush so they're never hit by accident.",
-  },
-  {
-    icon: '/assets/specifications/icons/stable-base.svg',
-    title: 'Stable base',
-    body: 'A 1 mm rubber mat grips the surface and seals each slot, blocking light bleed between stacked trays.',
-  },
-];
+// icon_key -> local icon asset (same 6 icons the desktop SpecificationsSection uses).
+const FEATURE_ICON = {
+  'magnetic-lock': '/assets/specifications/icons/magnetic-lock.svg',
+  'medical-grade': '/assets/specifications/icons/medical-grade.svg',
+  'marked-for-everyone': '/assets/specifications/icons/marked-for-everyone.svg',
+  'see-whats-left': '/assets/specifications/icons/see-whats-left.svg',
+  'made-for-older-hands': '/assets/specifications/icons/made-for-older-hands.svg',
+  'stable-base': '/assets/specifications/icons/stable-base.svg',
+};
 
+// The "Magnetic Lock" card body ends with a bolded sentence in Figma; the DB stores
+// the body as one plain-text field, so the bold tail is re-applied by locating the
+// known trailing sentence (copy itself still comes from the DB row).
+const MAGNETIC_LOCK_BOLD_TAIL = 'IR sensors confirm each dose is taken.';
+
+// NOTE: no 'mobile' variant rows exist in specification_connectivity_cards (DB only
+// seeds 'desktop') and the copy below (title "Charging" instead of "Charging Input",
+// extra "24 hours of battery backup" sentence) doesn't match the 'desktop' rows either
+// — left hardcoded, unmapped, per instructions to flag rather than guess.
 const CONNECTIVITY_CARDS = [
   {
     icon: '/assets/specifications/icons/connectivity.svg',
@@ -135,6 +122,20 @@ function ConnectivityCard({ icon, title, body, bodyPlaceholder }) {
 }
 
 export default function SpecificationsMobile() {
+  const { specifications } = useContent();
+  const FEATURE_CARDS = specifications.cards
+    .filter((c) => c.state_key === 'state3')
+    .map((row) => {
+      const idx = row.icon_key === 'magnetic-lock' ? row.body.lastIndexOf(MAGNETIC_LOCK_BOLD_TAIL) : -1;
+      return {
+        icon: FEATURE_ICON[row.icon_key],
+        title: row.title,
+        body: idx === -1 ? row.body : row.body.slice(0, idx),
+        bold: idx === -1 ? undefined : row.body.slice(idx),
+      };
+    });
+  const specStats = specifications.stats.filter((s) => s.group_key === 'specifications');
+
   return (
     <div className="md:hidden" style={{ background: '#fff', display: 'flex', flexDirection: 'column', width: '100%' }}>
 
@@ -142,13 +143,13 @@ export default function SpecificationsMobile() {
       <SectionShell paddingY={60}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 20, textAlign: 'center', width: '100%' }}>
           <p className={textTrim} style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 20, lineHeight: '28px', letterSpacing: '0.324px', color: '#008EB1' }}>
-            Specifications
+            {specifications.content.eyebrow}
           </p>
           <h2 className={textTrim} style={{ margin: 0, fontFamily: FONT, fontWeight: 700, fontSize: 48, lineHeight: 'normal', color: '#000', textShadow: '0px 2px 20px rgba(0,65,114,0.08)' }}>
-            Engineered to last.
+            {specifications.content.heading}
           </h2>
           <p className={textTrim} style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 20, lineHeight: '28px', letterSpacing: '0.324px', color: '#808080', textShadow: '0px 2px 20px rgba(0,65,114,0.08)' }}>
-            Precision, inside out. · Proof in every detail.
+            {specifications.content.subhead}
           </p>
         </div>
         <Photo src={SPEC_IMG_DIMENSIONED} alt="TakeCare device dimensions" size={350} />
@@ -169,8 +170,11 @@ export default function SpecificationsMobile() {
         <Photo src={SPEC_IMG_EXPLODED} alt="TakeCare device with slots pulled out" size={200} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 48, alignItems: 'flex-start', width: '100%' }}>
           <p className={textTrim} style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 32, lineHeight: 'normal', color: '#000' }}>
-            Flexible Storage Capacity
+            {specifications.storageCapacity.heading}
           </p>
+          {/* This paragraph's bespoke wording (with inline emphasis) has no matching DB field —
+              specifications.storageCapacity.body holds a differently-worded plain-text version
+              used by the standalone StorageCapacitySection instead. Kept hardcoded. */}
           <p className={textTrim} style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 16, lineHeight: '24px', letterSpacing: '0.5178px', color: '#808080' }}>
             One slot holds a month&rsquo;s worth of meds, with{' '}
             <span style={{ fontWeight: 700, color: '#000' }}>six compartments for regular pills and two for larger ones.</span>
@@ -179,19 +183,19 @@ export default function SpecificationsMobile() {
           <div style={{ display: 'flex', gap: 38, alignItems: 'center' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 13, alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                <span style={{ fontFamily: FONT, fontWeight: 300, fontSize: 70, color: '#000' }}>24</span>
-                <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 12, lineHeight: 1.5, letterSpacing: '0.3883px', color: '#808080' }}>mm Height</span>
+                <span style={{ fontFamily: FONT, fontWeight: 300, fontSize: 70, color: '#000' }}>{specStats[0].number}</span>
+                <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 12, lineHeight: 1.5, letterSpacing: '0.3883px', color: '#808080' }}>{specStats[0].unit}</span>
               </div>
               <div style={{ width: '100%', height: 1, background: '#e5e5e5' }} />
-              <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 12, lineHeight: 1.5, letterSpacing: '0.3883px', color: '#30956A' }}>6 compartments</span>
+              <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 12, lineHeight: 1.5, letterSpacing: '0.3883px', color: '#30956A' }}>{specStats[0].label}</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 13, alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                <span style={{ fontFamily: FONT, fontWeight: 300, fontSize: 70, color: '#000' }}>48</span>
-                <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 12, lineHeight: 1.5, letterSpacing: '0.3883px', color: '#808080' }}>mm height</span>
+                <span style={{ fontFamily: FONT, fontWeight: 300, fontSize: 70, color: '#000' }}>{specStats[1].number}</span>
+                <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 12, lineHeight: 1.5, letterSpacing: '0.3883px', color: '#808080' }}>{specStats[1].unit}</span>
               </div>
               <div style={{ width: '100%', height: 1, background: '#e5e5e5' }} />
-              <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 12, lineHeight: 1.5, letterSpacing: '0.3883px', color: '#30956A' }}>2 compartments</span>
+              <span style={{ fontFamily: FONT, fontWeight: 500, fontSize: 12, lineHeight: 1.5, letterSpacing: '0.3883px', color: '#30956A' }}>{specStats[1].label}</span>
             </div>
           </div>
         </div>

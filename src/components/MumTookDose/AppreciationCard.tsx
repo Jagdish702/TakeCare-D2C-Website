@@ -1,6 +1,7 @@
 import { useState, type Ref } from 'react';
 import pillboxImg from '../../assets/mumdose-pillbox.png';
 import clapImg from '../../assets/mumdose-clap.svg';
+import { useContent } from '../../context/ContentContext';
 
 const HOVER_GRADIENT =
   'radial-gradient(ellipse at 50% 50%, #c1008a 2%, #911084 26.5%, #61217e 51%, #48297b 63.2%, #303178 75.5%, #183975 87.7%, #0c3d74 93.9%, #004172 100%)';
@@ -13,6 +14,8 @@ interface AppreciationCardProps {
 }
 
 export default function AppreciationCard({ glowRef }: AppreciationCardProps = {}) {
+  const { mumTookDose } = useContent();
+  const { appreciationCard } = mumTookDose;
   const [hovered, setHovered] = useState(false);
   const [appreciated, setAppreciated] = useState(false);
 
@@ -47,10 +50,10 @@ export default function AppreciationCard({ glowRef }: AppreciationCardProps = {}
               backgroundClip: 'text',
             }}
           >
-            Take Care
+            {appreciationCard.brand_name}
           </p>
           <p className="font-semibold text-[#4d4d4d] text-[15px] tracking-[0.3px] leading-[1.5]">
-            2 mins ago
+            {appreciationCard.timestamp_label}
           </p>
         </div>
       </div>
@@ -61,10 +64,10 @@ export default function AppreciationCard({ glowRef }: AppreciationCardProps = {}
       {/* Notification body */}
       <div className="flex flex-col gap-[15px] w-full">
         <p className="font-bold text-[20px] text-black tracking-[0.654px] leading-[35px] w-full">
-          Mum took her 8:00 AM dose
+          {appreciationCard.notification_title}
         </p>
         <p className="font-medium text-[#4d4d4d] text-[15px] tracking-[0.49px] leading-[25px] w-full whitespace-pre-wrap">
-          {`Slot 3  Metformin 500mg  On time`}
+          {`${appreciationCard.notification_slot}  ${appreciationCard.notification_medicine}  ${appreciationCard.notification_status}`}
         </p>
       </div>
 
@@ -113,7 +116,7 @@ export default function AppreciationCard({ glowRef }: AppreciationCardProps = {}
 
         {/* Label */}
         <p className="relative z-10 font-medium text-white text-[20px] tracking-[0.327px] whitespace-nowrap">
-          Appreciate
+          {appreciationCard.button_label}
         </p>
 
         {/* Inner shadow */}

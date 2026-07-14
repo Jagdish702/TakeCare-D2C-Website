@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { FAQ_ITEMS } from './faqData';
+import { useContent } from '../../context/ContentContext';
 import { XCircleIcon, PlusCircleIcon } from './QnAIcons';
 
 /*
@@ -66,6 +66,7 @@ function QAItem({ item, isOpen, onToggle }) {
 }
 
 export default function FAQSection() {
+  const { faq } = useContent();
   const wrapperRef = useRef(null);
   const canvasRef = useRef(null);
   // Single-open accordion: opening a question closes whichever one was open.
@@ -123,12 +124,12 @@ export default function FAQSection() {
             whiteSpace: 'nowrap',
           }}
         >
-          <p style={{ margin: 0, color: '#808080' }}>Question ?</p>
-          <p style={{ margin: 0, color: '#fff' }}>Answers</p>
+          <p style={{ margin: 0, color: '#808080' }}>{faq.content.heading_line1}</p>
+          <p style={{ margin: 0, color: '#fff' }}>{faq.content.heading_line2}</p>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 60, alignItems: 'flex-start', width: '100%' }}>
-          {FAQ_ITEMS.map((item, i) => (
+          {faq.items.map((item, i) => (
             <QAItem key={item.question} item={item} isOpen={openIndex === i} onToggle={() => toggle(i)} />
           ))}
         </div>

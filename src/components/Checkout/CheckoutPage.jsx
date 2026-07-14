@@ -1,14 +1,15 @@
 import DisclaimerCard from '../Subscription/DisclaimerCard';
 import CheckoutStepper from './CheckoutStepper';
 import CheckoutSummaryPanel from './CheckoutSummaryPanel';
+import { useContent } from '../../context/ContentContext';
 
 const HEADER_H = 52;
 
-const PLAN_FEATURES = [
-  { icon: '/assets/subscription/Mobile.svg',        text: 'Free on boarding and set up.' },
-  { icon: '/assets/subscription/warrenty.svg',      text: 'One year warranty on tablet dispenser.' },
-  { icon: '/assets/subscription/shield check.svg',  text: 'Lifetime CureBay command Centre support.' },
-];
+const PLAN_FEATURE_ICONS = {
+  mobile: '/assets/subscription/Mobile.svg',
+  warranty: '/assets/subscription/warrenty.svg',
+  'shield-check': '/assets/subscription/shield check.svg',
+};
 
 /* ── Shared card image box ── */
 function ImageBox({ src, alt, radial }) {
@@ -168,12 +169,14 @@ const priceStyle = {
 
 /* ── Product review card ── */
 function ProductReviewCard() {
+  const { subscription } = useContent();
+  const product = subscription.cartProduct;
   return (
     <ReviewCard>
-      <ImageBox src="/assets/subscription/cart-device.png" alt="TakeCare tablet dispenser" />
+      <ImageBox src="/assets/subscription/cart-device.png" alt={product.name} />
       <div style={textColStyle}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <p style={nameStyle}>Take Care tablet dispenser</p>
+          <p style={nameStyle}>{product.name}</p>
           <p
             style={{
               margin: 0,
@@ -188,20 +191,18 @@ function ProductReviewCard() {
               backgroundClip: 'text',
             }}
           >
-            One time payment
+            {product.tag}
           </p>
           <div style={descStyle}>
-            <p style={{ margin: 0 }}>
-              Take Care is the smart dispenser that doses, reminds, and confirms. So you stop worrying and start trusting.
-            </p>
+            <p style={{ margin: 0 }}>{product.description}</p>
           </div>
         </div>
         <div style={qtyRowStyle}>
           <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
-            <span style={qtyLabelStyle}>Quantity</span>
+            <span style={qtyLabelStyle}>{product.qty_label}</span>
             <span style={qtyValueStyle}>1</span>
           </div>
-          <p style={priceStyle}>₹1,599</p>
+          <p style={priceStyle}>{product.price}</p>
         </div>
       </div>
     </ReviewCard>
@@ -210,12 +211,9 @@ function ProductReviewCard() {
 
 /* ── Subscription review card ── */
 function SubscriptionReviewCard({ plan }) {
+  const { subscription } = useContent();
   const isMonthly = plan.key === 'monthly';
-  const planName = isMonthly ? 'TakeCare Monthly Plan' : 'TakeCare Yearly Plan';
-  const descLine1 = isMonthly ? 'Monthly subscription billing.' : 'Yearly subscription billing.';
-  const descLine2 = isMonthly
-    ? 'Save up to ₹100 every month on dedicated care.'
-    : 'Save up to ₹1,000 every year on dedicated care.';
+  const dbPlan = subscription.plans.find((p) => p.plan_key === (isMonthly ? 'monthly' : 'yearly'));
   const price = `₹${plan.subAmount}`;
 
   return (
@@ -223,15 +221,15 @@ function SubscriptionReviewCard({ plan }) {
       <ImageBox src="/assets/subscription/cart-mobile.png" alt="TakeCare app" radial />
       <div style={textColStyle}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <p style={nameStyle}>{planName}</p>
+          <p style={nameStyle}>{dbPlan.title}</p>
           <div style={descStyle}>
-            <p style={{ margin: 0 }}>{descLine1}</p>
-            <p style={{ margin: 0 }}>{descLine2}</p>
+            <p style={{ margin: 0 }}>{dbPlan.disclaimer_line1}</p>
+            <p style={{ margin: 0 }}>{dbPlan.disclaimer_line2}</p>
           </div>
         </div>
         <div style={qtyRowStyle}>
           <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
-            <span style={qtyLabelStyle}>Quantity</span>
+            <span style={qtyLabelStyle}>{subscription.cartProduct.qty_label}</span>
             <span style={qtyValueStyle}>1</span>
           </div>
           <p style={priceStyle}>{price}</p>
@@ -243,12 +241,13 @@ function SubscriptionReviewCard({ plan }) {
 
 /* ── Plan features list ── */
 function PlanFeatures() {
+  const { subscription } = useContent();
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '0 24px' }}>
-      {PLAN_FEATURES.map((f) => (
+      {subscription.planFeatures.map((f) => (
         <div key={f.text} style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
           <img
-            src={f.icon}
+            src={PLAN_FEATURE_ICONS[f.icon_key]}
             alt=""
             draggable={false}
             style={{ width: 24, height: 24, flexShrink: 0, objectFit: 'contain' }}
@@ -280,6 +279,9 @@ function PlanFeatures() {
    when "Checkout" is clicked in CartDrawer.
 ══════════════════════════════════════════════ */
 export default function CheckoutPage({ plan, onBack, onContinue, isOpen }) {
+  const { checkout } = useContent();
+  const section = checkout.section;
+
   if (!isOpen || !plan) return null;
 
   return (
@@ -354,7 +356,7 @@ export default function CheckoutPage({ plan, onBack, onContinue, isOpen }) {
                   lineHeight: '28px',
                 }}
               >
-                Review your products
+                {section.review_products_heading}
               </p>
               <ProductReviewCard />
             </div>
@@ -372,7 +374,7 @@ export default function CheckoutPage({ plan, onBack, onContinue, isOpen }) {
                   lineHeight: '28px',
                 }}
               >
-                Subscriptions
+                {section.subscriptions_heading}
               </p>
               <SubscriptionReviewCard plan={plan} />
               <PlanFeatures />

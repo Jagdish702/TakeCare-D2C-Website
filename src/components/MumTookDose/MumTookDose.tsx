@@ -4,10 +4,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useFitScale } from '../../hooks/useFitScale';
 import mumdoseBg from '../../assets/mum took dose Background.png';
 import AppreciationCard from './AppreciationCard';
+import { useContent } from '../../context/ContentContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function MumTookDose() {
+  const { mumTookDose } = useContent();
   const triggerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const cardWrapRef = useRef<HTMLDivElement>(null);
@@ -92,17 +94,17 @@ export default function MumTookDose() {
             <div ref={textRef} className="absolute top-0 left-0 w-full flex flex-col gap-[48px] items-start">
               {/* Web/H3-M: 24px Medium, lineHeight 100%, tracking 0.3888px */}
               <p className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic] font-inter font-medium text-[24px] leading-none text-[#008eb1] tracking-[0.3888px] whitespace-nowrap">
-                For the ones who care.
+                {mumTookDose.content.eyebrow}
               </p>
               {/* Web/H0-B: 88px Bold, lineHeight 100% */}
               <div className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic] font-inter font-bold text-[88px] leading-none text-black">
-                <p>Mum took</p>
-                <p>her dose.</p>
+                <p>{mumTookDose.content.heading_line1}</p>
+                <p>{mumTookDose.content.heading_line2}</p>
               </div>
               {/* Web/H2-L: 32px Light, lineHeight 100% */}
               <div className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic] font-inter font-light text-[32px] leading-none text-black">
-                <p>Know in real time.</p>
-                <p>From anywhere in the world.</p>
+                <p>{mumTookDose.content.subheading_line1}</p>
+                <p>{mumTookDose.content.subheading_line2}</p>
               </div>
             </div>
 

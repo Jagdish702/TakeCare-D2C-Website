@@ -3,6 +3,7 @@ import CheckoutStepper from './CheckoutStepper';
 import CheckoutSummaryPanel from './CheckoutSummaryPanel';
 import RadioIcon from './RadioIcon';
 import DisclaimerCard from '../Subscription/DisclaimerCard';
+import { useContent } from '../../context/ContentContext';
 
 /*
   "Payment" — Figma node 12185:4974 ("Step 5"), the third and final step of
@@ -15,15 +16,18 @@ import DisclaimerCard from '../Subscription/DisclaimerCard';
 const HEADER_H = 52;
 const FONT = 'Inter, sans-serif';
 
-export const PAYMENT_OPTIONS = [
-  { key: 'all', label: 'Pay via Debit/Credit/Netbanking/UPI', icons: ['visa', 'mastercard', 'paypal', 'upi'] },
-  { key: 'debit', label: 'Pay via Debit Card', icons: ['visa', 'mastercard', 'paypal'] },
-  { key: 'credit', label: 'Pay via Credit Card', icons: ['visa', 'mastercard', 'paypal'] },
-  { key: 'upi', label: 'Pay via UPI', icons: ['upi-badge'] },
-  { key: 'ewallet', label: 'Pay via E-Wallet', icons: ['visa', 'mastercard', 'paypal', 'upi'] },
-  { key: 'netbanking', label: 'Pay via Netbanking', icons: ['netbanking'] },
-  { key: 'cod', label: 'Cash on delivery', subtext: '(Not available for subscription orders)', icons: ['cash'] },
-];
+// Icon sets per payment option — not content-DB-backed (icons aren't part
+// of the `checkout.paymentOptions` copy schema), keyed by `option_key` so
+// they can be merged onto the DB-sourced label/subtext at render time.
+export const PAYMENT_ICONS = {
+  all: ['visa', 'mastercard', 'paypal', 'upi'],
+  debit: ['visa', 'mastercard', 'paypal'],
+  credit: ['visa', 'mastercard', 'paypal'],
+  upi: ['upi-badge'],
+  ewallet: ['visa', 'mastercard', 'paypal', 'upi'],
+  netbanking: ['netbanking'],
+  cod: ['cash'],
+};
 
 export const ICON_SRC = {
   visa: '/assets/checkout/pay-visa.png',
@@ -79,7 +83,7 @@ function Divider() {
      back to Figma's own placeholder example only if that step somehow
      hasn't run yet (shouldn't normally happen, since Payment is only
      reachable via that step's Continue button). ── */
-function ContactShippingCard({ shippingInfo, onChange }) {
+function ContactShippingCard({ shippingInfo, onChange, payment }) {
   const contactLine = shippingInfo
     ? `${shippingInfo.firstName} ${shippingInfo.lastName}, +91 ${shippingInfo.phone}`.trim()
     : 'Nishant Jagtap, +91 9158074477';
@@ -93,14 +97,14 @@ function ContactShippingCard({ shippingInfo, onChange }) {
     <div style={{ width: '100%', background: '#fff', borderRadius: 16, padding: 32, boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div style={{ display: 'flex', width: '100%' }}>
         <p style={{ margin: 0, flex: 1, minWidth: 0, fontFamily: FONT, fontWeight: 700, fontSize: 18, color: '#000', letterSpacing: '0.5825px', lineHeight: '28px' }}>
-          Contact
+          {payment.contact_label}
         </p>
         <p style={{ margin: 0, flex: 1, minWidth: 0, fontFamily: FONT, fontWeight: 300, fontSize: 16, color: '#000', letterSpacing: '0.5184px', lineHeight: '28px' }}>
           {contactLine}
         </p>
         <div style={{ flex: 1, minWidth: 0, display: 'flex', justifyContent: 'flex-end' }}>
           <button type="button" onClick={onChange} style={{ border: 'none', background: 'transparent', padding: 0, cursor: 'pointer', boxShadow: '0 2px 2px rgba(0,65,114,0.08)', fontFamily: FONT, fontWeight: 500, fontSize: 16, color: '#004172', letterSpacing: '0.2592px' }}>
-            Change
+            {payment.change_label}
           </button>
         </div>
       </div>
@@ -109,7 +113,7 @@ function ContactShippingCard({ shippingInfo, onChange }) {
 
       <div style={{ display: 'flex', width: '100%' }}>
         <p style={{ margin: 0, flex: 1, minWidth: 0, fontFamily: FONT, fontWeight: 700, fontSize: 18, color: '#000', letterSpacing: '0.5825px', lineHeight: '28px' }}>
-          Shipping Address
+          {payment.shipping_address_label}
         </p>
         <p style={{ margin: 0, flex: 1, minWidth: 0, fontFamily: FONT, fontWeight: 300, fontSize: 16, color: '#000', letterSpacing: '0.5184px', lineHeight: '28px' }}>
           {addressLine}
@@ -118,7 +122,7 @@ function ContactShippingCard({ shippingInfo, onChange }) {
       </div>
 
       <p style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 12, color: '#999', letterSpacing: '0.3883px', lineHeight: '20px' }}>
-        Address cannot be changed after dispatch
+        {payment.address_note}
       </p>
     </div>
   );
@@ -165,6 +169,11 @@ function PaymentOptionRow({ option, selected, onSelect }) {
 }
 
 export default function PaymentPage({ plan, shippingInfo, isOpen, onBack, onContinue }) {
+  const { checkout } = useContent();
+  const payment = checkout.payment;
+  const paymentModeOptions = [...checkout.paymentOptions]
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((opt) => ({ key: opt.option_key, label: opt.label, subtext: opt.subtext, icons: PAYMENT_ICONS[opt.option_key] }));
   const [paymentMode, setPaymentMode] = useState('upi');
 
   if (!isOpen || !plan) return null;
@@ -183,14 +192,14 @@ export default function PaymentPage({ plan, shippingInfo, isOpen, onBack, onCont
           {/* ── Left panel: Contact/Shipping summary + Payment Mode ── */}
           <div style={{ flex: '1 1 800px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 60, width: '100%' }}>
-              <ContactShippingCard shippingInfo={shippingInfo} onChange={onBack} />
+              <ContactShippingCard shippingInfo={shippingInfo} onChange={onBack} payment={payment} />
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>
                 <p style={{ margin: 0, fontFamily: FONT, fontWeight: 700, fontSize: 18, color: '#808080', letterSpacing: '0.5825px', lineHeight: '28px' }}>
-                  Payment Mode
+                  {payment.payment_mode_heading}
                 </p>
                 <div style={{ width: '100%', background: '#fff', borderRadius: 16, padding: 32, boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  {PAYMENT_OPTIONS.map((option, i) => (
+                  {paymentModeOptions.map((option, i) => (
                     <div key={option.key} style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%' }}>
                       {i > 0 && <Divider />}
                       <PaymentOptionRow option={option} selected={paymentMode === option.key} onSelect={setPaymentMode} />
@@ -202,10 +211,10 @@ export default function PaymentPage({ plan, shippingInfo, isOpen, onBack, onCont
 
             <DisclaimerCard iconNode={<AlertCircleIcon />}>
               <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 12, color: '#000', letterSpacing: '0.3883px', lineHeight: '20px' }}>
-                No duplicate charges
+                {payment.disclaimer_title}
               </p>
               <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 12, color: '#999', letterSpacing: '0.3883px', lineHeight: '20px' }}>
-                Fraud held payments are reviewed within 24 hrs — contact support@curebay.com
+                {payment.disclaimer_body}
               </p>
             </DisclaimerCard>
           </div>

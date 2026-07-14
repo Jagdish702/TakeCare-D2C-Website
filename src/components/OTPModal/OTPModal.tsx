@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useContent } from '../../context/ContentContext';
 import PrimaryButton from '../common/PrimaryButton';
 import IconSlot from '../common/IconSlot';
 import iconVerifyCheck from '../../assets/profile-modal/icon-verify-check.svg';
@@ -41,17 +42,19 @@ function otpBoxStyle(status: 'idle' | 'success' | 'error', filled: boolean): Rea
 
 // Figma node 12185:2686 ("Status Card" success state).
 function SuccessCard({ onContinue }: { onContinue: () => void }) {
+  const { profile } = useContent();
+  const otpModal = profile.otpModal;
   return (
     <div className="flex w-full flex-col items-center gap-8">
       <div className="success-badge-in flex shrink-0 items-center justify-center rounded-[30px] bg-[#e8fff1] p-3">
         <IconSlot src={iconSuccessCheck} width={22.167} height={14.4375} />
       </div>
       <p className="w-full font-inter text-[18px] font-bold leading-[28px] tracking-[0.5825px] text-[#00b82e] text-center [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]">
-        Registration Successful
+        {otpModal.success_text}
       </p>
       <PrimaryButton fullWidth onClick={onContinue}>
         <span className="flex items-center justify-center gap-2">
-          Continue
+          {otpModal.continue_label}
           <IconSlot src={iconChevronRight} width={5} height={10} />
         </span>
       </PrimaryButton>
@@ -68,6 +71,8 @@ export default function OTPModal({
   onClose: () => void;
   onSuccess: () => void;
 }) {
+  const { profile } = useContent();
+  const otpModal = profile.otpModal;
   const [digits, setDigits] = useState(['', '', '', '', '', '']);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [shaking, setShaking] = useState(false);
@@ -173,10 +178,10 @@ export default function OTPModal({
             {/* Heading */}
             <div className="flex w-full flex-col items-center gap-4 text-center">
               <p className="w-full font-inter text-[18px] font-bold leading-[28px] tracking-[0.5825px] text-black [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]">
-                Enter OTP
+                {otpModal.heading_enter}
               </p>
               <p className="w-full font-inter text-[16px] font-light leading-[28px] tracking-[0.5184px] text-black [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]">
-                OTP sent to {maskPhone(phoneNumber)}.
+                {otpModal.otp_sent_template.replace('{phone}', maskPhone(phoneNumber))}
               </p>
             </div>
 
@@ -205,7 +210,7 @@ export default function OTPModal({
               <PrimaryButton fullWidth onClick={handleVerify}>
                 <span className="flex items-center justify-center gap-2" style={{ opacity: allFilled ? 1 : 0.5 }}>
                   <IconSlot src={iconVerifyCheck} width={14} height={9.625} />
-                  Verify OTP
+                  {otpModal.verify_label}
                 </span>
               </PrimaryButton>
               <button
@@ -219,7 +224,7 @@ export default function OTPModal({
                   cursor: countdown > 0 ? 'default' : 'pointer',
                 }}
               >
-                {countdown > 0 ? `Resend SMS in ${countdown} sec` : 'Resend OTP'}
+                {countdown > 0 ? otpModal.resend_countdown_template.replace('{n}', String(countdown)) : otpModal.resend_label}
               </button>
             </div>
           </>

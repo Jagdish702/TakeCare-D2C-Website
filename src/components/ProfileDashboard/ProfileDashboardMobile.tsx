@@ -1,4 +1,5 @@
 import { Fragment, useState } from 'react';
+import { useContent } from '../../context/ContentContext';
 import IconSlot from '../common/IconSlot';
 import PrimaryButton from '../common/PrimaryButton';
 import avatarPhoto from '../../assets/profile-dashboard/avatar-photo.png';
@@ -100,6 +101,8 @@ function SectionCard({
 // ─── Avatar + Welcome row ────────────────────────────────────────────────────
 
 function AvatarWelcomeRow({ formData }: { formData: ProfileFormData | null }) {
+  const { profile } = useContent();
+  const dashboard = profile.dashboard;
   return (
     <div className="flex w-full shrink-0 items-center gap-6">
       <div
@@ -113,13 +116,13 @@ function AvatarWelcomeRow({ formData }: { formData: ProfileFormData | null }) {
           className="whitespace-nowrap bg-clip-text font-inter text-[20px] font-light leading-[28px] tracking-[0.324px] text-transparent"
           style={{ backgroundImage: 'linear-gradient(96.24deg, #b189ff 0%, #2e008b 96.07%)' }}
         >
-          Welcome,
+          {dashboard.welcome_text}
         </p>
         <p className="whitespace-nowrap font-inter text-[20px] font-bold leading-[28px] tracking-[0.324px] text-black">
           {displayName(formData)}
         </p>
         <p className="whitespace-nowrap font-inter text-[14px] font-light leading-[24px] tracking-[0.4536px] text-black">
-          CureBay · Take Care Member
+          {dashboard.member_tag}
         </p>
       </div>
       <IconRoundButton icon={iconCamera} width={20} height={14.754} alt="Change profile picture" />
@@ -130,17 +133,19 @@ function AvatarWelcomeRow({ formData }: { formData: ProfileFormData | null }) {
 // ─── ABHA ────────────────────────────────────────────────────────────────────
 
 function ABHACard() {
+  const { profile } = useContent();
+  const abhaCard = profile.abhaCard;
   return (
     <SectionCard
       title="ABHA"
-      actions={<Chip text="ABHA not created" variant="danger" />}
+      actions={<Chip text={abhaCard.not_created_chip} variant="danger" />}
       footer=""
     >
-      <InfoRow label="ABHA ID :" value="Not linked" />
+      <InfoRow label={abhaCard.id_label} value={abhaCard.not_linked_value} />
       <Divider />
-      <InfoRow label="ABHA Address :" value="Not linked" />
+      <InfoRow label={abhaCard.address_label} value={abhaCard.not_linked_value} />
       <div className="w-full pt-1">
-        <PrimaryButton fullWidth>Create ABHA</PrimaryButton>
+        <PrimaryButton fullWidth>{abhaCard.create_cta_label}</PrimaryButton>
       </div>
     </SectionCard>
   );
@@ -149,13 +154,15 @@ function ABHACard() {
 // ─── Personal Information ───────────────────────────────────────────────────
 
 function PersonalInfoCard({ formData }: { formData: ProfileFormData | null }) {
+  const { profile } = useContent();
+  const personalInfoCard = profile.personalInfoCard;
   return (
     <SectionCard
       title="Personal Information"
       shadowMode="onCard"
       headerFixedHeight
       actions={<IconRoundButton icon={iconEditPencil} width={17.8} height={17.019} alt="Edit personal information" />}
-      footer="Your name appears on your Take Care Subscription and orders."
+      footer={personalInfoCard.footer_text}
     >
       <InfoRow label="First Name" value={val(formData?.firstName)} />
       <Divider />
@@ -173,6 +180,8 @@ function PersonalInfoCard({ formData }: { formData: ProfileFormData | null }) {
 // ─── Addresses ───────────────────────────────────────────────────────────────
 
 function AddressesCard({ formData }: { formData: ProfileFormData | null }) {
+  const { profile } = useContent();
+  const addressesCard = profile.addressesCard;
   const address = formData ? formatAddress(formData) : null;
   return (
     <SectionCard
@@ -181,21 +190,21 @@ function AddressesCard({ formData }: { formData: ProfileFormData | null }) {
       actions={
         <div className="flex items-center gap-3">
           <IconRoundButton icon={iconEditPencil} width={17.8} height={17.019} alt="Edit address" />
-          <GhostButton className="h-10 rounded-full p-2">View All</GhostButton>
+          <GhostButton className="h-10 rounded-full p-2">{addressesCard.view_all_label}</GhostButton>
         </div>
       }
-      footer="Address cannot be changed after an order is dispatched."
+      footer={addressesCard.footer_text}
     >
       {address ? (
         <div className="flex w-full shrink-0 items-center gap-6">
           <div className="flex min-w-0 flex-1 flex-col items-start gap-3">
-            <p className="w-full font-inter text-[14px] font-medium leading-[24px] tracking-[0.4536px] text-black">Home</p>
+            <p className="w-full font-inter text-[14px] font-medium leading-[24px] tracking-[0.4536px] text-black">{addressesCard.home_label}</p>
             <p className="w-full font-inter text-[14px] font-medium leading-[24px] tracking-[0.4536px] text-[#808080]">{address}</p>
           </div>
-          <Chip text="Default" variant="info" />
+          <Chip text={addressesCard.default_chip} variant="info" />
         </div>
       ) : (
-        <p className={EMPTY_ROW_CLS}>No address added yet.</p>
+        <p className={EMPTY_ROW_CLS}>{addressesCard.empty_text}</p>
       )}
     </SectionCard>
   );
@@ -204,17 +213,19 @@ function AddressesCard({ formData }: { formData: ProfileFormData | null }) {
 // ─── Contact ─────────────────────────────────────────────────────────────────
 
 function ContactCard({ formData }: { formData: ProfileFormData | null }) {
+  const { profile } = useContent();
+  const contactCard = profile.contactCard;
   const phone = formData?.phoneNumber?.trim() ? `+91 ${formData.phoneNumber.trim()}` : DASH;
   return (
     <SectionCard
       title="Contact"
       headerFixedHeight
       actions={<IconRoundButton icon={iconEditPencil} width={17.8} height={17.019} alt="Edit contact" />}
-      footer="Your email activates your Take Care Subscription. Changing it affects your login."
+      footer={contactCard.footer_text}
     >
-      <InfoRow label="Email" value="Not provided" />
+      <InfoRow label={contactCard.email_label} value={contactCard.not_provided_label} />
       <Divider />
-      <InfoRow label="Contact" value={phone} />
+      <InfoRow label={contactCard.contact_label} value={phone} />
     </SectionCard>
   );
 }
@@ -222,15 +233,17 @@ function ContactCard({ formData }: { formData: ProfileFormData | null }) {
 // ─── Subscription ────────────────────────────────────────────────────────────
 
 function SubscriptionCard({ cartPlan }: { cartPlan: CartPlan }) {
+  const { profile } = useContent();
+  const subscriptionCard = profile.subscriptionCard;
   return (
     <SectionCard
       title="Subscription"
       actions={
         <div className="flex items-center gap-3">
-          <GhostButton className="h-10 rounded-full p-2">History</GhostButton>
+          <GhostButton className="h-10 rounded-full p-2">{subscriptionCard.history_label}</GhostButton>
         </div>
       }
-      footer="Your email activates your Take Care Subscription. Changing it affects your login."
+      footer={subscriptionCard.footer_text}
     >
       {cartPlan ? (
         <>
@@ -241,14 +254,14 @@ function SubscriptionCard({ cartPlan }: { cartPlan: CartPlan }) {
                 ₹{cartPlan.subAmount} {cartPlan.subPeriod[0]} {cartPlan.subPeriod[1]}
               </p>
             </div>
-            <Chip text="Active" variant="success" />
+            <Chip text={subscriptionCard.active_chip} variant="success" />
           </div>
           <div className="w-full">
-            <TintedButton>Manage Subscription</TintedButton>
+            <TintedButton>{subscriptionCard.manage_label}</TintedButton>
           </div>
         </>
       ) : (
-        <p className={EMPTY_ROW_CLS}>No active subscription yet.</p>
+        <p className={EMPTY_ROW_CLS}>{subscriptionCard.empty_text}</p>
       )}
     </SectionCard>
   );
@@ -257,9 +270,11 @@ function SubscriptionCard({ cartPlan }: { cartPlan: CartPlan }) {
 // ─── Orders ──────────────────────────────────────────────────────────────────
 
 function OrdersCard({ cartPlan }: { cartPlan: CartPlan }) {
+  const { profile } = useContent();
+  const ordersCard = profile.ordersCard;
   const rows = cartPlan
     ? [
-        { key: 'device', title: 'TakeCare Tablet Dispenser', sub: '₹1,599 · One-time' },
+        { key: 'device', title: ordersCard.device_name, sub: ordersCard.device_price_label },
         { key: 'plan', title: cartPlan.title, sub: `₹${cartPlan.subAmount} ${cartPlan.subPeriod[0]} ${cartPlan.subPeriod[1]}` },
       ]
     : [];
@@ -271,7 +286,7 @@ function OrdersCard({ cartPlan }: { cartPlan: CartPlan }) {
         <div className="flex items-center gap-3">
           <GhostButton className="h-10 rounded-full p-2">History</GhostButton>
           <TintedButton>
-            Filter by
+            {ordersCard.filter_label}
             <IconSlot src={iconFilter} width={20} height={20} />
           </TintedButton>
         </div>
@@ -284,12 +299,12 @@ function OrdersCard({ cartPlan }: { cartPlan: CartPlan }) {
             <div className="flex w-full shrink-0 flex-col items-start gap-3">
               <p className="w-full font-inter text-[14px] font-medium leading-[24px] tracking-[0.4536px] text-black">{row.title}</p>
               <p className="w-full font-inter text-[14px] font-medium leading-[24px] tracking-[0.4536px] text-[#808080]">{row.sub}</p>
-              <Chip text="Order Confirmed" variant="detail" />
+              <Chip text={ordersCard.confirmed_chip} variant="detail" />
             </div>
           </Fragment>
         ))
       ) : (
-        <p className={EMPTY_ROW_CLS}>No orders yet.</p>
+        <p className={EMPTY_ROW_CLS}>{ordersCard.empty_text}</p>
       )}
     </SectionCard>
   );
@@ -298,6 +313,8 @@ function OrdersCard({ cartPlan }: { cartPlan: CartPlan }) {
 // ─── Notifications ───────────────────────────────────────────────────────────
 
 function NotificationsCard() {
+  const { profile } = useContent();
+  const notificationRows = profile.notificationRows;
   const [toggles, setToggles] = useState<Record<NotifKey, boolean>>({
     orderUpdates: true,
     subscriptionAlerts: true,
@@ -315,7 +332,7 @@ function NotificationsCard() {
             <div className="flex min-w-0 flex-1 items-center gap-3">
               <IconGreenBadge icon={row.icon} width={row.iw} height={row.ih} />
               <p className="whitespace-nowrap font-inter text-[14px] font-medium leading-[24px] tracking-[0.4536px] text-black">
-                {row.label}
+                {notificationRows[i].label}
               </p>
             </div>
             <Toggle on={toggles[row.key]} onToggle={flip(row.key)} />
@@ -329,15 +346,17 @@ function NotificationsCard() {
 // ─── General ─────────────────────────────────────────────────────────────────
 
 function GeneralCard() {
+  const { profile } = useContent();
+  const generalCard = profile.generalCard;
   return (
-    <SectionCard title="General" headerFixedHeight footer="Your email activates your Take Care Subscription. Changing it affects your login.">
+    <SectionCard title="General" headerFixedHeight footer={generalCard.footer_text}>
       <div className="flex w-full shrink-0 items-center gap-6">
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <IconGreenBadge icon={iconLanguage} width={16.9} height={14.4} />
-          <p className="whitespace-nowrap font-inter text-[14px] font-medium leading-[24px] tracking-[0.4536px] text-[#808080]">Language</p>
+          <p className="whitespace-nowrap font-inter text-[14px] font-medium leading-[24px] tracking-[0.4536px] text-[#808080]">{generalCard.language_label}</p>
         </div>
         <div className="flex items-center gap-3">
-          <p className="whitespace-nowrap font-inter text-[14px] font-medium leading-[24px] tracking-[0.4536px] text-black">English</p>
+          <p className="whitespace-nowrap font-inter text-[14px] font-medium leading-[24px] tracking-[0.4536px] text-black">{generalCard.language_value}</p>
           <IconChevronButton />
         </div>
       </div>
@@ -345,7 +364,7 @@ function GeneralCard() {
       <div className="flex w-full shrink-0 items-center gap-6">
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <IconGreenBadge icon={iconShieldCheck} width={18} height={19.8} />
-          <p className="whitespace-nowrap font-inter text-[14px] font-medium leading-[24px] tracking-[0.4536px] text-[#808080]">Privacy &amp; data</p>
+          <p className="whitespace-nowrap font-inter text-[14px] font-medium leading-[24px] tracking-[0.4536px] text-[#808080]">{generalCard.privacy_label}</p>
         </div>
         <IconChevronButton />
       </div>
@@ -356,15 +375,17 @@ function GeneralCard() {
 // ─── Title + breadcrumb ──────────────────────────────────────────────────────
 
 function TitleBreadcrumb({ onBack }: { onBack: () => void }) {
+  const { profile } = useContent();
+  const dashboard = profile.dashboard;
   return (
     <div className="flex w-full shrink-0 flex-col items-start gap-3">
-      <h1 className="font-inter text-[32px] font-bold leading-normal text-black">Profile</h1>
+      <h1 className="font-inter text-[32px] font-bold leading-normal text-black">{dashboard.title}</h1>
       <div className="flex items-center gap-1 bg-[#f9f9f9]">
         <button type="button" onClick={onBack} className="font-inter text-[12px] font-medium leading-[20px] tracking-[0.3883px] text-[#999999]">
           TakeCare
         </button>
         <IconSlot src={iconBreadcrumbChevron} width={4.445} height={7.778} />
-        <span className="font-inter text-[12px] font-medium leading-[20px] tracking-[0.3883px] text-black">Profile</span>
+        <span className="font-inter text-[12px] font-medium leading-[20px] tracking-[0.3883px] text-black">{dashboard.title}</span>
       </div>
     </div>
   );

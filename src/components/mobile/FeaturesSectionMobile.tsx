@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { TABS } from '../Features/FeaturesSection';
+import { buildTabs } from '../Features/FeaturesSection';
+import { useContent } from '../../context/ContentContext';
 
 // Real Figma mobile exports (355×~395, one per tab, same order as TABS) —
 // dropped into public/assets/mobile by hand since Figma's Dev Mode MCP asset
@@ -22,6 +23,9 @@ const MOBILE_IMAGES = [
  * mockup images (MOBILE_IMAGES, portrait crops) differ.
  */
 export default function FeaturesSectionMobile() {
+  const { features } = useContent();
+  const TABS = buildTabs(features.tabs);
+
   const [activeTab, setActiveTab] = useState(0);
   const [displayTab, setDisplayTab] = useState(0);
   const [phase, setPhase] = useState<'idle' | 'exiting' | 'entering'>('idle');
@@ -65,13 +69,13 @@ export default function FeaturesSectionMobile() {
             className="font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
             style={{ fontSize: 20, lineHeight: '28px', letterSpacing: '1.62px', color: '#008EB1' }}
           >
-            Curebay Services
+            {features.content.eyebrow}
           </p>
           <p
             className="w-full font-inter font-bold not-italic text-black [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
             style={{ fontSize: 48, lineHeight: 'normal' }}
           >
-            One device. Complete care.
+            {features.content.heading}
           </p>
         </div>
 
@@ -87,9 +91,9 @@ export default function FeaturesSectionMobile() {
 
         {/* Tab grid — 2 columns; Dose Management spans both */}
         <div className="grid w-full grid-cols-2 gap-3">
-          {TABS.map((t, i) => {
+          {TABS.map((t: any, i: number) => {
             const isActive = i === activeTab;
-            const isWide = i === TABS.length - 1;
+            const isWide = t.isWide;
             return (
               <button
                 key={t.label}

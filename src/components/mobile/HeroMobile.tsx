@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { useContent } from '../../context/ContentContext';
 import { useFitScale } from '../../hooks/useFitScale';
 import bgDarkImg from '../../assets/hero-mobile-bg-dark.jpg';
 import bgLightImg from '../../assets/hero-mobile-bg-light.jpg';
@@ -93,6 +94,11 @@ const ECO_CARD_LABEL_STYLE: React.CSSProperties = {
 };
 
 export default function HeroMobile() {
+  const { hero } = useContent();
+  // Ecosystem card labels — image assets stay local; only the label text and
+  // its order come from the DB (already sort_order-ascending).
+  const ecosystemCards = [...hero.ecosystemCards].sort((a, b) => a.sort_order - b.sort_order);
+
   const triggerRef = useRef<HTMLDivElement>(null);
 
   const bgDarkRef = useRef<HTMLDivElement>(null);
@@ -334,7 +340,7 @@ export default function HeroMobile() {
                 textShadow: '0px 2px 20px rgba(0,65,114,0.08)',
               }}
             >
-              It dispenses, reminds &amp; confirms.
+              {hero.content.subtitle}
             </p>
             <p
               className="whitespace-nowrap text-center font-inter font-bold not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
@@ -352,7 +358,7 @@ export default function HeroMobile() {
                   backgroundClip: 'text',
                 }}
               >
-                Take Care
+                {hero.content.heading}
               </span>
             </p>
           </div>
@@ -405,7 +411,7 @@ export default function HeroMobile() {
                   className="whitespace-pre-line font-inter font-light not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                   style={CAPTION_TEXT_STYLE}
                 >
-                  {'Conceptualised. \nDesigned.\nMade in India.'}
+                  {hero.content.chip_india_text}
                 </p>
               </div>
             </div>
@@ -419,7 +425,7 @@ export default function HeroMobile() {
                 className="whitespace-pre-line text-center font-inter font-light not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                 style={CAPTION_TEXT_STYLE}
               >
-                {'Peace of mind for you. \nTimely medication support \nfor your loved ones.'}
+                {hero.content.chip_left_text}
               </p>
             </div>
             {/* State 4 — Your medicines */}
@@ -432,7 +438,7 @@ export default function HeroMobile() {
                 className="whitespace-pre-line text-center font-inter font-light not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                 style={CAPTION_TEXT_STYLE}
               >
-                {'Your medicines. \nOn time. Every time.'}
+                {hero.content.chip_right_text}
               </p>
             </div>
           </div>
@@ -447,7 +453,7 @@ export default function HeroMobile() {
               className="w-full text-center font-inter font-bold not-italic text-white [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
               style={{ fontSize: 24, lineHeight: '32px', textShadow: '0px 2px 8px rgba(0,65,114,0.08)' }}
             >
-              You can&apos;t be there every moment. Take Care can.
+              {hero.content.ecosystem_heading}
             </p>
 
             <div
@@ -458,28 +464,28 @@ export default function HeroMobile() {
               <div className="relative flex items-end justify-center self-stretch overflow-hidden" style={{ borderRadius: 32, paddingTop: 11.963, paddingBottom: 11.963 }}>
                 <img src={ecoCardDispenser} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
                 <p className={ECO_CARD_LABEL_CLASS} style={ECO_CARD_LABEL_STYLE}>
-                  {'Smart \nDispenser'}
+                  {ecosystemCards[0].label}
                 </p>
               </div>
               {/* Takecare App */}
               <div className="relative flex items-end justify-center self-stretch overflow-hidden" style={{ borderRadius: 32, paddingTop: 11.963, paddingBottom: 11.963 }}>
                 <img src={ecoCardApp} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
                 <p className={ECO_CARD_LABEL_CLASS} style={ECO_CARD_LABEL_STYLE}>
-                  {'Take Care \nApp'}
+                  {ecosystemCards[1].label}
                 </p>
               </div>
               {/* CureBay Services */}
               <div className="relative flex items-end justify-center self-stretch overflow-hidden" style={{ borderRadius: 32, paddingTop: 11.963, paddingBottom: 11.963 }}>
                 <img src={ecoCardCurebay} alt="" className="absolute inset-0 size-full max-w-none object-contain" />
                 <p className={ECO_CARD_LABEL_CLASS} style={ECO_CARD_LABEL_STYLE}>
-                  {'CureBay \nServices'}
+                  {ecosystemCards[2].label}
                 </p>
               </div>
               {/* 24×7 Command Centre */}
               <div className="relative flex items-end justify-center self-stretch overflow-hidden" style={{ borderRadius: 32, paddingTop: 11.963, paddingBottom: 11.963 }}>
                 <img src={ecoCardCommand} alt="" className="absolute inset-0 size-full max-w-none object-cover" />
                 <p className={ECO_CARD_LABEL_CLASS} style={ECO_CARD_LABEL_STYLE}>
-                  {'24x7 \nCommand Centre'}
+                  {ecosystemCards[3].label}
                 </p>
               </div>
             </div>
@@ -494,7 +500,7 @@ export default function HeroMobile() {
                 textShadow: '0px 2px 8px rgba(0,65,114,0.08)',
               }}
             >
-              Connect yourself to a real-world healthcare ecosystem
+              {hero.content.ecosystem_footer_caption}
             </p>
           </div>
 
@@ -523,7 +529,7 @@ export default function HeroMobile() {
                 textShadow: '0px 3.117px 9.352px rgba(0,65,114,0.08)',
               }}
             >
-              {'Yaa ! It comes with the specially curated \nTakeCare App for you'}
+              {hero.content.phone_caption}
             </p>
           </div>
         </div>

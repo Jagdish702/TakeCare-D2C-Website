@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { NAV_ITEMS } from './navItems';
 import CartIcon from '../icons/CartIcon';
 import ProfileIcon from '../icons/ProfileIcon';
 import CloseCircleIcon from '../icons/CloseCircleIcon';
 import PhoneIcon from '../icons/PhoneIcon';
+import { useContent } from '../../context/ContentContext';
 
 interface MobileMenuDrawerProps {
   isOpen: boolean;
@@ -20,6 +20,14 @@ interface MobileMenuDrawerProps {
  * 8px gap) → 48px → divider → 48px → icon row → 48px → "Get the App" button.
  */
 export default function MobileMenuDrawer({ isOpen, onClose, onOpenCart, onOpenProfile }: MobileMenuDrawerProps) {
+  const { header } = useContent();
+  const menuLabel = header.labels.find((l: any) => l.label_key === 'menu').label_text;
+  const closeMenuLabel = header.labels.find((l: any) => l.label_key === 'close_menu').label_text;
+  const mobilePrimaryNavLabel = header.labels.find((l: any) => l.label_key === 'mobile_primary_nav').label_text;
+  const cartLabel = header.labels.find((l: any) => l.label_key === 'cart').label_text;
+  const accountLabel = header.labels.find((l: any) => l.label_key === 'account').label_text;
+  const getAppLabel = header.labels.find((l: any) => l.label_key === 'get_app_cta').label_text;
+
   useEffect(() => {
     const fn = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -56,7 +64,7 @@ export default function MobileMenuDrawer({ isOpen, onClose, onOpenCart, onOpenPr
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Menu"
+        aria-label={menuLabel}
         className="fixed inset-y-0 left-0 z-[1101] flex w-full max-w-[407px] flex-col overflow-y-auto bg-white md:hidden"
         style={{
           transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
@@ -72,11 +80,11 @@ export default function MobileMenuDrawer({ isOpen, onClose, onOpenCart, onOpenPr
               className="font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
               style={{ fontSize: 24, lineHeight: '32px', color: '#000000' }}
             >
-              Menu
+              {menuLabel}
             </p>
             <button
               type="button"
-              aria-label="Close menu"
+              aria-label={closeMenuLabel}
               onClick={onClose}
               className="flex size-10 shrink-0 cursor-pointer appearance-none items-center justify-center text-brand-blue"
             >
@@ -88,19 +96,19 @@ export default function MobileMenuDrawer({ isOpen, onClose, onOpenCart, onOpenPr
           <div className="mt-6 h-px w-full shrink-0" style={{ background: '#CCCCCC' }} />
 
           {/* Nav list */}
-          <nav className="mt-12 flex flex-col gap-2" aria-label="Mobile primary">
-            {NAV_ITEMS.map((item) => (
+          <nav className="mt-12 flex flex-col gap-2" aria-label={mobilePrimaryNavLabel}>
+            {header.navLinks.map((item: any) => (
               <a
-                key={item.label}
+                key={item.id}
                 href={item.href}
-                aria-current={item.active ? 'page' : undefined}
+                aria-current={item.is_active ? 'page' : undefined}
                 onClick={onClose}
                 className="flex h-10 shrink-0 items-center rounded-xl px-2 font-inter font-medium not-italic tracking-nav [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                 style={{
                   fontSize: 16,
                   lineHeight: 'normal',
-                  background: item.active ? '#F5FAFF' : 'transparent',
-                  color: item.active ? '#004172' : '#808080',
+                  background: item.is_active ? '#F5FAFF' : 'transparent',
+                  color: item.is_active ? '#004172' : '#808080',
                 }}
               >
                 {item.label}
@@ -115,7 +123,7 @@ export default function MobileMenuDrawer({ isOpen, onClose, onOpenCart, onOpenPr
           <div className="mt-12 flex shrink-0 items-center gap-6">
             <button
               type="button"
-              aria-label="Cart"
+              aria-label={cartLabel}
               onClick={() => {
                 onClose();
                 onOpenCart?.();
@@ -126,7 +134,7 @@ export default function MobileMenuDrawer({ isOpen, onClose, onOpenCart, onOpenPr
             </button>
             <button
               type="button"
-              aria-label="Account"
+              aria-label={accountLabel}
               onClick={() => {
                 onClose();
                 onOpenProfile?.();
@@ -143,7 +151,7 @@ export default function MobileMenuDrawer({ isOpen, onClose, onOpenCart, onOpenPr
             className="mt-12 flex h-12 w-full shrink-0 cursor-pointer appearance-none items-center justify-center gap-2 rounded-full bg-brand-blue font-inter font-medium not-italic text-white tracking-nav"
             style={{ fontSize: 16 }}
           >
-            Get the App
+            {getAppLabel}
             <PhoneIcon />
           </button>
         </div>

@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { useContent } from '../../context/ContentContext';
 import { useFitScale } from '../../hooks/useFitScale';
 import ecoSectionBg from '../../assets/figma-hero/eco-section-bg.png';
 import plateCurebayConnected from '../../assets/figma-hero/plate-curebay-connected.png';
@@ -30,49 +31,29 @@ gsap.registerPlugin(ScrollTrigger);
 
 type Plate = { src: string; className?: string; style?: React.CSSProperties };
 
-const ITEMS: Array<{
-  key: string;
-  title: string;
-  body: string;
-  note: string;
-  plates: Plate[];
-}> = [
-  {
-    key: 'connected-to-curebay',
-    title: 'Connected to CureBay',
-    body: 'Consult doctors, order medications, book lab tests, manage doses, and access emergency support—all through the Take Care App.',
-    note: 'No more disconnected healthcare.',
-    plates: [{ src: plateCurebayConnected, className: 'object-cover' }],
-  },
-  {
-    key: 'works-24x7',
-    title: 'Works 24x7',
-    body: 'One missed dose; instant alerts to you, your family & the 24×7 command centre.',
-    note: 'No more boxes \nthat just sit there.',
-    plates: [{ src: plate247, className: 'object-cover' }],
-  },
-  {
-    key: '30-day-slots',
-    title: '30-Day Slots',
-    body: 'Drop in a whole sealed strip — 30 days per slot, refilled monthly by CureBay.',
-    note: 'No more popping pills \nfrom foil every day.',
-    plates: [{ src: plate30DayDrawers, style: { height: '125.73%', left: '0.07%', top: '-25.95%', width: '100%' } }],
-  },
-  {
-    key: 'medical-grade-build',
-    title: 'Medical-Grade Build',
-    body: 'Medical-grade ABS, anti-microbial finish. Built to last, easy to wipe clean.',
-    note: 'No more cracks on the first drop.',
-    plates: [{ src: plateMedical, className: 'object-cover' }],
-  },
-  {
-    key: 'magnetic-lock',
-    title: 'Magnetic lock',
-    body: "Magnetic lock seals every slot. \nAn IR sensor confirms the dose the slot glows when it's done.",
-    note: 'No more pills spilling in your bag.',
-    plates: [{ src: plateMagneticLock, className: 'object-cover' }],
-  },
-];
+type EcoItem = { key: string; title: string; body: string; note: string; plates: Plate[] };
+
+// Image assets per card — not part of the DB content, kept local and matched
+// to the DB rows by item_key in buildItems() below.
+const PLATES_BY_KEY: Record<string, Plate[]> = {
+  'connected-to-curebay': [{ src: plateCurebayConnected, className: 'object-cover' }],
+  'works-24x7': [{ src: plate247, className: 'object-cover' }],
+  '30-day-slots': [{ src: plate30DayDrawers, style: { height: '125.73%', left: '0.07%', top: '-25.95%', width: '100%' } }],
+  'medical-grade-build': [{ src: plateMedical, className: 'object-cover' }],
+  'magnetic-lock': [{ src: plateMagneticLock, className: 'object-cover' }],
+};
+
+function buildItems(dbItems: Array<{ item_key: string; title: string; body: string; note: string; sort_order: number }>): EcoItem[] {
+  return [...dbItems]
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((i) => ({
+      key: i.item_key,
+      title: i.title,
+      body: i.body,
+      note: i.note,
+      plates: PLATES_BY_KEY[i.item_key],
+    }));
+}
 
 // Figma card chrome: 1px #E8F1F8 border, 32px radius, white bg,
 // drop 0/2/4 + inset 0/0/2 rgba(0,65,114,0.08).
@@ -90,7 +71,7 @@ function EcoCard({
   fixedWidth,
   fixedHeight,
 }: {
-  item: (typeof ITEMS)[number];
+  item: EcoItem;
   index: number;
   cardRef: (el: HTMLDivElement | null) => void;
   fixedWidth?: number;
@@ -154,6 +135,9 @@ function EcoCard({
 }
 
 export default function ConnectedEcosystem() {
+  const { hero } = useContent();
+  const ITEMS = buildItems(hero.ecosystemItems);
+
   const triggerRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
 
@@ -229,7 +213,7 @@ export default function ConnectedEcosystem() {
                 className="whitespace-nowrap text-center font-inter font-bold not-italic text-black [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
                 style={{ fontSize: 88, lineHeight: 'normal' }}
               >
-                A connected Ecosystem
+                {hero.ecosystemSection.heading}
               </h2>
               <p
                 className="whitespace-nowrap text-center font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
@@ -241,7 +225,7 @@ export default function ConnectedEcosystem() {
                   textShadow: '0px 2px 20px rgba(0,65,114,0.08)',
                 }}
               >
-                Every pill dispenser fails. Take Care isn&apos;t one.
+                {hero.ecosystemSection.subheading}
               </p>
             </div>
 

@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import PrimaryButton from '../common/PrimaryButton';
 import CartPopup from './CartPopup';
+import { useContent } from '../../context/ContentContext';
 
 /*
   "Take Care Subscription" — Figma node 12202-6911.
@@ -17,36 +18,40 @@ const CARD_H   = 776;
 const SECTION_BG =
   'radial-gradient(ellipse 50% 50% at 50% 50%, #F2FBFD 0%, #FFFFFF 100%)';
 
-export const PLAN_FEATURES = [
-  { icon: '/assets/subscription/Mobile.svg',       text: 'Free on boarding and set up.' },
-  { icon: '/assets/subscription/warrenty.svg',     text: 'One year warranty on tablet dispenser.' },
-  { icon: '/assets/subscription/shield check.svg', text: 'Lifetime CureBay command Centre support.' },
-];
+// Local icon asset lookup keyed off the DB's `icon_key` — icon imports stay local,
+// only the DB decides which one is used and what text goes with it.
+const FEATURE_ICONS = {
+  mobile: '/assets/subscription/Mobile.svg',
+  warranty: '/assets/subscription/warrenty.svg',
+  'shield-check': '/assets/subscription/shield check.svg',
+};
 
-export const PLANS = [
-  {
-    key: 'monthly',
-    title: 'Monthly plan',
-    subAmount: '99',
-    subPeriod: ['INR /', 'month'],
-    cta: 'Get Started at ₹1,698',
-    disclaimer: [
-      'One-time device purchase. Monthly subscription billing.',
-      'Save up to ₹100 every month on dedicated care.',
-    ],
-  },
-  {
-    key: 'yearly',
-    title: 'Yearly plan',
-    subAmount: '999',
-    subPeriod: ['INR /', 'year'],
-    cta: 'Get Started at ₹2,598',
-    disclaimer: [
-      'One-time device purchase. Yearly subscription billing.',
-      'Save up to ₹1,000 every year on dedicated care.',
-    ],
-  },
-];
+// Shared by SubscriptionSection + SubscriptionSectionMobile: turns the DB's
+// `subscription.plans` / `subscription.planFeatures` into the same plan/feature
+// object shapes the components already worked with.
+export function usePlansAndFeatures() {
+  const { subscription } = useContent();
+
+  const plans = [...subscription.plans]
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((p) => ({
+      key: p.plan_key,
+      title: p.title,
+      subAmount: p.price_amount,
+      subPeriod: [p.price_period_line1, p.price_period_line2],
+      cta: p.cta_label,
+      disclaimer: [p.disclaimer_line1, p.disclaimer_line2],
+    }));
+
+  const features = [...subscription.planFeatures]
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((f) => ({
+      icon: FEATURE_ICONS[f.icon_key],
+      text: f.text,
+    }));
+
+  return { plans, features };
+}
 
 /* ── Price row: ₹ symbol + big number + period label ── */
 function PriceRow({ amount, periodLine1, periodLine2 }) {
@@ -96,7 +101,7 @@ function PriceRow({ amount, periodLine1, periodLine2 }) {
 }
 
 /* ── Single pricing card ── */
-function PlanCard({ plan, onGetStarted }) {
+function PlanCard({ plan, features, content, onGetStarted }) {
   return (
     <div
       style={{
@@ -178,7 +183,11 @@ function PlanCard({ plan, onGetStarted }) {
           >
             One time tablet dispenser cost
           </p>
-          <PriceRow amount="1,599" periodLine1="One" periodLine2="time cost" />
+          <PriceRow
+            amount={content.device_price}
+            periodLine1={content.device_period_line1}
+            periodLine2={content.device_period_line2}
+          />
         </div>
 
         <p
@@ -206,7 +215,7 @@ function PlanCard({ plan, onGetStarted }) {
               lineHeight: '28px',
             }}
           >
-            Subscription Cost
+            {content.subscription_cost_label}
           </p>
           <PriceRow
             amount={plan.subAmount}
@@ -237,7 +246,7 @@ function PlanCard({ plan, onGetStarted }) {
 
       {/* Features list */}
       <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 24 }}>
-        {PLAN_FEATURES.map((feat) => (
+        {features.map((feat) => (
           <div key={feat.text} style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
             <img
               src={feat.icon}
@@ -267,6 +276,9 @@ function PlanCard({ plan, onGetStarted }) {
 
 /* ── Section root ── */
 export default function SubscriptionSection({ onGetStarted, onOpenCart }) {
+  const { subscription } = useContent();
+  const { content } = subscription;
+  const { plans, features } = usePlansAndFeatures();
   const wrapperRef = useRef(null);
   const canvasRef  = useRef(null);
   const [activePlan, setActivePlan] = useState(null);
@@ -339,7 +351,7 @@ export default function SubscriptionSection({ onGetStarted, onOpenCart }) {
               lineHeight: 'normal',
             }}
           >
-            Get your plan
+            {content.eyebrow}
           </p>
           <p
             style={{
@@ -352,7 +364,7 @@ export default function SubscriptionSection({ onGetStarted, onOpenCart }) {
               whiteSpace: 'nowrap',
             }}
           >
-            Take Care Subscription
+            {content.heading}
           </p>
         </div>
 
@@ -373,8 +385,8 @@ export default function SubscriptionSection({ onGetStarted, onOpenCart }) {
             justifyContent: 'center',
           }}
         >
-          {PLANS.map((plan) => (
-            <PlanCard key={plan.key} plan={plan} onGetStarted={handleGetStarted} />
+          {plans.map((plan) => (
+            <PlanCard key={plan.key} plan={plan} features={features} content={content} onGetStarted={handleGetStarted} />
           ))}
         </div>
 
@@ -424,7 +436,7 @@ export default function SubscriptionSection({ onGetStarted, onOpenCart }) {
               lineHeight: '28px',
             }}
           >
-            Disclaimer
+            {content.disclaimer_title}
           </p>
           <p
             style={{
@@ -438,12 +450,7 @@ export default function SubscriptionSection({ onGetStarted, onOpenCart }) {
               lineHeight: '20px',
             }}
           >
-            Service availability and response times depend on your location and
-            partner network. Emergency and concierge support timelines are
-            applicable in select serviceable zones. Delivery and consultation
-            timelines may vary based on availability and medical requirements. All
-            benefits are valid only for the active subscription period and are
-            non-transferable.
+            {content.disclaimer_body}
           </p>
         </div>
       </div>

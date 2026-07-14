@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
+import { useContent } from '../../context/ContentContext';
 
 // Figma frame 12335:6587 — 1440×1250, p-120, column gap 60.
 const CANVAS_W = 1440;
@@ -44,61 +45,32 @@ export const IconDoseManagement = (props) => (
   </svg>
 );
 
-// Accent color per tab — each tab binds its OWN Figma color variable (confirmed via
-// get_variable_defs per state node), not a single shared color across all tabs.
-// Exported so the mobile section (FeaturesSectionMobile) reuses the same copy/colors.
-export const TABS = [
-  {
-    label: 'Doctor',
-    Icon: IconDoctor,
-    accent: '#30956A', // Green Secondary/10
-    accentLight: '#E8FFF1', // Success/light — active border, exact from node 13257:4315
-    image: '/assets/features/features-state0-doctor.png',
-    boldText: 'Book a doctor in a single tap.',
-    bodyText:
-      ' Schedule consultations, connect with trusted doctors, receive reminders, and manage appointments from the app or with a single tap on your TakeCare device.',
-  },
-  {
-    label: 'Medicines',
-    Icon: IconMedicine,
-    accent: '#D29300', // Warning/Dark
-    accentLight: '#FFF4DC', // pale tint, same pattern as Success/light
-    image: '/assets/features/features-state1-medicines.png',
-    boldText: 'Refill your medicines with a single tap.',
-    bodyText:
-      ' Refill prescriptions, upload prescriptions, track medicine stock, and get expert support—all from the app or with a single tap on your TakeCare device. Our concierge team handles the rest.',
-  },
-  {
-    label: 'Lab tests',
-    Icon: IconLabTest,
-    accent: '#005D8E', // Blue Secondary/Brand
-    accentLight: '#E1F1FA', // pale tint, same pattern as Success/light
-    image: '/assets/features/features-state2-labtest.png',
-    boldText: 'Book lab tests with a single tap.',
-    bodyText:
-      ' Browse tests, schedule home sample collection, and receive reports through the app or with a single tap on your TakeCare device. Our concierge team coordinates everything for you.',
-  },
-  {
-    label: 'SOS',
-    Icon: IconSOS,
-    accent: '#D82525', // Error/Dark
-    accentLight: '#FFE9E9', // pale tint, same pattern as Success/light
-    image: '/assets/features/features-state3-emergency.png',
-    boldText: 'Emergency Services. Get help when every second matters.',
-    bodyText:
-      ' Trigger emergency assistance, instantly notify caregivers, and connect to support with a single tap on your TakeCare device or through the app.',
-  },
-  {
-    label: 'Dose Management',
-    Icon: IconDoseManagement,
-    accent: '#008EB1', // Blue Tertiary/10
-    accentLight: '#E2F6FC', // pale tint, same pattern as Success/light
-    image: '/assets/features/features-state4-dose.png',
-    boldText: 'Take the right medicine at the right time.',
-    bodyText:
-      " Only the scheduled slot glows at the right time. The display shows what's next, sends reminders, and automatically logs each dose when the slot is closed.",
-  },
+// Icon + image assets per tab — not part of the DB content, kept local and
+// merged (by sort_order index) with the DB tab rows in buildTabs() below.
+// Exported so the mobile section (FeaturesSectionMobile) reuses the same assets.
+export const TAB_ASSETS = [
+  { Icon: IconDoctor, image: '/assets/features/features-state0-doctor.png' },
+  { Icon: IconMedicine, image: '/assets/features/features-state1-medicines.png' },
+  { Icon: IconLabTest, image: '/assets/features/features-state2-labtest.png' },
+  { Icon: IconSOS, image: '/assets/features/features-state3-emergency.png' },
+  { Icon: IconDoseManagement, image: '/assets/features/features-state4-dose.png' },
 ];
+
+// Merge DB tab rows (label/accent colors/copy/is_wide, already sort_order-ascending)
+// with the local icon/image assets above. Exported so FeaturesSectionMobile can
+// build the identical list from its own useContent() call.
+export function buildTabs(dbTabs) {
+  return dbTabs.map((t, i) => ({
+    label: t.label,
+    Icon: TAB_ASSETS[i].Icon,
+    image: TAB_ASSETS[i].image,
+    accent: t.accent_color,
+    accentLight: t.accent_light_color,
+    boldText: t.bold_text,
+    bodyText: t.body_text,
+    isWide: t.is_wide === 1,
+  }));
+}
 
 // Three animation phases: idle → exiting → entering → idle
 // 'activeTab'  — which button is highlighted (updates immediately on click)
@@ -106,6 +78,9 @@ export const TABS = [
 // 'phase'      — drives CSS class on card + description
 
 export default function FeaturesSection() {
+  const { features } = useContent();
+  const TABS = buildTabs(features.tabs);
+
   const wrapperRef = useRef(null);
   const canvasRef  = useRef(null);
   const timerRef   = useRef(null);
@@ -207,7 +182,7 @@ export default function FeaturesSection() {
               margin: 0, width: '100%',
             }}
           >
-            CureBay Services
+            {features.content.eyebrow}
           </p>
           {/* Web/H0-B 88px Bold (node 12335:6552) */}
           <p
@@ -218,7 +193,7 @@ export default function FeaturesSection() {
               lineHeight: 'normal', margin: 0, width: '100%',
             }}
           >
-            One device. Complete care.
+            {features.content.heading}
           </p>
         </div>
 
@@ -264,7 +239,7 @@ export default function FeaturesSection() {
                   key={t.label}
                   onClick={() => switchTab(i)}
                   style={{
-                    gridColumn: i === 4 ? 'span 2' : 'auto',
+                    gridColumn: t.isWide ? 'span 2' : 'auto',
                     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                     borderRadius: 12,
                     padding: '12px 16px',

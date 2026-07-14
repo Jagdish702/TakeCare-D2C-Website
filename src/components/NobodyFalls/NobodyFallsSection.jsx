@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import AlertCards from './AlertCards';
+import { useContent } from '../../context/ContentContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -42,6 +43,8 @@ const PANEL = { X: 1458, Y: 660, W: 1269, H: 486 };
 const CANVAS = { w: IMG_W, h: IMG_H };
 
 export default function NobodyFallsSection() {
+  const { nobodyFalls } = useContent();
+
   const outerRef   = useRef(null);
   const bg0Ref     = useRef(null);
   const bg2WrapRef = useRef(null);
@@ -233,7 +236,7 @@ export default function NobodyFallsSection() {
               lineHeight: 1.2, margin: 0,
             }}
           >
-            Nobody falls through the cracks.
+            {nobodyFalls.content.heading}
           </p>
           <div
             style={{
@@ -242,8 +245,8 @@ export default function NobodyFallsSection() {
               lineHeight: 1.4,
             }}
           >
-            <p style={{ margin: 0 }}>One missed dose triggers</p>
-            <p style={{ margin: 0 }}>three parallel alerts.</p>
+            <p style={{ margin: 0 }}>{nobodyFalls.content.subtext_line1}</p>
+            <p style={{ margin: 0 }}>{nobodyFalls.content.subtext_line2}</p>
           </div>
         </div>
       </div>

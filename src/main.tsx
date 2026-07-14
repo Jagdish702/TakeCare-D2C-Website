@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import App from './App';
 import ErrorBoundary from './components/ErrorBoundary';
+import { ContentProvider } from './context/ContentContext';
 import './index.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -24,7 +25,9 @@ if (window.matchMedia('(pointer: coarse)').matches) {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ErrorBoundary>
-      <App />
+      <ContentProvider>
+        <App />
+      </ContentProvider>
     </ErrorBoundary>
   </React.StrictMode>,
 );

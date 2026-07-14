@@ -93,15 +93,15 @@ const ICON_COLOR: Record<keyof typeof ICON_MAP, string> = {
 // ─── FeatureCard ──────────────────────────────────────────────────────────────
 
 export interface FeatureCardProps {
-  icon: keyof typeof ICON_MAP;
+  icon_key: keyof typeof ICON_MAP;
   title: string;
   body: string;
 }
 
 const FeatureCard = forwardRef<HTMLDivElement, FeatureCardProps>(
-  ({ icon, title, body }, ref) => {
-    const Icon = ICON_MAP[icon];
-    const color = ICON_COLOR[icon];
+  ({ icon_key, title, body }, ref) => {
+    const Icon = ICON_MAP[icon_key];
+    const color = ICON_COLOR[icon_key];
     return (
       <div ref={ref} className="flex flex-col">
         {/* Icon — 40×40 glass chip (Glass/chip + Outer/5 tokens) */}

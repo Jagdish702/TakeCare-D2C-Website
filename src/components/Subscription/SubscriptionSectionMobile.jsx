@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import PrimaryButton from '../common/PrimaryButton';
 import CartPopupMobile from './CartPopupMobile';
-import { PLANS, PLAN_FEATURES } from './SubscriptionSection';
+import { usePlansAndFeatures } from './SubscriptionSection';
+import { useContent } from '../../context/ContentContext';
 
 /*
   Mobile "Take Care Subscription" — Figma node 12445:4450.
@@ -39,7 +40,7 @@ function PriceRowMobile({ amount, periodLine1, periodLine2 }) {
 }
 
 /* ── Single pricing card ── */
-function PlanCardMobile({ plan, onGetStarted }) {
+function PlanCardMobile({ plan, features, content, onGetStarted }) {
   return (
     <div
       style={{
@@ -82,7 +83,11 @@ function PlanCardMobile({ plan, onGetStarted }) {
           <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 16, letterSpacing: '0.5178px', lineHeight: '24px' }}>
             One time tablet dispenser cost
           </p>
-          <PriceRowMobile amount="1,599" periodLine1="One" periodLine2="time cost" />
+          <PriceRowMobile
+            amount={content.device_price}
+            periodLine1={content.device_period_line1}
+            periodLine2={content.device_period_line2}
+          />
         </div>
 
         <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 16, letterSpacing: '0.5178px', lineHeight: '24px', textAlign: 'center' }}>
@@ -91,7 +96,7 @@ function PlanCardMobile({ plan, onGetStarted }) {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 16, letterSpacing: '0.5178px', lineHeight: '24px' }}>
-            Subscription Cost
+            {content.subscription_cost_label}
           </p>
           <PriceRowMobile amount={plan.subAmount} periodLine1={plan.subPeriod[0]} periodLine2={plan.subPeriod[1]} />
         </div>
@@ -107,7 +112,7 @@ function PlanCardMobile({ plan, onGetStarted }) {
 
       {/* Features list */}
       <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 24 }}>
-        {PLAN_FEATURES.map((feat) => (
+        {features.map((feat) => (
           <div key={feat.text} style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
             <img src={feat.icon} alt="" draggable={false} style={{ width: 24, height: 24, flexShrink: 0, objectFit: 'contain' }} />
             <p
@@ -134,6 +139,9 @@ function PlanCardMobile({ plan, onGetStarted }) {
 
 /* ── Section root ── */
 export default function SubscriptionSectionMobile({ onGetStarted, onOpenCart }) {
+  const { subscription } = useContent();
+  const { content } = subscription;
+  const { plans, features } = usePlansAndFeatures();
   const [activePlan, setActivePlan] = useState(null);
 
   const handleGetStarted = (plan) => {
@@ -167,10 +175,10 @@ export default function SubscriptionSectionMobile({ onGetStarted, onOpenCart }) 
         {/* Heading block */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24, textAlign: 'center', width: '100%' }}>
           <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 20, color: '#008EB1', letterSpacing: '0.324px', lineHeight: '28px' }}>
-            Get your plan
+            {content.eyebrow}
           </p>
           <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 48, color: '#000', lineHeight: 'normal', width: '100%' }}>
-            Take Care Subscription
+            {content.heading}
           </p>
         </div>
 
@@ -184,8 +192,8 @@ export default function SubscriptionSectionMobile({ onGetStarted, onOpenCart }) 
 
         {/* Pricing cards */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24, width: '100%' }}>
-          {PLANS.map((plan) => (
-            <PlanCardMobile key={plan.key} plan={plan} onGetStarted={handleGetStarted} />
+          {plans.map((plan) => (
+            <PlanCardMobile key={plan.key} plan={plan} features={features} content={content} onGetStarted={handleGetStarted} />
           ))}
         </div>
 
@@ -206,15 +214,10 @@ export default function SubscriptionSectionMobile({ onGetStarted, onOpenCart }) 
           <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.8)', borderRadius: 24, pointerEvents: 'none' }} />
           <div aria-hidden style={{ position: 'absolute', inset: 0, borderRadius: 'inherit', boxShadow: 'inset 0 0 2px 0 rgba(0,65,114,0.08)', pointerEvents: 'none' }} />
           <p style={{ position: 'relative', margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 14, color: '#000', letterSpacing: '0.4536px', lineHeight: '24px' }}>
-            Disclaimer
+            {content.disclaimer_title}
           </p>
           <p style={{ position: 'relative', margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 12, color: '#808080', letterSpacing: '0.3883px', lineHeight: 1.5 }}>
-            Service availability and response times depend on your location and
-            partner network. Emergency and concierge support timelines are
-            applicable in select serviceable zones. Delivery and consultation
-            timelines may vary based on availability and medical requirements. All
-            benefits are valid only for the active subscription period and are
-            non-transferable.
+            {content.disclaimer_body}
           </p>
         </div>
       </div>

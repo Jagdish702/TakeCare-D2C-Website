@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import { useContent } from '../../context/ContentContext';
 
 /*
   Cards are positioned in VIEWPORT space (not canvas space) so they always
@@ -37,54 +38,76 @@ export interface CardDef {
   secondaryColor?: string;
 }
 
-// Exported so the mobile section (NobodyFallsMobile) reuses the same copy.
-// Card widths are NOT uniform in Figma — 317 / 340 / 344 px respectively.
-export const CARDS: CardDef[] = [
+// DB-backed alert card copy — shape returned by GET /api/content (nobodyFalls.alertCards).
+export interface AlertCardContent {
+  card_key: string;
+  label: string;
+  title: string;
+  subtitle: string;
+  body: string;
+  primary_button_label: string;
+  secondary_button_label: string;
+  sort_order: number;
+}
+
+// Styling/layout-only — NOT part of the DB content, keyed by card_key so it
+// switches on the same literal keys the DB uses ('patient' / 'caregiver' /
+// 'command-centre'). Card widths are NOT uniform in Figma — 317 / 340 / 344 px.
+const CARD_STYLES: Record<
+  string,
+  { figmaW: number; delay: number; titleMultiline?: boolean; primaryIcon: boolean; iconStroke?: string; secondaryColor?: string }
+> = {
   /* LEFT — Patient — pops last (400 ms) */
-  {
-    key: 'left',
-    label: 'Patient',
+  patient: {
     figmaW: 317,
     delay: 400,
     titleMultiline: true,
-    title: 'Slot 1,5 & 7 : \nCritical Dose Missed',
-    subtitle: 'High-risk medicine in Slot 2. was missed.',
-    body: 'Please take your medication now to stay on track with your treatment.',
-    primaryBtn: 'Mark as Taken',
     primaryIcon: false,
-    secondaryBtn: 'Need Help?',
   },
   /* MIDDLE — Caregiver — pops second (200 ms) */
-  {
-    key: 'middle',
-    label: 'Caregiver',
+  caregiver: {
     figmaW: 340,
     delay: 200,
     titleMultiline: true,
-    title: 'Slot 1,5 & 7 : \nCritical Dose Missed',
-    subtitle: 'High-risk medicine in Slot 2. was missed.',
-    body: 'Please check on your loved one to ensure they have taken their medication and are safe.',
-    primaryBtn: 'Contact Patient',
     primaryIcon: true,
     iconStroke: '#e5e5e5',
-    secondaryBtn: 'Contact Us',
     secondaryColor: '#e5e5e5',
   },
   /* RIGHT — Command Centre — pops first (0 ms) */
-  {
-    key: 'right',
-    label: 'Command Centre',
+  'command-centre': {
     figmaW: 344,
     delay: 0,
-    title: 'Immediate Follow-up Required',
-    subtitle: 'Patient missed a critical scheduled dose.',
-    body: 'Medicine Slot: 1, 5 & 7\nAlert Level: High Priority',
-    primaryBtn: 'Contact Patient',
     primaryIcon: true,
     iconStroke: '#fff',
-    secondaryBtn: 'Schedule Home Visit',
   },
-];
+};
+
+// Merges DB copy (alertCards) with the positional styling above, sorted by
+// sort_order (patient, caregiver, command-centre — same left→right/pop order
+// the static CARDS array used to hardcode). Exported so the mobile section
+// (NobodyFallsMobile) builds the exact same cards from its own useContent().
+export function buildCards(alertCards: AlertCardContent[]): CardDef[] {
+  return [...alertCards]
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((c) => {
+      const style = CARD_STYLES[c.card_key];
+      return {
+        key: c.card_key,
+        label: c.label,
+        figmaW: style.figmaW,
+        delay: style.delay,
+        titleMultiline: style.titleMultiline,
+        title: c.title,
+        subtitle: c.subtitle,
+        body: c.body,
+        primaryBtn: c.primary_button_label,
+        primaryIcon: style.primaryIcon,
+        iconStroke: style.iconStroke,
+        secondaryBtn: c.secondary_button_label,
+        secondaryColor: style.secondaryColor,
+      };
+    });
+}
 
 interface Props {
   visible: boolean;
@@ -92,6 +115,9 @@ interface Props {
 }
 
 export default function AlertCards({ visible, vpSize }: Props) {
+  const { nobodyFalls } = useContent();
+  const CARDS = buildCards(nobodyFalls.alertCards);
+
   const outerRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {

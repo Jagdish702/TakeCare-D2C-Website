@@ -2,6 +2,7 @@ import DisclaimerCard from '../Subscription/DisclaimerCard';
 import PrimaryButton from '../common/PrimaryButton';
 import CheckoutStepperMobile from './CheckoutStepperMobile';
 import AvailDiscounts from './AvailDiscounts';
+import { useContent } from '../../context/ContentContext';
 
 /*
   Mobile "Purchase Summery" — Figma node 12185:6186 ("Mobile: Cart").
@@ -13,15 +14,15 @@ import AvailDiscounts from './AvailDiscounts';
   source of truth" convention (see SubscriptionSectionMobile/CartDrawerMobile).
 */
 
-const PLAN_FEATURES = [
-  { icon: '/assets/subscription/Mobile.svg',       text: 'Free on boarding and set up.' },
-  { icon: '/assets/subscription/warrenty.svg',     text: 'One year warranty on tablet dispenser.' },
-  { icon: '/assets/subscription/shield check.svg', text: 'Lifetime CureBay command Centre support.' },
-];
+const PLAN_FEATURE_ICONS = {
+  mobile: '/assets/subscription/Mobile.svg',
+  warranty: '/assets/subscription/warrenty.svg',
+  'shield-check': '/assets/subscription/shield check.svg',
+};
 
 const FONT = 'Inter, sans-serif';
 
-function ReviewCardMobile({ image, imageBg, title, tag, description, price }) {
+function ReviewCardMobile({ image, imageBg, title, tag, description, price, qtyLabel }) {
   return (
     <div
       style={{
@@ -73,7 +74,7 @@ function ReviewCardMobile({ image, imageBg, title, tag, description, price }) {
 
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: 8 }}>
         <div style={{ display: 'flex', gap: 5, alignItems: 'center', fontFamily: FONT, fontWeight: 500, fontSize: 14, letterSpacing: '0.4536px', lineHeight: '24px' }}>
-          <span style={{ color: '#ccc' }}>Quantity</span>
+          <span style={{ color: '#ccc' }}>{qtyLabel}</span>
           <span style={{ color: '#000' }}>1</span>
         </div>
         <p style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 14, color: '#000', letterSpacing: '0.4536px', lineHeight: '24px' }}>
@@ -85,11 +86,12 @@ function ReviewCardMobile({ image, imageBg, title, tag, description, price }) {
 }
 
 function PlanFeaturesMobile() {
+  const { subscription } = useContent();
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '0 24px', width: '100%', boxSizing: 'border-box' }}>
-      {PLAN_FEATURES.map((f) => (
+      {subscription.planFeatures.map((f) => (
         <div key={f.text} style={{ display: 'flex', gap: 20, alignItems: 'center', width: '100%' }}>
-          <img src={f.icon} alt="" draggable={false} style={{ width: 24, height: 24, flexShrink: 0, objectFit: 'contain' }} />
+          <img src={PLAN_FEATURE_ICONS[f.icon_key]} alt="" draggable={false} style={{ width: 24, height: 24, flexShrink: 0, objectFit: 'contain' }} />
           <p style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 14, color: '#808080', letterSpacing: '0.4536px', lineHeight: '24px', flex: '1 0 0', minWidth: 0 }}>
             {f.text}
           </p>
@@ -117,13 +119,16 @@ function Divider() {
 }
 
 export default function CheckoutPageMobile({ plan, onBack, onContinue, isOpen }) {
+  const { checkout, subscription } = useContent();
+  const section = checkout.section;
+
   if (!isOpen || !plan) return null;
 
   const isMonthly = plan.key === 'monthly';
-  const planName = isMonthly ? 'TakeCare Monthly Plan' : 'TakeCare Yearly Plan';
-  const planDesc = isMonthly
-    ? 'Monthly subscription billing. Save up to ₹100 every month on dedicated care.'
-    : 'Yearly subscription billing. Save up to ₹1,000 every year on dedicated care.';
+  const dbPlan = subscription.plans.find((p) => p.plan_key === (isMonthly ? 'monthly' : 'yearly'));
+  const planName = dbPlan.title;
+  const planDesc = `${dbPlan.disclaimer_line1} ${dbPlan.disclaimer_line2}`;
+  const product = subscription.cartProduct;
 
   const devicePrice = 1599;
   const subPrice = parseInt(String(plan.subAmount).replace(',', ''), 10);
@@ -139,21 +144,22 @@ export default function CheckoutPageMobile({ plan, onBack, onContinue, isOpen })
         {/* Review your products */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>
           <p style={{ margin: 0, fontFamily: FONT, fontWeight: 700, fontSize: 16, color: '#808080', letterSpacing: '0.5178px', lineHeight: '24px' }}>
-            Review your products
+            {section.review_products_heading}
           </p>
           <ReviewCardMobile
             image="/assets/subscription/cart-device.png"
-            title="Take Care tablet dispenser"
-            tag="One time payment"
-            description="Take Care is the smart dispenser that doses, reminds, and confirms. So you stop worrying and start trusting."
-            price="₹1,599"
+            title={product.name}
+            tag={product.tag}
+            description={product.description}
+            price={product.price}
+            qtyLabel={product.qty_label}
           />
         </div>
 
         {/* Subscriptions */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>
           <p style={{ margin: 0, fontFamily: FONT, fontWeight: 700, fontSize: 16, color: '#808080', letterSpacing: '0.5178px', lineHeight: '24px' }}>
-            Subscriptions
+            {section.subscriptions_heading}
           </p>
           <ReviewCardMobile
             image="/assets/subscription/cart-mobile.png"
@@ -162,6 +168,7 @@ export default function CheckoutPageMobile({ plan, onBack, onContinue, isOpen })
             tag={planDesc}
             description=""
             price={`₹${plan.subAmount}`}
+            qtyLabel={product.qty_label}
           />
           <PlanFeaturesMobile />
           <DisclaimerCard plan={plan} />
@@ -170,8 +177,8 @@ export default function CheckoutPageMobile({ plan, onBack, onContinue, isOpen })
         {/* Delivery / discounts / price breakdown */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>
           <DisclaimerCard icon="/assets/checkout/icon-delivery.svg">
-            <p style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 12, color: '#000', letterSpacing: '0.3883px', lineHeight: '20px' }}>Delivery</p>
-            <p style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 12, color: '#999', letterSpacing: '0.3883px', lineHeight: '20px' }}>Arrives in 2–4 days</p>
+            <p style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 12, color: '#000', letterSpacing: '0.3883px', lineHeight: '20px' }}>{section.delivery_label}</p>
+            <p style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 12, color: '#999', letterSpacing: '0.3883px', lineHeight: '20px' }}>{section.delivery_estimate}</p>
           </DisclaimerCard>
 
           <div style={{ borderTop: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '16px 0', width: '100%', boxSizing: 'border-box' }}>
@@ -179,19 +186,19 @@ export default function CheckoutPageMobile({ plan, onBack, onContinue, isOpen })
           </div>
 
           <div style={{ background: '#f7f5f4', borderBottom: '1px solid #ccc', padding: 16, display: 'flex', flexDirection: 'column', gap: 12, boxSizing: 'border-box', width: '100%' }}>
-            <PriceRowMobile label="Take Care tablet dispenser" amount={`₹${devicePrice.toLocaleString('en-IN')}`} />
+            <PriceRowMobile label={product.name} amount={`₹${devicePrice.toLocaleString('en-IN')}`} />
             <PriceRowMobile label={planName} amount={`₹${subPrice}`} />
             <Divider />
-            <PriceRowMobile label="Subtotal" amount={`₹${subtotal.toLocaleString('en-IN')}`} />
-            <PriceRowMobile label="Delivery charges" amount={`₹${delivery}`} />
+            <PriceRowMobile label={section.subtotal_label} amount={`₹${subtotal.toLocaleString('en-IN')}`} />
+            <PriceRowMobile label={section.delivery_charges_label} amount={`₹${delivery}`} />
             <Divider />
-            <PriceRowMobile label="Estimated Total" amount={`₹${total.toLocaleString('en-IN')}`} bold />
+            <PriceRowMobile label={section.estimated_total_label} amount={`₹${total.toLocaleString('en-IN')}`} bold />
           </div>
         </div>
 
         {/* Actions */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>
-          <PrimaryButton fullWidth onClick={onContinue}>Continue to Payment</PrimaryButton>
+          <PrimaryButton fullWidth onClick={onContinue}>{section.continue_payment_label}</PrimaryButton>
           <button
             onClick={onBack}
             style={{
@@ -212,7 +219,7 @@ export default function CheckoutPageMobile({ plan, onBack, onContinue, isOpen })
               letterSpacing: '0.2592px',
             }}
           >
-            Back
+            {section.back_label}
           </button>
         </div>
       </div>

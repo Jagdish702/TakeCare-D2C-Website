@@ -1,5 +1,6 @@
 import productImg from '../../assets/hero-product.png';
 import mobileImg from '../../assets/hero-mobile.png';
+import { useContent } from '../../context/ContentContext';
 
 /**
  * Compact "Get Take Care" price/CTA bar — Figma node 12506:11047
@@ -9,8 +10,11 @@ import mobileImg from '../../assets/hero-mobile.png';
  * desktop `GetTakeCareStrip` bottom pill (Figma "Type=Web" sibling).
  */
 export default function GetTakeCareBarMobile() {
+  const { header } = useContent();
+  const { promoStrip } = header;
+
   const scrollToPlans = () => {
-    document.getElementById('subscription-plans')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById(promoStrip.scroll_target_id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
@@ -23,7 +27,7 @@ export default function GetTakeCareBarMobile() {
           className="shrink-0 whitespace-nowrap font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] [word-break:break-word]"
           style={{ fontSize: '12px', color: '#4D4D4D', letterSpacing: '0.3883px', lineHeight: '1.5' }}
         >
-          +
+          {promoStrip.separator_symbol_1}
         </p>
         <div className="relative shrink-0 overflow-hidden" style={{ width: '15.509px', height: '32px' }}>
           <img
@@ -37,13 +41,13 @@ export default function GetTakeCareBarMobile() {
           className="shrink-0 whitespace-nowrap font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] [word-break:break-word]"
           style={{ fontSize: '12px', color: '#4D4D4D', letterSpacing: '0.3883px', lineHeight: '1.5' }}
         >
-          =
+          {promoStrip.separator_symbol_2}
         </p>
         <p
           className="shrink-0 whitespace-nowrap text-center font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] [word-break:break-word]"
           style={{ fontSize: '20px', color: '#000000', letterSpacing: '0.324px', lineHeight: '28px' }}
         >
-          ₹1,698
+          {promoStrip.price}
         </p>
       </div>
 
@@ -65,7 +69,7 @@ export default function GetTakeCareBarMobile() {
           className="font-inter font-medium not-italic text-white [text-box-trim:trim-both] [text-box-edge:cap_alphabetic] [word-break:break-word]"
           style={{ fontSize: '16px', letterSpacing: '0.2592px', lineHeight: 'normal' }}
         >
-          Get Take Care
+          {promoStrip.cta_label}
         </span>
       </button>
     </div>

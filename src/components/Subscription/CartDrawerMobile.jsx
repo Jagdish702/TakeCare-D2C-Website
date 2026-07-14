@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PrimaryButton from '../common/PrimaryButton';
 import DisclaimerCard from './DisclaimerCard';
+import { useContent } from '../../context/ContentContext';
 
 /*
   Mobile "Your Cart" page — Figma node 12185:6104 ("Mobile: Cart").
@@ -151,7 +152,7 @@ function CartLineCardMobile({ image, imageBg, title, tag, description, qty, onQt
   );
 }
 
-function EmptySubscriptionMobile() {
+function EmptySubscriptionMobile({ title, subtitle }) {
   return (
     <div
       style={{
@@ -169,15 +170,17 @@ function EmptySubscriptionMobile() {
       }}
     >
       <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 14, color: '#808080', textAlign: 'center', lineHeight: '24px' }}>
-        No subscription plan added.
+        {title}
         <br />
-        Choose Monthly or Yearly below.
+        {subtitle}
       </p>
     </div>
   );
 }
 
 export default function CartDrawerMobile({ plan, isOpen, onClose, onCheckout }) {
+  const { subscription } = useContent();
+  const { cartProduct, cartStaticText } = subscription;
   const [deviceQty, setDeviceQty] = useState(1);
   const [subQty, setSubQty] = useState(1);
 
@@ -226,7 +229,7 @@ export default function CartDrawerMobile({ plan, isOpen, onClose, onCheckout }) 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
             <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 32, lineHeight: 'normal', color: '#000' }}>
-              Your Cart
+              {cartStaticText.title}
             </p>
             <button
               onClick={onClose}
@@ -261,12 +264,12 @@ export default function CartDrawerMobile({ plan, isOpen, onClose, onCheckout }) 
           </p>
           <CartLineCardMobile
             image="/assets/subscription/cart-device.png"
-            title="Take Care tablet dispenser"
-            tag="One time payment"
-            description="Take Care is the smart dispenser that doses, reminds, and confirms. So you stop worrying and start trusting."
+            title={cartProduct.name}
+            tag={cartProduct.tag}
+            description={cartProduct.description}
             qty={deviceQty}
             onQtyChange={setDeviceQty}
-            price="₹1,599"
+            price={cartProduct.price}
           />
 
           {plan && <DisclaimerCard plan={plan} />}
@@ -275,7 +278,7 @@ export default function CartDrawerMobile({ plan, isOpen, onClose, onCheckout }) 
         {/* Subscriptions */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%' }}>
           <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 16, color: '#808080', letterSpacing: '0.5178px', lineHeight: '24px' }}>
-            Subscriptions
+            {cartStaticText.subscriptions_section_label}
           </p>
           {plan ? (
             <CartLineCardMobile
@@ -290,7 +293,10 @@ export default function CartDrawerMobile({ plan, isOpen, onClose, onCheckout }) 
               price={`₹${plan.subAmount}`}
             />
           ) : (
-            <EmptySubscriptionMobile />
+            <EmptySubscriptionMobile
+              title={cartStaticText.empty_subscription_title}
+              subtitle={cartStaticText.empty_subscription_subtitle}
+            />
           )}
         </div>
       </div>
@@ -314,7 +320,7 @@ export default function CartDrawerMobile({ plan, isOpen, onClose, onCheckout }) 
           ₹{totalStr}
         </p>
         <div style={{ position: 'relative', flexShrink: 0 }}>
-          <PrimaryButton onClick={() => { onClose(); onCheckout?.(); }}>Checkout</PrimaryButton>
+          <PrimaryButton onClick={() => { onClose(); onCheckout?.(); }}>{cartStaticText.checkout_cta_label}</PrimaryButton>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import NavMenu from './NavMenu';
 import HeaderActions from './HeaderActions';
 import MobileHeaderBar from './MobileHeaderBar';
 import MobileMenuDrawer from './MobileMenuDrawer';
+import { useContent } from '../../context/ContentContext';
 
 /**
  * Site header (Figma node 12169:4282 "Header", 1440 × 68.098).
@@ -23,6 +24,7 @@ interface HeaderProps {
 
 export default function Header({ onOpenCart, onOpenProfile }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { header } = useContent();
 
   return (
     <>
@@ -30,7 +32,11 @@ export default function Header({ onOpenCart, onOpenProfile }: HeaderProps) {
         <div className="flex min-w-[1px] flex-[1_0_0] items-center justify-between">
           <Logo />
           <NavMenu />
-          <HeaderActions notificationCount={1} onOpenCart={onOpenCart} onOpenProfile={onOpenProfile} />
+          <HeaderActions
+            notificationCount={header.header.notification_badge_count}
+            onOpenCart={onOpenCart}
+            onOpenProfile={onOpenProfile}
+          />
         </div>
       </header>
 

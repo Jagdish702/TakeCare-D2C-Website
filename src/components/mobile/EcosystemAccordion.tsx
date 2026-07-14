@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { useContent } from '../../context/ContentContext';
+
 /**
  * "A connected ecosystem" — Figma "Hero_mobile_option_2" States 9-13
  * (nodes 13061:3927 / 13063:4314 / 4368 / 4422 / 4476).
@@ -12,59 +14,39 @@ import { useState } from 'react';
  */
 type Plate = { src: string; className?: string; style?: React.CSSProperties };
 
-const ITEMS: Array<{
-  key: string;
-  title: string;
-  body: string;
-  note: string;
-  plates: Plate[];
-}> = [
-  {
-    key: 'connected-to-curebay',
-    title: 'Connected to CureBay',
-    body: 'Consult doctors, order medicines, book lab tests, manage every dose, and access emergency support—all seamlessly connected through the Take Care App.',
-    note: 'No more disconnected healthcare.',
-    plates: [{ src: '/assets/mobile/plate-curebay-connected.png', className: 'object-cover' }],
-  },
-  {
-    key: 'works-24x7',
-    title: 'Works 24x7',
-    body: 'One missed dose; instant alerts to you, your family & the 24×7 command centre.',
-    note: 'No more boxes \nthat just sit there.',
-    plates: [{ src: '/assets/mobile/plate-247.png', className: 'object-cover' }],
-  },
-  {
-    key: '30-day-slots',
-    title: '30-Day Slots',
-    body: 'Drop in a whole sealed strip — 30 days per slot, refilled monthly by CureBay.',
-    note: 'No more popping pills \nfrom foil every day.',
-    // Figma layers a transparent cut-out photo over a shared base image.
-    plates: [
-      { src: '/assets/mobile/plate-base.jpg', className: 'object-cover' },
-      {
-        src: '/assets/mobile/plate-30day-overlay.webp',
-        style: { height: '125.73%', left: '0.07%', top: '-25.95%', width: '100%' },
-      },
-    ],
-  },
-  {
-    key: 'medical-grade-build',
-    title: 'Medical-Grade Build',
-    body: 'Medical-grade ABS, anti-microbial finish. Built to last, easy to wipe clean.',
-    note: 'No more cracks on the first drop.',
-    plates: [
-      { src: '/assets/mobile/plate-base.jpg', className: 'object-cover' },
-      { src: '/assets/mobile/plate-medical-overlay.webp', className: 'object-cover' },
-    ],
-  },
-  {
-    key: 'magnetic-lock',
-    title: 'Magnetic lock',
-    body: "Magnetic lock seals every slot. \nAn IR sensor confirms the dose the slot glows when it's done.",
-    note: 'No more pills spilling in your bag.',
-    plates: [{ src: '/assets/mobile/plate-magnetic-lock.jpg', className: 'object-cover' }],
-  },
-];
+type EcoItem = { key: string; title: string; body: string; note: string; plates: Plate[] };
+
+// Image assets per card — not part of the DB content, kept local and matched
+// to the DB rows by item_key in buildItems() below.
+const PLATES_BY_KEY: Record<string, Plate[]> = {
+  'connected-to-curebay': [{ src: '/assets/mobile/plate-curebay-connected.png', className: 'object-cover' }],
+  'works-24x7': [{ src: '/assets/mobile/plate-247.png', className: 'object-cover' }],
+  // Figma layers a transparent cut-out photo over a shared base image.
+  '30-day-slots': [
+    { src: '/assets/mobile/plate-base.jpg', className: 'object-cover' },
+    {
+      src: '/assets/mobile/plate-30day-overlay.webp',
+      style: { height: '125.73%', left: '0.07%', top: '-25.95%', width: '100%' },
+    },
+  ],
+  'medical-grade-build': [
+    { src: '/assets/mobile/plate-base.jpg', className: 'object-cover' },
+    { src: '/assets/mobile/plate-medical-overlay.webp', className: 'object-cover' },
+  ],
+  'magnetic-lock': [{ src: '/assets/mobile/plate-magnetic-lock.jpg', className: 'object-cover' }],
+};
+
+function buildItems(dbItems: Array<{ item_key: string; title: string; body: string; note: string; sort_order: number }>): EcoItem[] {
+  return [...dbItems]
+    .sort((a, b) => a.sort_order - b.sort_order)
+    .map((i) => ({
+      key: i.item_key,
+      title: i.title,
+      body: i.body,
+      note: i.note,
+      plates: PLATES_BY_KEY[i.item_key],
+    }));
+}
 
 // Figma Outer/3 (active) and Outer/4 (collapsed) effect styles.
 const CARD_SHADOW_ACTIVE =
@@ -73,6 +55,9 @@ const CARD_SHADOW_INACTIVE =
   '0px 4px 12px rgba(0,65,114,0.08), inset 0px 0px 2px rgba(0,65,114,0.16)';
 
 export default function EcosystemAccordion() {
+  const { hero } = useContent();
+  const ITEMS = buildItems(hero.ecosystemItems);
+
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
@@ -94,7 +79,7 @@ export default function EcosystemAccordion() {
             className="font-inter font-bold not-italic text-black [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
             style={{ fontSize: 48, lineHeight: 'normal' }}
           >
-            A connected ecosystem
+            {hero.ecosystemSection.heading}
           </h2>
           <p
             className="whitespace-pre-line font-inter font-medium not-italic [text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
@@ -106,7 +91,7 @@ export default function EcosystemAccordion() {
               textShadow: '0px 2px 20px rgba(0,65,114,0.08)',
             }}
           >
-            {"Every pill dispenser fails. \nTake Care isn't one."}
+            {hero.ecosystemSection.subheading}
           </p>
         </div>
 
