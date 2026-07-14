@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Chrome scroll anchoring fights GSAP pin spacers: when late-loading
+     sections change the page height it silently moves scrollY, which yanks
+     every scrubbed section to a new state mid-scroll. */
+  overflow-anchor: none;
+}
+
+/* Features section tab transition — spring: stiffness 109, damping 30, mass 1 */
+@keyframes feat-exit {
+  from { opacity: 1; transform: translateY(0px);  }
+  to   { opacity: 0; transform: translateY(-16px); }
+}
+@keyframes feat-enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0px);  }
+}
+/* exit: 200ms ease-in (quick clear); enter: 400ms overdamped-spring cubic-bezier */
+.feat-exiting  { animation: feat-exit  0.20s ease-in                         forwards; }
+.feat-entering { animation: feat-enter 0.40s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+/* NobodyFalls device top-view countdown — incoming frame fades in over current */
+@keyframes nf-fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* NobodyFalls alert cards — pop up from below with a slight overshoot */
+@keyframes nf-card-pop {
+  0%   { opacity: 0; transform: translateY(34px) scale(0.92); }
+  60%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* OTP entry shake (wrong code) */
+@keyframes otp-shake {
+  0%, 100% { transform: translateX(0); }
+  15%       { transform: translateX(-6px); }
+  30%       { transform: translateX(6px); }
+  45%       { transform: translateX(-4px); }
+  60%       { transform: translateX(4px); }
+  75%       { transform: translateX(-2px); }
+  90%       { transform: translateX(2px); }
+}
+.otp-shake {
+  animation: otp-shake 0.45s ease-in-out;
+}
+
+/* OTP success badge — clean fade + scale-in, no bounce/loop */
+@keyframes success-badge-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.success-badge-in {
+  animation: success-badge-in 0.35s ease-out forwards;
+}
