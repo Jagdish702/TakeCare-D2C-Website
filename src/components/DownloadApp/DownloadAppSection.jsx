@@ -84,7 +84,7 @@ export default function DownloadAppSection() {
             maxWidth: '100%',
             height: '299px',
             flexShrink: 0,
-            marginBottom: '80px',      /* lift it off the very bottom edge */
+            marginBottom: '120px',     /* lift it off the very bottom edge — Figma p-120 */
             borderRadius: '51.805px',
             background: 'transparent',
             isolation: 'isolate',
@@ -95,7 +95,7 @@ export default function DownloadAppSection() {
             padding: '0 69.074px',
             boxSizing: 'border-box',
             boxShadow:
-              'inset 0 0 1.727px 0 rgba(0,65,114,0.12), 0 1.727px 17.268px 0 rgba(0,65,114,0.08)',
+              'inset 0 0 1.727px 0 rgba(0,65,114,0.12), 0 1.727px 8.634px 0 rgba(0,65,114,0.08)',
             overflow: 'visible',
             opacity: 0,
             transform: 'translateY(120px)',
@@ -256,7 +256,7 @@ export default function DownloadAppSection() {
                   top: '-0.51%',
                   left: '0.05%',
                   maxWidth: 'none',
-                  objectFit: 'contain',
+                  objectFit: 'cover',
                 }}
               />
             </div>

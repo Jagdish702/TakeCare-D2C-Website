@@ -109,7 +109,7 @@ function PlanCard({ plan, features, content, onGetStarted }) {
         width: 500,
         flexShrink: 0,
         borderRadius: 26,
-        padding: '38px 28px',
+        padding: '38px 24px',
         display: 'flex',
         flexDirection: 'column',
         gap: 38,

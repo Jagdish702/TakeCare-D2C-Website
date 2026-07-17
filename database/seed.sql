@@ -273,23 +273,17 @@ INSERT INTO specifications_content (id, eyebrow, heading, subhead) VALUES
 DELETE FROM specification_cards;
 INSERT INTO specification_cards (state_key, icon_key, title, body, col, row, sort_order) VALUES
   ('state3', 'magnetic-lock', 'Magnetic Lock',
-   'A magnetic lock secures the slot with a single push, at dose time the right slot glows green. Take it and shut the slot; that close is the confirmation, IR sensors confirm each dose is taken.', 1, 1, 0),
+   'A neodymium magnet secures every slot until it''s due. When closed, IR sensors confirm the dose and automatically log completion.', 1, 1, 0),
   ('state3', 'medical-grade', 'Medical-grade build.',
-   'Super White ABS / polycarbonate with a matte, anti-microbial finish — non-reflective and easy to wipe clean.', 2, 1, 1),
+   'Super White ABS. Premium ABS with a matte, anti-microbial durable finish that''s lightweight and easy to maintain for everyday use.', 2, 1, 1),
   ('state3', 'marked-for-everyone', 'Marked for everyone',
-   'Each slot carries a number, a pull-arrow, and a Braille mark — moulded into the surface, never printed, so they never rub off. Built so low-vision and blind users find the right slot by touch.', 3, 1, 2),
+   'Each slot carries a number and  a pull-arrow mounted into the surface, never printed, so they never rub off. Built so low-vision and blind users find the right slot by touch.', 3, 1, 2),
   ('state3', 'see-whats-left', 'See what''s left',
    'A clear window on the front of each slot, with a slight inward tilt that nudges pills forward, shows how much medicine remains at a glance.', 1, 2, 3),
   ('state3', 'made-for-older-hands', 'Made for older hands',
    'The two everyday keys — Taken and Snooze — sit raised for a confident press; the rest stay flush so they''re never hit by accident.', 2, 2, 4),
-  ('state3', 'stable-base', 'Stable base',
-   'A 1 mm rubber mat grips the surface and seals each slot, blocking light bleed between stacked trays.', 3, 2, 5),
-  ('state8', 'magnetic-lock', 'Magnetic Lock',
-   'A magnetic lock secures the slot with a single push, at dose time the right slot glows green — no labels to read. Take it and shut the slot; that close is the confirmation, IR sensors confirm each dose is taken.', NULL, NULL, 0),
-  ('state8', 'medical-grade', 'Medical-grade build.',
-   'Super White ABS / polycarbonate with a matte, anti-microbial finish — non-reflective and easy to wipe clean.', NULL, NULL, 1),
-  ('state8', 'stable-base', 'Stable base',
-   'A 1 mm rubber mat grips the surface and seals each slot, blocking light bleed between stacked trays.', NULL, NULL, 2);
+  ('state3', 'reliable-every-day', 'Reliable Every Day',
+   'Designed to operate reliably between 0°C to 60°C, ensuring stable performance across typical home environments.', 3, 2, 5);
 
 DELETE FROM specification_stats;
 INSERT INTO specification_stats (group_key, number, unit, label, sort_order) VALUES
@@ -306,9 +300,9 @@ INSERT INTO storage_capacity_content (id, heading, body) VALUES (
 
 DELETE FROM specification_connectivity_cards;
 INSERT INTO specification_connectivity_cards (variant, title, body, is_placeholder, sort_order) VALUES
-  ('desktop', 'Connectivity', '4G connectivity and nano-SIM tray with pin-hole release; high-tolerance fit.', 0, 0),
-  ('desktop', 'Charging Input', 'Side-mounted charging input on the top-right panel.', 0, 1),
-  ('desktop', 'Audio Integration', NULL, 1, 2);
+  ('desktop', 'Connectivity', 'Supports 4G cellular connectivity through a built-in Micro SIM, enabling continuous communication without relying on Wi-Fi.', 0, 0),
+  ('desktop', 'Charging', 'Stay powered, even during outages. Recharge through USB-C and rely on the built-in 3.7 V, 2000 mAh lithium-ion battery for up to 24 hours of backup power.', 0, 1),
+  ('desktop', 'Audio Integration', 'An integrated buzzer delivers clear reminder tones and alerts that are easy to hear when it''s time for medication.', 0, 2);
 
 -- ============================================================================
 -- 9. DOWNLOAD APP SECTION
@@ -430,12 +424,12 @@ INSERT INTO form_fields (form_key, field_key, label, placeholder, helper_text, i
   ('profile', 'last_name', 'Last Name', 'Enter Last Name', NULL, 0, 1),
   ('profile', 'gender', 'Gender', 'Eg. Male', NULL, 0, 2),
   ('profile', 'phone_number', 'Phone Number*', 'E.g. 98XXXXXXXX', NULL, 1, 3),
-  ('profile', 'date_of_birth', 'Date of Birth*', 'Placeholder', NULL, 1, 4),
+  ('profile', 'date_of_birth', 'Date of Birth*', 'DD/MM/YYYY', NULL, 1, 4),
   ('profile', 'blood_group', 'Blood Group', 'eg. O+', NULL, 0, 5),
   ('profile', 'age', 'Age*', 'eg. 24', NULL, 1, 6),
   ('profile', 'address1', 'Address 1*', 'Enter Address 1', NULL, 1, 7),
   ('profile', 'country', 'Country', 'eg. India', NULL, 0, 8),
-  ('profile', 'pincode', 'Pin code*', 'Placeholder', NULL, 1, 9),
+  ('profile', 'pincode', 'Pin code*', 'eg. 425412', NULL, 1, 9),
   ('profile', 'city', 'City*', 'eg. Nardana', NULL, 1, 10),
   ('profile', 'state', 'State*', 'eg. Maharashtra', NULL, 1, 11);
 

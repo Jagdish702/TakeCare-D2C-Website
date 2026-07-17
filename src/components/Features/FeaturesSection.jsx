@@ -202,16 +202,20 @@ export default function FeaturesSection() {
           display: 'flex', flexDirection: 'column', alignItems: 'center',
           gap: 32, width: '100%',
         }}>
-          {/* Card — animated via CSS class */}
+          {/* Card — animated via CSS class. Figma "Features" (node
+              12335:1635): 1199.52×600 — the DB image per tab is already a
+              flattened export of the full composited scene (gradient blob +
+              device/phone mockups baked in), aspect ratio ~1.998 ≈ card's
+              1199.52/600 ≈ 1.999, so a plain object-cover fill matches exactly. */}
           <div
             className={animClass}
-            style={{ width: 1000, height: 500, flexShrink: 0, overflow: 'hidden' }}
+            style={{ width: '100%', height: 600, flexShrink: 0, overflow: 'hidden' }}
           >
             <img
               src={tab.image}
               alt={tab.label}
               draggable={false}
-              style={{ width: 1000, height: 500, objectFit: 'cover', display: 'block' }}
+              style={{ width: '100%', height: 600, objectFit: 'cover', display: 'block' }}
             />
           </div>
 
@@ -229,7 +233,7 @@ export default function FeaturesSection() {
               display: 'grid',
               gridTemplateColumns: 'repeat(6, minmax(0, 1fr))',
               gap: 12,
-              width: 1000,
+              width: '100%',
             }}
           >
             {TABS.map((t, i) => {

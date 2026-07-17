@@ -49,7 +49,7 @@ const ICON_META = {
   'marked-for-everyone':    { icon: '/assets/specifications/icons/marked-for-everyone.svg', fontSize: 16, tracking: '0.5184px' },
   'see-whats-left':         { icon: '/assets/specifications/icons/see-whats-left.svg', fontSize: 16, tracking: '0.5184px' },
   'made-for-older-hands':   { icon: '/assets/specifications/icons/made-for-older-hands.svg', fontSize: 16, tracking: '0.5184px' },
-  'stable-base':            { icon: '/assets/specifications/icons/stable-base.svg', fontSize: 18, tracking: '0.5825px' },
+  'reliable-every-day':     { icon: '/assets/specifications/icons/reliable-every-day.svg', fontSize: 18, tracking: '0.5825px' },
 };
 
 // The "Magnetic Lock" card body ends with a bolded sentence in the Figma design.
@@ -104,7 +104,6 @@ export default function SpecificationsSection() {
   const STATE6_IMG = images['specifications-spec-state6'];
   const STATE9_IMG = images['specifications-spec-state9'];
   const cardsByState = (key) => specifications.cards.filter((c) => c.state_key === key);
-  const state8ByIcon = Object.fromEntries(cardsByState('state8').map((c) => [c.icon_key, c]));
   const CARDS = cardsByState('state3').map((row) => {
     const meta = ICON_META[row.icon_key];
     return {
@@ -121,8 +120,17 @@ export default function SpecificationsSection() {
   const connectivityCards = specifications.connectivityCards.filter((c) => c.variant === 'desktop');
   const CONNECTIVITY_ICON = {
     Connectivity: '/assets/specifications/icons/connectivity.svg',
-    'Charging Input': '/assets/specifications/icons/charging-input.svg',
+    Charging: '/assets/specifications/icons/charging-input.svg',
     'Audio Integration': '/assets/specifications/icons/audio-integration.svg',
+  };
+  // Figma (node 12160:3462) places these in a specific 2-col grid — Connectivity
+  // and Audio Integration share row 1, Charging sits alone in row 2 — which is
+  // NOT the DB's natural reading order (Connectivity, Charging, Audio
+  // Integration), so position explicitly instead of relying on grid auto-flow.
+  const CONNECTIVITY_GRID_POS = {
+    Connectivity: { gridColumn: 1, gridRow: 1 },
+    Charging: { gridColumn: 1, gridRow: 2 },
+    'Audio Integration': { gridColumn: 2, gridRow: 1 },
   };
 
   const outerRef     = useRef(null);
@@ -133,7 +141,6 @@ export default function SpecificationsSection() {
   const gridRef      = useRef(null);
   const state6ImgRef  = useRef(null);
   const leftTextRef   = useRef(null);
-  const leftText2Ref  = useRef(null);
   const state9ImgRef  = useRef(null);
   const leftText3Ref  = useRef(null);
 
@@ -144,7 +151,6 @@ export default function SpecificationsSection() {
     if (state1Ref.current)    state1Ref.current.style.opacity    = '0';
     if (state6ImgRef.current) { state6ImgRef.current.style.opacity = '1'; state6ImgRef.current.style.transform = 'translateX(100%)'; }
     if (leftTextRef.current)   leftTextRef.current.style.opacity  = '0';
-    if (leftText2Ref.current)  leftText2Ref.current.style.opacity = '0';
     if (state9ImgRef.current)  state9ImgRef.current.style.opacity = '0';
     if (leftText3Ref.current)  leftText3Ref.current.style.opacity = '0';
 
@@ -173,7 +179,7 @@ export default function SpecificationsSection() {
       if (
         !specRef.current || !state1Ref.current || !titleRef.current ||
         !gridRef.current || !outerRef.current ||
-        !state6ImgRef.current || !leftTextRef.current || !leftText2Ref.current ||
+        !state6ImgRef.current || !leftTextRef.current ||
         !state9ImgRef.current || !leftText3Ref.current
       ) return;
 
@@ -181,7 +187,6 @@ export default function SpecificationsSection() {
       gsap.set(gridRef.current,      { opacity: 0 });
       gsap.set(state6ImgRef.current, { opacity: 1, x: '100%' });
       gsap.set(leftTextRef.current,   { opacity: 0, y: 80 });
-      gsap.set(leftText2Ref.current,  { opacity: 0, y: 80 });
       gsap.set(state9ImgRef.current,  { opacity: 0, y: IMG9_START_Y });
       gsap.set(leftText3Ref.current,  { opacity: 0, y: 80 });
 
@@ -219,19 +224,14 @@ export default function SpecificationsSection() {
       tl.to(state6ImgRef.current, { x: 0, duration: 2, ease: 'power2.out' }, 10);
 
       // ── Beat 12→14: State 6 → 7 ────────────────────────────────────────
-      // Left content rises from 80px below into centred position
+      // Left content ("Flexible Storage Capacity") rises from 80px below into
+      // centred position, and stays put — no 3-card column takeover — until
+      // it exits alongside the product image at beat 18→20.
       tl.to(leftTextRef.current, { opacity: 1, y: 0, duration: 2, ease: 'power2.out' }, 12);
 
-      // ── Beat 14→16: left text exits upward ─────────────────────────────
-      tl.to(leftTextRef.current,  { opacity: 0, y: -100, duration: 2, ease: 'power2.in' }, 14);
-
-      // ── Beat 16→18: 3-card column rises from below (after first text gone)
-      tl.to(leftText2Ref.current, { opacity: 1, y: 0,    duration: 2, ease: 'power2.out' }, 16);
-
-      // ── Beat 18→20: State 8 exit ────────────────────────────────────────
-      // Product image exits right, 3-card column exits upward simultaneously
+      // ── Beat 18→20: product image + left text exit together ────────────
       tl.to(state6ImgRef.current, { x: '100%', duration: 2, ease: 'power2.in' }, 18);
-      tl.to(leftText2Ref.current, { opacity: 0, y: -100, duration: 2, ease: 'power2.in' }, 18);
+      tl.to(leftTextRef.current, { opacity: 0, y: -100, duration: 2, ease: 'power2.in' }, 18);
 
       // ── Beat 20→22: State 9 enter ───────────────────────────────────────
       // New device image rises from below canvas, 2×2 grid fades in from below
@@ -432,13 +432,13 @@ export default function SpecificationsSection() {
           {/* ── State 9: 2×2 feature grid (Connectivity / Charging / Audio) ───── */}
           {/* Outer: centers grid at canvas y=402 (Figma: top=calc(50%-148px)).    */}
           {/* Inner div is the GSAP target for y+opacity animation.                 */}
-          <div style={{ position: 'absolute', left: 317, top: 402, width: 807, transform: 'translateY(-50%)', zIndex: 10 }}>
+          <div style={{ position: 'absolute', left: 302.5, top: 360, width: 835, transform: 'translateY(-50%)', zIndex: 10 }}>
             <div
               ref={leftText3Ref}
               style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', columnGap: 60, rowGap: 60, opacity: 0 }}
             >
               {connectivityCards.map((card) => (
-                <div key={card.title} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                <div key={card.title} style={{ display: 'flex', flexDirection: 'column', gap: 24, ...CONNECTIVITY_GRID_POS[card.title] }}>
                   <img src={CONNECTIVITY_ICON[card.title]} alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
                   <p
                     className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
@@ -468,76 +468,6 @@ export default function SpecificationsSection() {
                   )}
                 </div>
               ))}
-            </div>
-          </div>
-
-          {/* ── State 8: 3-card column — Magnetic Lock / Medical-grade / Stable ── */}
-          {/* Same outer centering wrapper; inner div animated by GSAP              */}
-          <div
-            style={{
-              position: 'absolute',
-              left: 180, top: 0, bottom: 0,
-              width: 329,
-              display: 'flex', alignItems: 'center',
-              zIndex: 10,
-            }}
-          >
-            <div
-              ref={leftText2Ref}
-              style={{ display: 'flex', flexDirection: 'column', gap: 60, opacity: 0 }}
-            >
-
-              {/* Card 1: Magnetic Lock */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <img src={ICON_META['magnetic-lock'].icon} alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
-                <p
-                  className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
-                  style={{ fontSize: 24, fontWeight: 500, fontFamily: 'Inter, sans-serif', color: '#000', letterSpacing: '0.3888px', lineHeight: 'normal', margin: 0 }}
-                >
-                  {state8ByIcon['magnetic-lock'].title}
-                </p>
-                <p
-                  className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
-                  style={{ fontSize: 18, fontWeight: 300, fontFamily: 'Inter, sans-serif', color: '#4D4D4D', letterSpacing: '0.5825px', lineHeight: '28px', margin: 0 }}
-                >
-                  {withBoldTail(state8ByIcon['magnetic-lock'].body, MAGNETIC_LOCK_BOLD_TAIL, { fontWeight: 700, color: '#000' })}
-                </p>
-              </div>
-
-              {/* Card 2: Medical-grade build. */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <img src={ICON_META['medical-grade'].icon} alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
-                <p
-                  className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
-                  style={{ fontSize: 24, fontWeight: 500, fontFamily: 'Inter, sans-serif', color: '#000', letterSpacing: '0.3888px', lineHeight: 'normal', margin: 0 }}
-                >
-                  {state8ByIcon['medical-grade'].title}
-                </p>
-                <p
-                  className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
-                  style={{ fontSize: 18, fontWeight: 300, fontFamily: 'Inter, sans-serif', color: '#4D4D4D', letterSpacing: '0.5825px', lineHeight: '28px', margin: 0 }}
-                >
-                  {state8ByIcon['medical-grade'].body}
-                </p>
-              </div>
-
-              {/* Card 3: Stable base */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                <img src={ICON_META['stable-base'].icon} alt="" draggable={false} style={{ width: 48, height: 48, objectFit: 'contain' }} />
-                <p
-                  className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
-                  style={{ fontSize: 24, fontWeight: 500, fontFamily: 'Inter, sans-serif', color: '#000', letterSpacing: '0.3888px', lineHeight: 'normal', margin: 0 }}
-                >
-                  {state8ByIcon['stable-base'].title}
-                </p>
-                <p
-                  className="[text-box-trim:trim-both] [text-box-edge:cap_alphabetic]"
-                  style={{ fontSize: 18, fontWeight: 300, fontFamily: 'Inter, sans-serif', color: '#4D4D4D', letterSpacing: '0.5825px', lineHeight: '28px', margin: 0 }}
-                >
-                  {state8ByIcon['stable-base'].body}
-                </p>
-              </div>
-
             </div>
           </div>
 

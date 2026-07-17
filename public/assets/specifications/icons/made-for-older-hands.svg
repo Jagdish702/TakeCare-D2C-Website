@@ -1,23 +1,6 @@
-<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="48" height="48" fill="#D9D9D9"/>
-<g id="Homepage components">
-<g id="Specifications">
-<rect x="-5212.83" y="-405.5" width="13799" height="1139" rx="4.5" stroke="#9747FF" stroke-dasharray="10 5"/>
-<g id="State=3">
-<rect width="1440" height="1100" transform="translate(-573.333 -386)" fill="white"/>
-<g id="Frame 1984078835">
-<g id="Frame 1984078832">
-<g id="Frame 1984078837">
-<g id="OLd_person">
+<svg width="34.0001" height="40.0005" viewBox="0 0 34.0001 40.0005" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="Group">
-<path id="Vector" d="M22 42L20 34L16 28V16" stroke="#00654D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector_2" d="M10 28L8 22L16 16L22 20L28 21M14 34L10 42M32 42V25C32 24.2044 32.3161 23.4413 32.8787 22.8787C33.4413 22.3161 34.2044 22 35 22C35.7956 22 36.5587 22.3161 37.1213 22.8787C37.6839 23.4413 38 24.2044 38 25V26M14 8C14 8.53043 14.2107 9.03914 14.5858 9.41421C14.9609 9.78929 15.4696 10 16 10C16.5304 10 17.0391 9.78929 17.4142 9.41421C17.7893 9.03914 18 8.53043 18 8C18 7.46957 17.7893 6.96086 17.4142 6.58579C17.0391 6.21071 16.5304 6 16 6C15.4696 6 14.9609 6.21071 14.5858 6.58579C14.2107 6.96086 14 7.46957 14 8Z" stroke="#00654D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
+<path id="Vector" d="M16.0001 38L14.0001 30L10.0001 24V12" stroke="#00654D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M4.00013 24L2.00013 18L10.0001 12L16.0001 16L22.0001 17M8.00013 30L4.00013 38M26.0001 38V21C26.0001 20.2044 26.3162 19.4413 26.8788 18.8787C27.4414 18.3161 28.2045 18 29.0001 18C29.7958 18 30.5588 18.3161 31.1214 18.8787C31.6841 19.4413 32.0001 20.2044 32.0001 21V22M8.00013 4C8.00013 4.53043 8.21084 5.03914 8.58592 5.41421C8.96099 5.78929 9.4697 6 10.0001 6C10.5306 6 11.0393 5.78929 11.4143 5.41421C11.7894 5.03914 12.0001 4.53043 12.0001 4C12.0001 3.46957 11.7894 2.96086 11.4143 2.58579C11.0393 2.21071 10.5306 2 10.0001 2C9.4697 2 8.96099 2.21071 8.58592 2.58579C8.21084 2.96086 8.00013 3.46957 8.00013 4Z" stroke="#00654D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 </svg>

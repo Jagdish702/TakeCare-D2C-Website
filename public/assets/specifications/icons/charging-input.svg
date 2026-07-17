@@ -1,21 +1,6 @@
-<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="48" height="48" fill="#D9D9D9"/>
-<g id="Homepage components">
-<g id="Specifications">
-<rect x="-13090" y="-251.5" width="13799" height="1139" rx="4.5" stroke="#9747FF" stroke-dasharray="10 5"/>
-<g id="State=12">
-<rect width="1440" height="1100" transform="translate(-750.5 -232)" fill="white"/>
-<g id="Frame 1984078832">
-<g id="Frame 1984078832_2">
-<g id="iconoir:ev-plug-charging">
+<svg width="32" height="42.0004" viewBox="0 0 32 42.0004" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="Group">
-<path id="Vector" d="M20 26.308V42M26.666 12.77V6M13.334 12.77V6M30 16.77V22.308C30 23.3689 29.5786 24.3863 28.8284 25.1364C28.0783 25.8866 27.0609 26.308 26 26.308H14C12.9391 26.308 11.9217 25.8866 11.1716 25.1364C10.4214 24.3863 10 23.3689 10 22.308V16.768C10 15.7071 10.4214 14.6897 11.1716 13.9396C11.9217 13.1894 12.9391 12.768 14 12.768H26C27.0609 12.768 28.0783 13.1894 28.8284 13.9396C29.5786 14.6897 30 15.7071 30 16.768V16.77Z" stroke="#3CBA84" stroke-width="4" stroke-linecap="round"/>
-<path id="Vector_2" d="M33.334 32L30 38H38L34.666 44" stroke="#3CBA84" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-</g>
-</g>
-</g>
-</g>
-</g>
-</g>
+<path id="Vector" d="M12 22.308V38M18.666 8.77V2M5.334 8.77V2M22 12.77V18.308C22 19.3689 21.5786 20.3863 20.8284 21.1364C20.0783 21.8866 19.0609 22.308 18 22.308H6C4.93913 22.308 3.92172 21.8866 3.17157 21.1364C2.42143 20.3863 2 19.3689 2 18.308V12.768C2 11.7071 2.42143 10.6897 3.17157 9.93957C3.92172 9.18943 4.93913 8.768 6 8.768H18C19.0609 8.768 20.0783 9.18943 20.8284 9.93957C21.5786 10.6897 22 11.7071 22 12.768V12.77Z" stroke="#3CBA84" stroke-width="4" stroke-linecap="round"/>
+<path id="Vector_2" d="M25.334 28L22 34H30L26.666 40" stroke="#3CBA84" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 </svg>

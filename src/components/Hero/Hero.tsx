@@ -368,11 +368,19 @@ export default function Hero() {
         </div>
 
         {/* ── BG Layer 1: dark night bedroom (states 0-2) ────────────────── */}
+        {/*   Figma's canvas (1440×1000, aspect 1.44) is almost an exact       */}
+        {/*   match for the photo's own aspect (2764×1892, 1.46) — effectively */}
+        {/*   no crop at the design's own size. At other viewport aspects,    */}
+        {/*   a bare center object-position crops into the lamp/nightstand/bed */}
+        {/*   on the right and leaves excess empty wall on the left; anchoring */}
+        {/*   right keeps that detail in frame and sacrifices the (empty) left */}
+        {/*   margin instead. */}
         <div ref={bgNightRef} className="pointer-events-none absolute inset-0" aria-hidden>
           <img
             src={images['figma-hero-bg-night']}
             alt=""
             className="absolute inset-0 size-full max-w-none object-cover"
+            style={{ objectPosition: 'right center' }}
           />
           {/* Top-to-bottom black fade so the heading area reads dark in state 2 */}
           <div

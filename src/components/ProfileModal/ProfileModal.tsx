@@ -335,13 +335,13 @@ export default function ProfileModal({
           </div>
 
           <div className="md:col-start-1 md:row-start-4">
-            <SelectField label={fieldMap.pincode.label} value={formData.pincode} onChange={handleChange('pincode')} placeholder={fieldMap.pincode.placeholder} />
+            <SelectField label={fieldMap.state.label} value={formData.state} onChange={handleChange('state')} placeholder={fieldMap.state.placeholder} />
           </div>
           <div className="md:col-start-2 md:row-start-4">
             <SelectField label={fieldMap.city.label} value={formData.city} onChange={handleChange('city')} placeholder={fieldMap.city.placeholder} />
           </div>
           <div className="md:col-start-3 md:row-start-4">
-            <SelectField label={fieldMap.state.label} value={formData.state} onChange={handleChange('state')} placeholder={fieldMap.state.placeholder} />
+            <SelectField label={fieldMap.pincode.label} value={formData.pincode} onChange={handleChange('pincode')} placeholder={fieldMap.pincode.placeholder} />
           </div>
         </div>
 

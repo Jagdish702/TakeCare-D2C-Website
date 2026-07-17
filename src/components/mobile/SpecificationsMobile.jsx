@@ -21,7 +21,7 @@ const FEATURE_ICON = {
   'marked-for-everyone': '/assets/specifications/icons/marked-for-everyone.svg',
   'see-whats-left': '/assets/specifications/icons/see-whats-left.svg',
   'made-for-older-hands': '/assets/specifications/icons/made-for-older-hands.svg',
-  'stable-base': '/assets/specifications/icons/stable-base.svg',
+  'reliable-every-day': '/assets/specifications/icons/reliable-every-day.svg',
 };
 
 // The "Magnetic Lock" card body ends with a bolded sentence in Figma; the DB stores
@@ -29,30 +29,14 @@ const FEATURE_ICON = {
 // known trailing sentence (copy itself still comes from the DB row).
 const MAGNETIC_LOCK_BOLD_TAIL = 'IR sensors confirm each dose is taken.';
 
-// NOTE: no 'mobile' variant rows exist in specification_connectivity_cards (DB only
-// seeds 'desktop') and the copy below (title "Charging" instead of "Charging Input",
-// extra "24 hours of battery backup" sentence) doesn't match the 'desktop' rows either
-// — left hardcoded, unmapped, per instructions to flag rather than guess.
-const CONNECTIVITY_CARDS = [
-  {
-    icon: '/assets/specifications/icons/connectivity.svg',
-    title: 'Connectivity',
-    body: '4G connectivity and nano-SIM tray with pin-hole release; high-tolerance fit.',
-  },
-  {
-    icon: '/assets/specifications/icons/charging-input.svg',
-    title: 'Charging',
-    body: 'Side-mounted charging input on the top-right panel along with 24 hours of battery backup.',
-  },
-  {
-    icon: '/assets/specifications/icons/audio-integration.svg',
-    title: 'Audio Integration',
-    // Figma's own content here is an unfinished placeholder (a duplicate red-gradient
-    // "Audio Integration" label instead of real body copy) — reproduced as-is per the
-    // design rather than inventing copy the design hasn't written yet.
-    bodyPlaceholder: true,
-  },
-];
+// No 'mobile' variant rows exist in specification_connectivity_cards — the copy is
+// device specs (SIM/charging/audio), identical regardless of viewport, so mobile
+// reuses the 'desktop' rows directly rather than keeping a separate hardcoded copy.
+const CONNECTIVITY_ICON = {
+  Connectivity: '/assets/specifications/icons/connectivity.svg',
+  Charging: '/assets/specifications/icons/charging-input.svg',
+  'Audio Integration': '/assets/specifications/icons/audio-integration.svg',
+};
 
 function SectionShell({ paddingY, children }) {
   return (
@@ -90,28 +74,16 @@ function FeatureCard({ icon, title, body, bold }) {
   );
 }
 
-function ConnectivityCard({ icon, title, body, bodyPlaceholder }) {
+function ConnectivityCard({ icon, title, body }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 16, width: '100%' }}>
       <img src={icon} alt="" draggable={false} style={{ width: 32, height: 32 }} />
       <p className={textTrim} style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 20, lineHeight: '28px', letterSpacing: '0.324px', color: '#000' }}>
         {title}
       </p>
-      {bodyPlaceholder ? (
-        <p
-          className={textTrim}
-          style={{
-            margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 16, lineHeight: '24px', letterSpacing: '0.5178px',
-            background: 'linear-gradient(180deg, #ff9191 0%, #ba0000 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent',
-          }}
-        >
-          Audio Integration
-        </p>
-      ) : (
-        <p className={textTrim} style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 16, lineHeight: '24px', letterSpacing: '0.5178px', color: '#4d4d4d' }}>
-          {body}
-        </p>
-      )}
+      <p className={textTrim} style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 16, lineHeight: '24px', letterSpacing: '0.5178px', color: '#4d4d4d' }}>
+        {body}
+      </p>
     </div>
   );
 }
@@ -134,6 +106,9 @@ export default function SpecificationsMobile() {
       };
     });
   const specStats = specifications.stats.filter((s) => s.group_key === 'specifications');
+  const connectivityCards = specifications.connectivityCards
+    .filter((c) => c.variant === 'desktop')
+    .map((row) => ({ icon: CONNECTIVITY_ICON[row.title], title: row.title, body: row.body }));
 
   return (
     <div className="md:hidden" style={{ background: '#fff', display: 'flex', flexDirection: 'column', width: '100%' }}>
@@ -204,7 +179,7 @@ export default function SpecificationsMobile() {
       <SectionShell paddingY={48}>
         <Photo src={SPEC_IMG_ANGLED} alt="TakeCare device top corner detail" size={200} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>
-          {CONNECTIVITY_CARDS.map((card) => (
+          {connectivityCards.map((card) => (
             <ConnectivityCard key={card.title} {...card} />
           ))}
         </div>
