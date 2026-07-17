@@ -1,18 +1,11 @@
-import { useState, type Ref } from 'react';
+import { useState } from 'react';
 import clapImg from '../../assets/mumdose-clap.svg';
 import { useContent } from '../../context/ContentContext';
 
 const HOVER_GRADIENT =
   'radial-gradient(ellipse at 50% 50%, #c1008a 2%, #911084 26.5%, #61217e 51%, #48297b 63.2%, #303178 75.5%, #183975 87.7%, #0c3d74 93.9%, #004172 100%)';
 
-interface AppreciationCardProps {
-  // When provided (mobile), GSAP owns this div's opacity directly to drive a
-  // scroll-scrubbed glow flourish — there's no mouse to hover on a touch
-  // device, so the desktop hover state is triggered by scroll position instead.
-  glowRef?: Ref<HTMLDivElement>;
-}
-
-export default function AppreciationCard({ glowRef }: AppreciationCardProps = {}) {
+export default function AppreciationCard() {
   const { mumTookDose, images } = useContent();
   const { appreciationCard } = mumTookDose;
   const [hovered, setHovered] = useState(false);
@@ -86,14 +79,10 @@ export default function AppreciationCard({ glowRef }: AppreciationCardProps = {}
 
         {/* Hover gradient: pink center → blue edge */}
         <div
-          ref={glowRef}
           className="absolute inset-0 transition-opacity duration-300"
           style={{
             background: HOVER_GRADIENT,
-            // Only React-drive opacity when nothing else owns this node —
-            // with glowRef set, omitting the key keeps GSAP's direct DOM
-            // writes from being stomped by React re-renders.
-            ...(glowRef ? {} : { opacity: hovered && !appreciated ? 1 : 0 }),
+            opacity: hovered && !appreciated ? 1 : 0,
           }}
         />
 

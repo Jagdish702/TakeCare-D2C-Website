@@ -19,14 +19,15 @@ const CARD_SCALE = CARD_W / CARD_NATIVE_W;
 
 /**
  * Mobile "Mum took her dose" — Figma "Mum_took_dose_section_1_mobile"
- * (node 12442:3881), States 0-4.
+ * (node 12442:3881), States 0-3.
  *
- * One GSAP-pinned screen, scroll-scrubbed through 4 beats:
+ * One GSAP-pinned screen, scroll-scrubbed through 3 beats:
  *   0→1  bg photo fades in
  *   1→2  caption + heading + subtitle rise in
  *   2→3  text exits upward, Appreciate notification card rises in
- *   3→4  Appreciate button's pink glow pulses in (same gradient as the
- *        desktop hover state — forced on here since touch has no hover)
+ *
+ * The Appreciate button's hover glow is left to real touch/hover — it's not
+ * forced on by scroll, matching desktop's mouse-only hover behavior.
  *
  * Reuses the desktop section's exact background photo and AppreciationCard
  * component so copy/visuals stay in lockstep; only layout and scale differ.
@@ -37,7 +38,6 @@ export default function MumTookDoseMobile() {
   const bgRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const cardWrapRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
 
   const fitScale = useFitScale(CANVAS_W, CANVAS_H, HEADER_H);
 
@@ -47,7 +47,6 @@ export default function MumTookDoseMobile() {
       gsap.set(bgRef.current, { opacity: 0 });
       gsap.set(textRef.current, { y: 60, opacity: 0 });
       gsap.set(cardWrapRef.current, { y: 60, opacity: 0 });
-      gsap.set(glowRef.current, { opacity: 0 });
 
       // Fade the whole section in as it scrolls into view from below.
       ScrollTrigger.create({
@@ -64,7 +63,7 @@ export default function MumTookDoseMobile() {
           pinSpacing: true,
           anticipatePin: 1,
           start: `top ${HEADER_H}px`,
-          end: '+=2800',
+          end: '+=2100',
           scrub: 1.5,
           invalidateOnRefresh: true,
         },
@@ -82,10 +81,6 @@ export default function MumTookDoseMobile() {
       tl.to(textRef.current, { y: -60, opacity: 0, duration: 0.6, ease: 'power2.in' });
       tl.to(cardWrapRef.current, { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out' }, '-=0.4');
       tl.to({}, { duration: 0.4 });
-
-      // Beat 3→4: Appreciate button glow pulses in.
-      tl.to(glowRef.current, { opacity: 1, duration: 0.6, ease: 'power1.inOut' });
-      tl.to({}, { duration: 0.6 });
     }, triggerRef);
 
     return () => ctx.revert();
@@ -154,7 +149,7 @@ export default function MumTookDoseMobile() {
             {/* Appreciation card (beat 2→3 in, glow at 3→4) */}
             <div ref={cardWrapRef} className="pointer-events-auto absolute left-0 top-0">
               <div style={{ width: CARD_W, transform: `scale(${CARD_SCALE})`, transformOrigin: 'top left' }}>
-                <AppreciationCard glowRef={glowRef} />
+                <AppreciationCard />
               </div>
             </div>
           </div>

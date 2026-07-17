@@ -9,6 +9,7 @@ import qrChipImg from '../../assets/figma-hero/qr-chip.png';
 import iconApple from '../../assets/figma-hero/icon-apple.svg';
 import iconAndroid from '../../assets/figma-hero/icon-android.svg';
 import madeInIndiaImg from '../../assets/made in india IMG.png';
+import bgLivingFallback from '../../assets/figma-hero/bg-living.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -94,6 +95,7 @@ export default function Hero() {
   const bgNightRef = useRef<HTMLDivElement>(null);
   const bgNightShadeRef = useRef<HTMLDivElement>(null);
   const bgLivingRef = useRef<HTMLDivElement>(null);
+  const bgLivingBlurRef = useRef<HTMLImageElement>(null);
   const bgLivingScrimRef = useRef<HTMLDivElement>(null);
 
   // Heading / subtitle (states 0-2)
@@ -167,13 +169,16 @@ export default function Hero() {
         gsap.set(r.current, { autoAlpha: 0, scale: 0.8 }),
       );
       gsap.set(bgNightShadeRef.current, { opacity: 0 });
-      // Resting blur is 0 — the living-room photo has its own depth-of-field
-      // (sharp table, soft background), which is what plants the product on
-      // the table in states 3/5. Only states 4/6/7 add the 24px wash.
+      // Resting blur is 8px per Figma (State=2/4) — the living-room bg is
+      // never fully sharp; only the ecosystem/phone beats push it to 24px.
+      // Blur only applies to the masked duplicate (left half) — see
+      // bgLivingBlurRef below — not the whole container, per explicit
+      // request for a left-blurred / right-clear split (a deliberate
+      // deviation from Figma, which blurs the layer uniformly).
       gsap.set(bgLivingRef.current, {
         opacity: 0, x: 0, y: 0, scale: 1, xPercent: -50, yPercent: -50,
-        filter: 'blur(0px)',
       });
+      gsap.set(bgLivingBlurRef.current, { filter: 'blur(8px)' });
       gsap.set(bgLivingScrimRef.current, { opacity: 0 });
       gsap.set(ecoBlockRef.current, { y: 197, opacity: 0, xPercent: -50, yPercent: -50 });
       gsap.set(phoneBlockRef.current, { y: 787, opacity: 0, xPercent: -50, yPercent: -50 });
@@ -252,7 +257,7 @@ export default function Hero() {
       tl.to({}, { duration: 0.1 });
 
       // ─── SEGMENT 3 (3→4): State 3 → State 4 – ecosystem block enters ─────
-      tl.to(bgLivingRef.current, {
+      tl.to(bgLivingBlurRef.current, {
         filter: 'blur(24px)',
         duration: 1, ease: 'power2.inOut',
       });
@@ -267,14 +272,14 @@ export default function Hero() {
         y: -332, opacity: 0,
         duration: 1, ease: 'power2.in',
       });
-      tl.to(bgLivingRef.current, {
-        filter: 'blur(0px)',
+      tl.to(bgLivingBlurRef.current, {
+        filter: 'blur(8px)',
         duration: 1, ease: 'power2.inOut',
       }, '<');
       tl.to(bgLivingScrimRef.current, { opacity: 0, duration: 1 }, '<');
 
       // ─── SEGMENT 5 (5→6): State 5 → State 6 – app-phone block rises ──────
-      tl.to(bgLivingRef.current, {
+      tl.to(bgLivingBlurRef.current, {
         filter: 'blur(24px)',
         duration: 1, ease: 'power2.inOut',
       });
@@ -304,9 +309,12 @@ export default function Hero() {
         style={{ minHeight: '480px' }}
       >
         {/* ── BG Layer 2: living room (states 3-7) ───────────────────────── */}
-        {/*   Figma: 2794×1863 container centred at (50%+78px, 50%+126.5px), */}
-        {/*   sharp at rest (photo has baked depth-of-field), whole container */}
-        {/*   blurred 24px in states 4/6/7 — oversize hides edge fringing.   */}
+        {/*   Figma: 2794×1863 container centred at (50%+78px, 50%+126.5px). */}
+        {/*   Figma itself blurs this layer UNIFORMLY (8px rest / 24px on    */}
+        {/*   the ecosystem+phone beats) — no split. Per explicit request,   */}
+        {/*   this is a deliberate deviation: a masked duplicate blurs only  */}
+        {/*   the left half, faded out toward the right so the table/       */}
+        {/*   product side of the photo stays clear.                        */}
         <div
           ref={bgLivingRef}
           className="pointer-events-none absolute"
@@ -320,9 +328,33 @@ export default function Hero() {
           aria-hidden
         >
           <img
-            src={images['figma-hero-bg-living']}
+            // DB `figma-hero-bg-living` currently points at the mobile portrait
+            // crop, not this web landscape scene — use the static asset until
+            // the CDN row is corrected.
+            // Sizing matches Figma's exact fill exactly (99.946% x 99.98% at
+            // 0.786px/0.109px) rather than a flat 100% cover.
+            src={bgLivingFallback}
             alt=""
-            className="absolute inset-0 size-full max-w-none object-cover"
+            className="absolute max-w-none object-cover"
+            style={{
+              left: '0.0281%', top: '0.0059%',
+              width: '99.946%', height: '99.98%',
+              backgroundColor: 'lightgray',
+            }}
+          />
+          {/* Blurred duplicate, masked so only the left half stays blurred —
+              fades out across the middle so the seam isn't a hard line. */}
+          <img
+            ref={bgLivingBlurRef}
+            src={bgLivingFallback}
+            alt=""
+            className="absolute max-w-none object-cover"
+            style={{
+              left: '0.0281%', top: '0.0059%',
+              width: '99.946%', height: '99.98%',
+              WebkitMaskImage: 'linear-gradient(to right, black 0%, black 40%, transparent 60%)',
+              maskImage: 'linear-gradient(to right, black 0%, black 40%, transparent 60%)',
+            }}
           />
           {/* Left dark scrim (states 4/6/7) so the white copy stays legible */}
           <div
