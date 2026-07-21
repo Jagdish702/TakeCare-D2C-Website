@@ -116,7 +116,7 @@ function ProductCard({ product }) {
             inset: 0,
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
+            objectFit: 'contain',
             display: 'block',
             maxWidth: 'none',
           }}
@@ -147,7 +147,7 @@ function ProductCard({ product }) {
           alignSelf: 'stretch',
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <p
             style={{
               margin: 0,
@@ -188,6 +188,10 @@ function ProductCard({ product }) {
               color: '#555',
               letterSpacing: '0.3px',
               lineHeight: '22px',
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
             }}
           >
             <p style={{ margin: 0 }}>{product.description}</p>

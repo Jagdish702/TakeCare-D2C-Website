@@ -47,7 +47,7 @@ function ImageBox({ src, alt, radial }) {
         style={
           radial
             ? { position: 'relative', width: 61, height: 125, objectFit: 'cover', flexShrink: 0 }
-            : { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', maxWidth: 'none' }
+            : { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block', maxWidth: 'none' }
         }
       />
       <div
@@ -129,6 +129,10 @@ const descStyle = {
   color: '#808080',
   letterSpacing: '0.5184px',
   lineHeight: '28px',
+  display: '-webkit-box',
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: 'vertical',
+  overflow: 'hidden',
 };
 
 const qtyRowStyle = {

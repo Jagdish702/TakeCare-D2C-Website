@@ -15,7 +15,7 @@ const DEMO_UNSERVICEABLE_PINCODE = '560001';
   the second step of checkout, reached from CheckoutPage's "Continue to
   Payment" button. Reuses the exact same "Input Field" component styling
   (44px h, 0.81px #ebebeb border, radius 12) that appears throughout this
-  Figma file (e.g. the Cure Coins / coupon inputs in AvailDiscounts.jsx),
+  Figma file (e.g. the coupon input in AvailDiscounts.jsx),
   and the same full-screen overlay shell + Continue-button styling as
   CheckoutPage.jsx.
 */

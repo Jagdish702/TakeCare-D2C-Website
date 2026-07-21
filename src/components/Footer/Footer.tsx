@@ -1,27 +1,34 @@
-// Site footer — Figma node 13222:18333 ("Footer", mobile flow-page spec).
-// Content (logo/address/contact, Services + About link lists, certification
-// badges, copyright) is identical between breakpoints; only the layout
-// reflows — single stacked column on mobile (as designed), 3-column row on
-// desktop (Logo+contact | Services | About) since no separate desktop Figma
-// frame for this section has been built yet.
+// Site footer — Figma node 12221:7272 ("Footer", desktop homepage, node-id
+// 12075-1249 in the URL). That node is a single flattened image in Figma (no
+// live text/icon layers), so exact typography/spacing were matched visually
+// from the reference screenshot rather than extracted from Figma data.
+// Content (logo/address/contact, Services + About link lists, social icons,
+// certification badges) is identical between breakpoints; only the layout
+// reflows — single stacked column on mobile, this 3-column row on desktop.
 
 import { useContent } from '../../context/ContentContext';
 
 const LOGO = '/assets/footer/logo-white.svg';
 const ICON_PHONE = '/assets/footer/icon-phone.svg';
 const ICON_MAIL = '/assets/footer/icon-mail.svg';
-const BADGE_STRIP = '/assets/footer/badge-strip.png';
+const SOCIAL_ICONS = [
+  { key: 'facebook', src: '/assets/footer/icon-social-facebook.png', href: 'https://facebook.com' },
+  { key: 'instagram', src: '/assets/footer/icon-social-instagram.png', href: 'https://instagram.com' },
+  { key: 'youtube', src: '/assets/footer/icon-social-youtube.png', href: 'https://youtube.com' },
+  { key: 'linkedin', src: '/assets/footer/icon-social-linkedin.png', href: 'https://linkedin.com' },
+];
 const BADGE_ISO = '/assets/footer/badge-iso.png';
+const BADGE_HIPAA = '/assets/footer/badge-hipaa.png';
 const BADGE_SOC = '/assets/footer/badge-soc.png';
 const BADGE_DIGITAL_MISSION = '/assets/footer/badge-digital-mission.png';
 
 function LinkColumn({ title, items }: { title: string; items: string[] }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 159.5 }}>
-      <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 18, lineHeight: '28px', color: '#fff' }}>{title}</p>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, minWidth: 159.5 }}>
+      <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 18, lineHeight: '28px', color: '#fff' }}>{title}</p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {items.map((item) => (
-          <p key={item} style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 300, fontSize: 14, lineHeight: '20px', color: '#fff', whiteSpace: 'nowrap' }}>
+          <p key={item} style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 15, lineHeight: '20px', color: '#fff' }}>
             {item}
           </p>
         ))}
@@ -37,13 +44,13 @@ export default function Footer() {
   return (
     <footer style={{ background: '#004172', width: '100%' }}>
       <div
-        className="flex flex-col gap-10 px-6 pt-6 md:flex-row md:justify-between md:gap-12 md:px-[120px] md:pt-16"
+        className="flex flex-col gap-10 px-6 py-10 md:flex-row md:justify-between md:gap-12 md:px-[120px] md:py-16"
         style={{ maxWidth: 1440, margin: '0 auto' }}
       >
-        {/* Logo + address + contact */}
-        <div className="flex flex-col gap-1 md:max-w-[380px]">
+        {/* Logo + address + contact + social + certification badges */}
+        <div className="flex flex-col gap-1 md:max-w-[460px]">
           <img src={LOGO} alt="CureBay" draggable={false} style={{ width: 106.378, height: 32 }} />
-          <p style={{ margin: 0, marginTop: 4, fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 16, lineHeight: '18.4px', color: '#42BA85' }}>
+          <p style={{ margin: 0, marginTop: 12, fontFamily: 'Inter, sans-serif', fontWeight: 600, fontSize: 16, lineHeight: '20px', color: '#42BA85' }}>
             {companyInfo.company_name}
           </p>
           <p style={{ margin: 0, marginTop: 16, fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 14, lineHeight: '20px', color: '#fff', maxWidth: 319 }}>
@@ -67,6 +74,24 @@ export default function Footer() {
               {companyInfo.email_secondary}
             </p>
           </div>
+
+          {/* Social icons */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 24 }}>
+            {SOCIAL_ICONS.map((s) => (
+              <a key={s.key} href={s.href} target="_blank" rel="noreferrer" aria-label={s.key}>
+                <img src={s.src} alt="" draggable={false} style={{ width: 40, height: 40, objectFit: 'contain' }} />
+              </a>
+            ))}
+          </div>
+
+          {/* Certification badges — one line on web (per Figma), always;
+              wraps to 2×2 only below md, instead of overflowing the screen. */}
+          <div className="flex-wrap md:flex-nowrap" style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 24 }}>
+            <img src={BADGE_ISO} alt="ISO 27001:2022 certified" draggable={false} style={{ height: 88, objectFit: 'contain' }} />
+            <img src={BADGE_HIPAA} alt="HIPAA secured by Sprinto" draggable={false} style={{ height: 88, objectFit: 'contain' }} />
+            <img src={BADGE_SOC} alt="AICPA SOC certified" draggable={false} style={{ height: 88, objectFit: 'contain' }} />
+            <img src={BADGE_DIGITAL_MISSION} alt="Ayushman Bharat Digital Mission" draggable={false} style={{ height: 88, objectFit: 'contain' }} />
+          </div>
         </div>
 
         {/* Services + About */}
@@ -75,28 +100,6 @@ export default function Footer() {
             <LinkColumn key={group.id} title={group.title} items={group.links.map((link: any) => link.label)} />
           ))}
         </div>
-
-        {/* Certification badges */}
-        <div className="flex flex-col items-center gap-3 md:items-end md:justify-start">
-          <img src={BADGE_STRIP} alt="" draggable={false} style={{ width: 221, height: 44.772, objectFit: 'cover' }} />
-          <div
-            className="grid grid-cols-2 gap-8 justify-center"
-            style={{ borderTop: '1px solid rgba(255,255,255,0.37)', paddingTop: 21, width: '100%', maxWidth: 319 }}
-          >
-            <img src={BADGE_ISO} alt="ISO certified" draggable={false} style={{ height: 80, objectFit: 'contain' }} />
-            <img src={BADGE_ISO} alt="ISO certified" draggable={false} style={{ height: 80, objectFit: 'contain' }} />
-            <img src={BADGE_SOC} alt="SOC certified" draggable={false} style={{ height: 80, objectFit: 'contain' }} />
-            <img src={BADGE_DIGITAL_MISSION} alt="Digital Mission" draggable={false} style={{ height: 99.5, objectFit: 'contain' }} />
-          </div>
-        </div>
-      </div>
-
-      <div style={{ borderTop: '1px solid rgba(255,255,255,0.37)', marginTop: 32 }} className="mx-6 md:mx-[120px]">
-        <p style={{ margin: 0, padding: '33px 0 32px', textAlign: 'center', fontFamily: 'Inter, sans-serif', fontWeight: 400, fontSize: 12, lineHeight: '16px', color: '#fff' }}>
-          Copyright © {companyInfo.copyright_year}
-          <br />
-          {companyInfo.copyright_text}
-        </p>
       </div>
     </footer>
   );

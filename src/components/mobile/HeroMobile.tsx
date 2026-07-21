@@ -15,19 +15,21 @@ ScrollTrigger.config({ ignoreMobileResize: true });
 /**
  * Mobile Hero — Figma "Hero_mobile_option_2" (node 13058:4148), States 0-8.
  *
- * One GSAP-pinned screen, fully scroll-scrubbed through 8 beats:
- *   0→1  heading shrinks 1.1842→1 & docks to top, product grows in
- *   1→2  glass caption chip fades in (Made in India)
- *   2→3  caption swaps to "Peace of mind…"
- *   3→4  caption swaps to "Your medicines…"
- *   4→5  dark bg (A) crossfades to light bg (B); heading + chip exit;
+ * INTRO (auto-plays on load, matching web's Hero.tsx — NOT scroll-driven):
+ *   0→2  heading shrinks 1.1842→1 & docks to top, product grows in, glass
+ *        caption chip fades in ("Made in India"); once settled, the chip
+ *        free-runs a 1s-per-swap crossfade loop through its 3 messages,
+ *        completely decoupled from scroll.
+ *
+ * Then scrolling scrubs the remaining 4 beats:
+ *   0→1  dark bg (A) crossfades to light bg (B); heading + chip exit;
  *        product shrinks & rises
- *   5→6  ecosystem block (heading + 4 cards + footer) zooms in
- *   6→7  ecosystem block exits; product blurs & drifts right
- *   7→8  app-phone block rises to centre
+ *   1→2  ecosystem block (heading + 4 cards + footer) zooms in
+ *   2→3  ecosystem block exits; product blurs & drifts right
+ *   3→4  app-phone block rises to centre
  *
  * Backgrounds: A is shared verbatim by states 0-4, B by 5-8 — each is mounted
- * once and only crossfaded at the 4→5 boundary, never re-created or moved.
+ * once and only crossfaded at the intro→scroll boundary, never re-created or moved.
  *
  * All foreground geometry lives on a fixed 402×767 design canvas (Figma frame
  * size) that is contain-fit scaled to the area below the 54px sticky header;
@@ -53,7 +55,7 @@ const PRODUCT = {
 // Background-B gradient overlays (one per Figma state, crossfaded on scrub).
 const BG_LIGHT_GRADIENTS = [
   'linear-gradient(1.8432deg, rgba(0,0,0,0.32) 50.333%, rgba(255,255,255,0) 58.93%)', // state 5
-  'linear-gradient(0.8985deg, rgba(0,0,0,0.6) 55.49%, rgba(255,255,255,0) 68.315%)', // state 6
+  'linear-gradient(1.8423deg, rgba(59,51,44,0.6) 50.333%, rgba(255,255,255,0) 58.93%)', // state 6
   'linear-gradient(1.2414deg, rgba(0,0,0,0.32) 64.842%, rgba(255,255,255,0) 85.683%)', // state 7
   'linear-gradient(1.2414deg, rgba(0,0,0,0.48) 64.842%, rgba(255,255,255,0) 85.683%)', // state 8
 ];
@@ -95,6 +97,12 @@ export default function HeroMobile() {
 
   const bgDarkRef = useRef<HTMLDivElement>(null);
   const bgGradientRefs = useRef<Array<HTMLDivElement | null>>([]);
+  // Background B's blur is state-specific, not constant (verified per-state
+  // against Figma): the "half blur" behind the text/ecosystem cards at
+  // state 6 (node 13058:4188) is baked into the image asset itself; states
+  // 7-8 need the whole frame blurred on top of that, via one extra layer
+  // crossfaded exactly like the darkening gradients below.
+  const blurFullRef = useRef<HTMLImageElement>(null);
 
   const headingRef = useRef<HTMLDivElement>(null);
   const productRef = useRef<HTMLDivElement>(null);
@@ -127,13 +135,13 @@ export default function HeroMobile() {
 
     const ctx = gsap.context(() => {
       // ── Canvas-space layout (the 402×767 canvas itself never resizes) ────
-      // State-1 flow: column top 40, [heading]-24-[product 364]-24-[chip].
+      // State-1 flow: column top 40, [heading]-12-[product 364]-24-[chip].
       // State-0 (Figma: py-80, justify-center, gap 64) re-centres that column
       // with the heading scaled up and the product collapsed to its
       // 59.21×77.907 placeholder above a 124px-tall (hidden) chip.
       const measure = () => {
         const headingH = headingRef.current?.offsetHeight ?? 129;
-        const productTop = 40 + headingH + 24;
+        const productTop = 40 + headingH + 12;
         m.productCY = productTop + 182 - CANVAS_H / 2; // centre offset from canvas centre
 
         const h0 = headingH * HEADING_SCALE_0;
@@ -153,6 +161,43 @@ export default function HeroMobile() {
       gsap.set(ecoBlockRef.current, { yPercent: -50, scale: 0.31, opacity: 0 });
       gsap.set(phoneBlockRef.current, { yPercent: -50, y: 336, opacity: 0 });
       bgGradientRefs.current.forEach((el, i) => el && gsap.set(el, { opacity: i === 0 ? 1 : 0 }));
+      gsap.set(blurFullRef.current, { opacity: 0 });
+
+      // ── Caption chip: free-running 1s-per-swap crossfade loop, fully
+      // decoupled from scroll (Made in India → Peace of mind → Your
+      // medicines → repeat). Built up front, started once the intro lands
+      // on state 2; killed the moment the user starts scrolling.
+      const HOLD = 0.6;
+      const FADE = 0.4;
+      const captionTl = gsap.timeline({ paused: true, repeat: -1 });
+      for (let i = 0; i < 3; i++) {
+        const cur = chipRefs.current[i % 3];
+        const nxt = chipRefs.current[(i + 1) % 3];
+        captionTl.to(cur, { opacity: 0, duration: FADE }, i + HOLD);
+        captionTl.to(nxt, { opacity: 1, duration: FADE }, i + HOLD);
+      }
+
+      // ── INTRO (auto-plays on load): State 0 → State 2 — heading docks to
+      // top, product grows in, Made-in-India chip fades in. NOT scroll-driven.
+      let intro: gsap.core.Timeline | null = gsap.timeline({ paused: true, delay: 0.3 });
+      intro.fromTo(
+        headingRef.current,
+        { y: () => m.headingY0, scale: HEADING_SCALE_0 },
+        { y: 0, scale: 1, duration: 1, ease: 'power2.inOut' },
+        0,
+      );
+      intro.fromTo(
+        productRef.current,
+        { x: 0, y: () => m.productY0, scale: PRODUCT_SCALE_0, opacity: 0, filter: 'blur(0px)' },
+        { y: 0, scale: 1, opacity: 1, duration: 1, ease: 'power2.out' },
+        0,
+      );
+      intro.fromTo(
+        chipRefs.current[0],
+        { opacity: 0, y: 40 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+        1.1,
+      );
 
       // The pin exists from the very first frame (an unpinned window would let
       // the hero scroll away and then visibly snap once pinned). Every beat is
@@ -167,11 +212,33 @@ export default function HeroMobile() {
           pinSpacing: true,
           anticipatePin: 1,
           start: `top ${HEADER_H}px`,
-          end: '+=3600',
+          end: '+=1800',
           scrub: 1,
           invalidateOnRefresh: true,
+          // If the user starts scrolling before the intro/caption-loop settle,
+          // fast-forward the intro and stop the loop so scroll's own fromTo
+          // (which fades the whole chip stack) never fights either of them.
+          onUpdate: (self) => {
+            if (self.progress > 0.001) {
+              if (intro) {
+                intro.progress(1).kill();
+                intro = null;
+              }
+              captionTl.pause();
+            }
+          },
         },
       });
+
+      // Play the intro only when the page opens at the very top; on a reload
+      // mid-page the scrub already owns these elements — skip straight to done.
+      if (window.scrollY < 5 && (tl.scrollTrigger?.progress ?? 0) <= 0.001) {
+        intro.eventCallback('onComplete', () => captionTl.play(0));
+        intro.play();
+      } else {
+        intro.progress(1).kill();
+        intro = null;
+      }
 
       const productPose = (s: { cx: number; cy: number; scale: number }) => ({
         x: s.cx,
@@ -179,66 +246,44 @@ export default function HeroMobile() {
         scale: s.scale,
       });
 
-      // Beat 0→1: heading docks to top, product grows in.
-      tl.fromTo(
-        headingRef.current,
-        { y: () => m.headingY0, scale: HEADING_SCALE_0 },
-        { y: 0, scale: 1, duration: 1 },
-        0,
-      );
-      tl.fromTo(
-        productRef.current,
-        { x: 0, y: () => m.productY0, scale: PRODUCT_SCALE_0, opacity: 0, filter: 'blur(0px)' },
-        { y: 0, scale: 1, opacity: 1, duration: 1 },
-        0,
-      );
-
-      // Beat 1→2: Made-in-India chip fades in.
-      tl.fromTo(chipRefs.current[0], { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1 }, 1);
-
-      // Beats 2→3→4: caption swaps — the old one fades out, then the new one in.
-      tl.fromTo(chipRefs.current[0], { opacity: 1 }, { opacity: 0, duration: 0.45 }, 2);
-      tl.fromTo(chipRefs.current[1], { opacity: 0 }, { opacity: 1, duration: 0.55 }, 2.45);
-      tl.fromTo(chipRefs.current[1], { opacity: 1 }, { opacity: 0, duration: 0.45 }, 3);
-      tl.fromTo(chipRefs.current[2], { opacity: 0 }, { opacity: 1, duration: 0.55 }, 3.45);
-
-      // Beat 4→5: bg A → bg B; heading + chip exit; product shrinks & rises.
-      tl.to(headingRef.current, { opacity: 0, duration: 0.4 }, 4);
-      tl.fromTo(chipRefs.current[2], { opacity: 1 }, { opacity: 0, duration: 0.4 }, 4);
-      tl.fromTo(bgDarkRef.current, { opacity: 1 }, { opacity: 0, duration: 1 }, 4);
+      // Beat 0→1: bg A → bg B; heading + chip stack exit; product shrinks & rises.
+      tl.to(headingRef.current, { opacity: 0, duration: 0.4 }, 0);
+      tl.fromTo(chipStackRef.current, { opacity: 1 }, { opacity: 0, duration: 0.4 }, 0);
+      tl.fromTo(bgDarkRef.current, { opacity: 1 }, { opacity: 0, duration: 1 }, 0);
       tl.fromTo(
         productRef.current,
         { x: 0, y: 0, scale: 1 },
         { ...productPose(PRODUCT.s5), duration: 1 },
-        4,
+        0,
       );
 
-      // Beat 5→6: ecosystem block zooms in, product settles higher.
+      // Beat 1→2: ecosystem block zooms in, product settles higher.
       tl.fromTo(
         productRef.current,
         productPose(PRODUCT.s5),
         { ...productPose(PRODUCT.s6), duration: 1 },
-        5,
+        1,
       );
-      tl.fromTo(ecoBlockRef.current, { opacity: 0, scale: 0.31 }, { opacity: 1, scale: 1, duration: 1 }, 5);
-      tl.fromTo(bgGradientRefs.current[0], { opacity: 1 }, { opacity: 0, duration: 1 }, 5);
-      tl.fromTo(bgGradientRefs.current[1], { opacity: 0 }, { opacity: 1, duration: 1 }, 5);
+      tl.fromTo(ecoBlockRef.current, { opacity: 0, scale: 0.31 }, { opacity: 1, scale: 1, duration: 1 }, 1);
+      tl.fromTo(bgGradientRefs.current[0], { opacity: 1 }, { opacity: 0, duration: 1 }, 1);
+      tl.fromTo(bgGradientRefs.current[1], { opacity: 0 }, { opacity: 1, duration: 1 }, 1);
 
-      // Beat 6→7: ecosystem block exits, product blurs & drifts right.
-      tl.fromTo(ecoBlockRef.current, { y: 0 }, { opacity: 0, y: 60, duration: 0.7 }, 6);
+      // Beat 2→3: ecosystem block exits, product blurs & drifts right.
+      tl.fromTo(ecoBlockRef.current, { y: 0 }, { opacity: 0, y: 60, duration: 0.7 }, 2);
       tl.fromTo(
         productRef.current,
         { ...productPose(PRODUCT.s6), filter: 'blur(0px)' },
         { ...productPose(PRODUCT.s7), filter: 'blur(16px)', duration: 1 },
-        6,
+        2,
       );
-      tl.fromTo(bgGradientRefs.current[1], { opacity: 1 }, { opacity: 0, duration: 1 }, 6);
-      tl.fromTo(bgGradientRefs.current[2], { opacity: 0 }, { opacity: 1, duration: 1 }, 6);
+      tl.fromTo(bgGradientRefs.current[1], { opacity: 1 }, { opacity: 0, duration: 1 }, 2);
+      tl.fromTo(bgGradientRefs.current[2], { opacity: 0 }, { opacity: 1, duration: 1 }, 2);
+      tl.fromTo(blurFullRef.current, { opacity: 0 }, { opacity: 1, duration: 1 }, 2);
 
-      // Beat 7→8: app-phone block rises to centre.
-      tl.fromTo(phoneBlockRef.current, { opacity: 0, y: 336 }, { opacity: 1, y: 0, duration: 1 }, 7);
-      tl.fromTo(bgGradientRefs.current[2], { opacity: 1 }, { opacity: 0, duration: 1 }, 7);
-      tl.fromTo(bgGradientRefs.current[3], { opacity: 0 }, { opacity: 1, duration: 1 }, 7);
+      // Beat 3→4: app-phone block rises to centre.
+      tl.fromTo(phoneBlockRef.current, { opacity: 0, y: 336 }, { opacity: 1, y: 0, duration: 1 }, 3);
+      tl.fromTo(bgGradientRefs.current[2], { opacity: 1 }, { opacity: 0, duration: 1 }, 3);
+      tl.fromTo(bgGradientRefs.current[3], { opacity: 0 }, { opacity: 1, duration: 1 }, 3);
 
       // Webfonts change the heading height a few px; fold the exact metrics in
       // without rebuilding (refresh + invalidateOnRefresh re-runs the keyframe
@@ -273,16 +318,27 @@ export default function HeroMobile() {
       >
         {/* ── Backgrounds: cover-fit canvas, mounted once, crossfaded only ── */}
         <div aria-hidden className="pointer-events-none" style={canvasStyle(coverScale)}>
-          {/* Background B — light living room (states 5-8), Figma state-7/8 framing */}
-          <div
-            className="absolute"
-            style={{ left: -383, top: -162, width: 1046, height: 1036, filter: 'blur(24px)' }}
-          >
+          {/* Background B — light living room (states 5-8). The asset itself
+              (Figma's flattened state-6 export, exactly 402×767 — native
+              canvas size, no crop/offset needed) already bakes in the "half
+              blur": sharp behind the product's table, naturally
+              depth-of-field-blurred behind where the text/ecosystem cards
+              sit. States 7-8 need the WHOLE frame blurred — that's the only
+              extra layer required. */}
+          <div className="absolute inset-0">
             <img
               src={images['hero-mobile-bg-light']}
               alt=""
-              className="absolute left-0 top-0 w-full max-w-none"
-              style={{ height: '99.98%' }}
+              className="absolute inset-0 size-full max-w-none object-cover"
+            />
+            {/* States 7-8 — uniformly blurred on top of the (already
+                half-blurred) base, fully hiding its sharp region too. */}
+            <img
+              ref={blurFullRef}
+              src={images['hero-mobile-bg-light']}
+              alt=""
+              className="absolute inset-0 size-full max-w-none object-cover"
+              style={{ filter: 'blur(24px)' }}
             />
             {BG_LIGHT_GRADIENTS.map((g, i) => (
               <div

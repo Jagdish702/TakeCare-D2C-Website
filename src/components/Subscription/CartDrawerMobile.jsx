@@ -100,7 +100,7 @@ function CartLineCardMobile({ image, imageBg, title, tag, description, qty, onQt
             src={image}
             alt=""
             draggable={false}
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', maxWidth: 'none' }}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block', maxWidth: 'none' }}
           />
           <div aria-hidden style={{ position: 'absolute', inset: 0, borderRadius: 'inherit', boxShadow: 'inset 0 0 1.2px rgba(0,65,114,0.24)', pointerEvents: 'none' }} />
         </div>

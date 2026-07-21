@@ -535,13 +535,13 @@ INSERT INTO image_assets (image_key, url) VALUES
 
   -- Hero (mobile) ----------------------------------------------------------
   ('hero-mobile', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Mobile_img.png'),
-  ('hero-mobile-bg-dark', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Hero_img_1.jpg'),
-  ('hero-mobile-bg-light', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/hero-mobile-bg-light.jpg'),
+  ('hero-mobile-bg-dark', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Hero_img_1.png'),
+  ('hero-mobile-bg-light', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/bg%20living%20mobile.png'),
 
   -- Hero / ConnectedEcosystem (web, Figma-sourced) --------------------------
   ('figma-hero-product', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Pill_dispenser.png'),
   ('figma-hero-bg-living', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/hero-mobile-bg-light.jpg'),
-  ('figma-hero-bg-night', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Hero_img_1.jpg'),
+  ('figma-hero-bg-night', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Hero_img_1.png'),
   ('figma-hero-eco-section-bg', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/eco-section-bg.png'),
   ('figma-hero-eco-card-app', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/eco-card-app.png'),
   ('figma-hero-eco-card-command', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/eco-card-command.png'),
@@ -551,7 +551,7 @@ INSERT INTO image_assets (image_key, url) VALUES
   ('figma-hero-plate-247', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_1.jpg'),
   ('figma-hero-plate-30day-drawers', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_0.jpg'),
   ('figma-hero-plate-curebay-connected', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/plate-curebay-connected.png'),
-  ('figma-hero-plate-magnetic-lock', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_3.jpg'),
+  ('figma-hero-plate-magnetic-lock', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/magnetic%20lock%20image.png'),
   ('figma-hero-plate-medical', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_2.jpg'),
 
   -- EcosystemAccordion (mobile) ---------------------------------------------
@@ -560,7 +560,7 @@ INSERT INTO image_assets (image_key, url) VALUES
   ('mobile-plate-247', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_1.jpg'),
   ('mobile-plate-30day-overlay', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_0.jpg'),
   ('mobile-plate-curebay-connected', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/plate-curebay-connected.png'),
-  ('mobile-plate-magnetic-lock', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_3.jpg'),
+  ('mobile-plate-magnetic-lock', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/magnetic%20lock%20image.png'),
   ('mobile-plate-medical-overlay', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_2.jpg'),
 
   -- Features (web) -----------------------------------------------------------
@@ -636,4 +636,6 @@ INSERT INTO image_assets (image_key, url) VALUES
   ('download-app-phone-frame', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Download_Totalcare_App_banner_section/phone-frame.png'),
 
   -- Subscription / Cart / Checkout ------------------------------------------
-  ('subscription-device', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Subscription_section/Dispenser_%26_mobile_live_img.png');
+  ('subscription-device', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Subscription_section/Dispenser_%26_mobile_live_img.png'),
+  ('subscription-cart-device', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Pill_dispenser.png'),
+  ('subscription-cart-mobile', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Mobile_img.png');

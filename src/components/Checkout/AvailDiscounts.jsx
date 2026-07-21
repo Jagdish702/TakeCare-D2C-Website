@@ -2,21 +2,17 @@ import { useRef, useState } from 'react';
 import RadioIcon from './RadioIcon';
 
 /*
-  "Avail Discounts" — Figma node 1914:11620 (file "Total-Care--D2C"), 14
-  states covering 3 mutually-exclusive discount methods:
+  "Avail Discounts" — Figma node 1914:11620 (file "Total-Care--D2C"), states
+  covering 2 mutually-exclusive discount methods:
 
     Coupon:            empty -> filled -> Apply -> invalid | applied
     Corporate Discount: empty email -> Send OTP -> empty OTP -> filled OTP
                          -> Verify -> wrong OTP | applied
-    Cure Coins:        empty -> filled -> Apply -> invalid | applied
 
   No real backend exists, so validation is a fixed demo rule (mirrors the
   exact examples shown in Figma's own mockup states):
     - Coupon code "FLAT100" (case-insensitive) succeeds; anything else fails.
     - Corporate OTP "1234" succeeds; anything else fails.
-    - Cure Coins: any amount <= the remaining balance succeeds (balance
-      starts at 1000 CC, matching Figma); anything over (or non-numeric)
-      fails — Figma's own invalid example is 1200 against a 1000 balance.
 
   "Remove" (on an applied discount) clears that method back to its empty
   input state rather than deselecting the radio — lets the user retry with
@@ -25,7 +21,6 @@ import RadioIcon from './RadioIcon';
 
 const DEMO_COUPON = 'FLAT100';
 const DEMO_OTP = '1234';
-const STARTING_CC_BALANCE = 1000;
 
 const FONT = 'Inter, sans-serif';
 
@@ -308,61 +303,12 @@ function CorporateFlow({ state, setState }) {
   );
 }
 
-/* ── Cure Coins flow ── */
-function CureCoinsFlow({ state, setState, balance, onApplied, onRemoved }) {
-  const { amount, applied, error } = state;
-
-  if (applied) {
-    return (
-      <AppliedRow
-        message={`${applied} Cure Coins applied Successfully!`}
-        onRemove={() => {
-          onRemoved(applied);
-          setState({ amount: '', applied: null, error: false });
-        }}
-      />
-    );
-  }
-
-  const handleApply = () => {
-    const value = parseInt(amount, 10);
-    if (!amount.trim()) return;
-    if (!Number.isInteger(value) || value <= 0 || value > balance) {
-      setState({ ...state, error: true });
-      return;
-    }
-    setState({ amount, applied: value, error: false });
-    onApplied(value);
-  };
-
-  return (
-    <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', width: '100%' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: '1 0 0', minWidth: 0 }}>
-        <DiscountInput
-          value={amount}
-          onChange={(e) => setState({ ...state, amount: e.target.value.replace(/\D/g, ''), error: false })}
-          onKeyDown={(e) => e.key === 'Enter' && handleApply()}
-          placeholder="Enter number of Curecoin to use"
-          error={error}
-          icon={error}
-        />
-        {error ? <HelperText error>Invalid digits</HelperText> : <HelperText>(1 Cure Coin = ₹1 discount)</HelperText>}
-      </div>
-      <ActionButton disabled={error} onClick={handleApply}>Apply</ActionButton>
-    </div>
-  );
-}
-
 export default function AvailDiscounts() {
-  const [active, setActive] = useState(null); // 'coupon' | 'corporate' | 'curecoins' | null
+  const [active, setActive] = useState(null); // 'coupon' | 'corporate' | null
   const [coupon, setCoupon] = useState({ code: '', applied: null, error: false });
   const [corporate, setCorporate] = useState({ email: '', otpSent: false, otp: ['', '', '', ''], applied: false, wrong: false });
-  const [cureCoins, setCureCoins] = useState({ amount: '', applied: null, error: false });
-  const [ccBalance, setCcBalance] = useState(STARTING_CC_BALANCE);
 
   const select = (key) => setActive((prev) => (prev === key ? prev : key));
-
-  const isCureCoinsActive = active === 'curecoins';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>
@@ -381,26 +327,6 @@ export default function AvailDiscounts() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start', width: '100%' }}>
           <RadioRow checked={active === 'corporate'} label="Corporate Discount" onClick={() => select('corporate')} />
           {active === 'corporate' && <CorporateFlow state={corporate} setState={setCorporate} />}
-        </div>
-
-        {/* Cure Coins */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start', width: '100%' }}>
-          <RadioRow
-            checked={isCureCoinsActive}
-            label="Cure Coins"
-            labelBold={isCureCoinsActive}
-            right={`${ccBalance.toLocaleString('en-IN')} CC left`}
-            onClick={() => select('curecoins')}
-          />
-          {isCureCoinsActive && (
-            <CureCoinsFlow
-              state={cureCoins}
-              setState={setCureCoins}
-              balance={ccBalance}
-              onApplied={(value) => setCcBalance((b) => b - value)}
-              onRemoved={(value) => setCcBalance((b) => b + value)}
-            />
-          )}
         </div>
       </div>
     </div>

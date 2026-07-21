@@ -42,7 +42,7 @@ function ReviewCardMobile({ image, imageBg, title, tag, description, price, qtyL
 
       <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', width: '100%' }}>
         <div style={{ position: 'relative', width: 120, height: 120, borderRadius: 12, overflow: 'hidden', flexShrink: 0, background: imageBg }}>
-          <img src={image} alt="" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', maxWidth: 'none' }} />
+          <img src={image} alt="" draggable={false} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain', display: 'block', maxWidth: 'none' }} />
           <div aria-hidden style={{ position: 'absolute', inset: 0, borderRadius: 'inherit', boxShadow: 'inset 0 0 1.2px rgba(0,65,114,0.24)', pointerEvents: 'none' }} />
         </div>
 

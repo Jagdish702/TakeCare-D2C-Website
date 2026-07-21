@@ -1,6 +1,6 @@
 /*
   Shared checked/unchecked radio glyph used by both AvailDiscounts.jsx
-  (Coupon/Corporate/Cure Coins) and PaymentPage.jsx (Payment Mode list) so
+  (Coupon/Corporate Discount) and PaymentPage.jsx (Payment Mode list) so
   the two selection lists can never visually drift apart — same asset,
   single source of truth, one consistent grey for the unchecked state
   (#808080, matching AvailDiscounts' Figma-verified original — Payment

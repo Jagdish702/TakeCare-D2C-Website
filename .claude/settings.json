@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pkill -f \"node server/index.js\")",
+      "Bash(pkill -f \"concurrently\")"
+    ]
+  }
+}

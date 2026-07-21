@@ -9,13 +9,15 @@ import qrChipImg from '../../assets/figma-hero/qr-chip.png';
 import iconApple from '../../assets/figma-hero/icon-apple.svg';
 import iconAndroid from '../../assets/figma-hero/icon-android.svg';
 import madeInIndiaImg from '../../assets/made in india IMG.png';
-import bgLivingFallback from '../../assets/figma-hero/bg-living.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * Web Hero — Figma "Hero" component set (node 12185:14642), States 0-7.
- * (States 9-10 — "A connected Ecosystem" — live in ConnectedEcosystem.tsx.)
+ * Web Hero — Figma "Hero" component set (node 12185:14642), States 0-6.
+ * (States 9-10 — "A connected Ecosystem" — live in ConnectedEcosystem.tsx.
+ * Figma's own State 7 — product drifts down & bg zooms out — is dropped per
+ * explicit request: once the app-phone block is up, further scroll just
+ * releases the pin and carries the section away, nothing more.)
  *
  * All geometry below is extracted verbatim from the Figma state variants via
  * get_design_context — do not round the fractional px values.
@@ -26,28 +28,89 @@ gsap.registerPlugin(ScrollTrigger);
  *   0→2  heading shrinks & docks to top, product rises onto the bedside
  *        table, four glass chips pop in (night-bedroom background)
  *
- * Then scrolling scrubs 5 segments:
+ * Then scrolling scrubs 4 segments:
  *   2→3  night bg crossfades to the living-room bg (sharp — the photo's own
  *        depth-of-field); heading, subtitle and chips exit; product settles
  *   3→4  bg blur 0→24 + scrim; ecosystem block (heading + cards + caption) in
  *   4→5  blur 24→0, scrim out; ecosystem block exits up
- *   5→6  blur 0→24 + scrim; app-phone block rises
- *   6→7  product drifts down & shrinks; bg container zooms out slightly
+ *   5→6  blur 0→24 + scrim; app-phone block rises (last segment)
  */
 
 // ─── Product (Figma "Pill_dispenser" / "image 3") ─────────────────────────────
 // State-2 resting box: 419×551, centre (50%-17.5px, 50%+78.5px).
-// Poses are offsets from that centre + scale of the 551px-tall box.
+// s3 no longer carries fixed x/y — the living-room bg is a full-bleed photo
+// that crops differently per viewport aspect ratio, so a hardcoded pixel
+// offset drifts off the table on short/wide viewports. Position is instead
+// computed live from PRODUCT_TABLE_ANCHOR + computeProductDelta() below.
 const PRODUCT = {
   s0: { x: 45.6, y: 166.63, scale: 250.269 / 551 },   // 190.207×250.269 @ (+28.1, +245.13), hidden
-  s3: { x: 234, y: -198, scale: 333 / 551 },          // 253×333 @ (+216.5, -119.5) — states 3-6
-  s7: { x: 210.91, y: -109.39, scale: 308.636 / 551 },// 234.566×308.636 @ (+193.41, -30.89)
+  s3: { scale: 333 / 551 },                            // states 3-6, resting on the table
 };
 
 // ─── Living-room background container (Figma "img") ──────────────────────────
-// 2794×1863 centred at (50%+78px, 50%+126.5px); state 7 shrinks it to
-// 2590×1726.667 centred at (50%+65px, 50%+197.33px).
-const BG_LIVING_S7 = { x: -13, y: 70.83, scale: 2590 / 2794 };
+// Figma zooms this layer out slightly at state 7 — dropped along with that
+// state (see file header); the photo holds a constant exact 1:1 cover for
+// its entire living-room run (states 3-6), so it can never expose the edge.
+const BG_LIVING_SCALE = 1;
+
+// Must match the img's inline `objectPosition` below — used to reproduce the
+// browser's own object-fit:cover math when locating the table in the photo.
+const BG_LIVING_OBJECT_POSITION = { xPct: 50, yPct: 15 };
+// Natural size of the DB-served photo — used only until the <img> itself has
+// loaded and naturalWidth/naturalHeight are available (see bgLivingImgRef).
+const BG_LIVING_IMG_FALLBACK = { w: 2100, h: 2134 };
+
+// The 1440×1000 (+52px header inset) design canvas the foreground content
+// scales to fit — see useFitScale below and computeProductDelta.
+const HERO_DESIGN_WIDTH = 1440;
+const HERO_DESIGN_HEIGHT = 1000;
+const HERO_HEADER_INSET = 52;
+
+// Where the product should sit on the coffee table, expressed as a FRACTION
+// of the photo's own pixel dimensions (not the viewport) — this is what
+// makes the placement survive any viewport aspect ratio: the browser crops
+// the photo differently per viewport (object-fit:cover), and this function
+// re-derives that same crop to find where that fraction lands on screen,
+// then converts it into the x/y GSAP animates on productRef (which lives
+// inside the fitScale-scaled foreground wrapper, not raw viewport space).
+const PRODUCT_TABLE_ANCHOR = {
+  s3: { fx: 0.613, fy: 0.361 },
+};
+
+function computeProductDelta(
+  imgEl: HTMLImageElement | null,
+  anchor: { fx: number; fy: number },
+  bgScale: number,
+): { x: number; y: number } {
+  const vw = document.documentElement.clientWidth;
+  const vh = document.documentElement.clientHeight;
+  const imgW = imgEl?.naturalWidth || BG_LIVING_IMG_FALLBACK.w;
+  const imgH = imgEl?.naturalHeight || BG_LIVING_IMG_FALLBACK.h;
+  const fitScale = Math.min(1, vw / HERO_DESIGN_WIDTH, (vh - HERO_HEADER_INSET) / HERO_DESIGN_HEIGHT);
+
+  // Reproduce object-fit:cover + object-position for the bg photo.
+  const coverScale = Math.max(vw / imgW, vh / imgH);
+  const dispW = imgW * coverScale;
+  const dispH = imgH * coverScale;
+  const offsetX = (vw - dispW) * (BG_LIVING_OBJECT_POSITION.xPct / 100);
+  const offsetY = (vh - dispH) * (BG_LIVING_OBJECT_POSITION.yPct / 100);
+  const localX = offsetX + anchor.fx * dispW;
+  const localY = offsetY + anchor.fy * dispH;
+
+  // The bgLivingRef container then applies its own GSAP `scale` about the
+  // viewport centre (see gsap.set/tl.to on bgLivingRef) — fold that in too.
+  const finalX = vw / 2 + (localX - vw / 2) * bgScale;
+  const finalY = vh / 2 + (localY - vh / 2) * bgScale;
+
+  // productRef's box lives inside the foreground wrapper (inset-x-0, top:52,
+  // bottom:0), scaled by fitScale about ITS OWN centre — invert that to get
+  // the x/y delta GSAP needs to land the product on the computed point.
+  const wrapperCenterY = HERO_HEADER_INSET + (vh - HERO_HEADER_INSET) / 2;
+  return {
+    x: (finalX - vw / 2) / fitScale,
+    y: (finalY - wrapperCenterY) / fitScale,
+  };
+}
 
 // State-0 heading/subtitle are the state-2 ones scaled up about their cap-top.
 // The subtitle stays dead-centre in both states (Figma's small ±16px x drift
@@ -95,6 +158,7 @@ export default function Hero() {
   const bgNightRef = useRef<HTMLDivElement>(null);
   const bgNightShadeRef = useRef<HTMLDivElement>(null);
   const bgLivingRef = useRef<HTMLDivElement>(null);
+  const bgLivingImgRef = useRef<HTMLImageElement>(null);
   const bgLivingBlurRef = useRef<HTMLImageElement>(null);
   const bgLivingScrimRef = useRef<HTMLDivElement>(null);
 
@@ -113,14 +177,14 @@ export default function Hero() {
   const chipIndiaRef = useRef<HTMLDivElement>(null);
   const chipQRRef = useRef<HTMLDivElement>(null);
 
-  // Ecosystem block (state 4) and app-phone block (states 6-7)
+  // Ecosystem block (state 4) and app-phone block (state 6)
   const ecoBlockRef = useRef<HTMLDivElement>(null);
   const phoneBlockRef = useRef<HTMLDivElement>(null);
 
   // Contain-fit the 1440×1000 composition to the viewport (width AND height),
   // so nothing is clipped on narrow OR short screens. Never scales up past 1.
   // The 52px arg reserves the sticky header height.
-  const fitScale = useFitScale(1440, 1000, 52);
+  const fitScale = useFitScale(HERO_DESIGN_WIDTH, HERO_DESIGN_HEIGHT, HERO_HEADER_INSET);
 
   // useLayoutEffect (not useEffect) so setup/teardown run synchronously with
   // React's commit — closes the race where GSAP's own debounced global
@@ -134,15 +198,15 @@ export default function Hero() {
       // callback below can fast-forward it if the user scrolls mid-intro.
       let intro: gsap.core.Timeline | null = null;
 
-      // ── Master timeline – scrubbed by scroll (States 2→7) ────────────────
-      // 5 segments × 1 unit each. Scroll end "+=5000" → each unit = 1000px.
+      // ── Master timeline – scrubbed by scroll (States 2→6) ────────────────
+      // 4 segments × 1 unit each. Scroll end "+=4000" → each unit = 1000px.
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: triggerRef.current,
           pin: true,
           pinSpacing: true,
           start: 'top top',
-          end: '+=5000',
+          end: '+=4000',
           scrub: 1.5,
           invalidateOnRefresh: true,
           // Highest priority → recalculates first so the sections below always
@@ -176,7 +240,7 @@ export default function Hero() {
       // request for a left-blurred / right-clear split (a deliberate
       // deviation from Figma, which blurs the layer uniformly).
       gsap.set(bgLivingRef.current, {
-        opacity: 0, x: 0, y: 0, scale: 1, xPercent: -50, yPercent: -50,
+        opacity: 0, x: 0, y: 0, scale: BG_LIVING_SCALE, transformOrigin: 'center center',
       });
       gsap.set(bgLivingBlurRef.current, { filter: 'blur(8px)' });
       gsap.set(bgLivingScrimRef.current, { opacity: 0 });
@@ -245,9 +309,13 @@ export default function Hero() {
       // Night bg fades, living-room bg fades in
       tl.to(bgNightRef.current, { opacity: 0, duration: 0.7 }, '<');
       tl.to(bgLivingRef.current, { opacity: 1, duration: 0.7 }, '<');
-      // Product settles onto the coffee table (img opacity .95 per Figma)
+      // Product settles onto the coffee table (img opacity .95 per Figma).
+      // x/y are functions (not fixed numbers) so invalidateOnRefresh
+      // re-derives the table's screen position on every resize.
       tl.fromTo(productRef.current, { x: 0, y: 0, scale: 1 }, {
-        ...PRODUCT.s3,
+        x: () => computeProductDelta(bgLivingImgRef.current, PRODUCT_TABLE_ANCHOR.s3, BG_LIVING_SCALE).x,
+        y: () => computeProductDelta(bgLivingImgRef.current, PRODUCT_TABLE_ANCHOR.s3, BG_LIVING_SCALE).y,
+        scale: PRODUCT.s3.scale,
         duration: 0.8, ease: 'power2.inOut', immediateRender: false,
       }, '<0.1');
       tl.fromTo(productImgRef.current, { opacity: 1 }, {
@@ -279,6 +347,9 @@ export default function Hero() {
       tl.to(bgLivingScrimRef.current, { opacity: 0, duration: 1 }, '<');
 
       // ─── SEGMENT 5 (5→6): State 5 → State 6 – app-phone block rises ──────
+      // This is the last segment — per explicit request, the product no
+      // longer drifts/shrinks after the phone block appears. Once it's up,
+      // further scroll just releases the pin and carries the section away.
       tl.to(bgLivingBlurRef.current, {
         filter: 'blur(24px)',
         duration: 1, ease: 'power2.inOut',
@@ -288,13 +359,6 @@ export default function Hero() {
         y: 0, opacity: 1,
         duration: 1, ease: 'power2.out',
       }, '<');
-
-      // ─── SEGMENT 6 (6→7): State 6 → State 7 – product drifts, bg zooms out ─
-      tl.to(productRef.current, {
-        ...PRODUCT.s7,
-        duration: 1, ease: 'power2.inOut',
-      });
-      tl.to(bgLivingRef.current, { ...BG_LIVING_S7, duration: 1, ease: 'power2.inOut' }, '<');
     }, triggerRef);
 
     return () => ctx.revert();
@@ -308,8 +372,11 @@ export default function Hero() {
         className="relative h-screen w-full overflow-hidden bg-white"
         style={{ minHeight: '480px' }}
       >
-        {/* ── BG Layer 2: living room (states 3-7) ───────────────────────── */}
-        {/*   Figma: 2794×1863 container centred at (50%+78px, 50%+126.5px). */}
+        {/* ── BG Layer 2: living room (states 3-6) ───────────────────────── */}
+        {/*   Full-bleed viewport container (not a fixed Figma-px canvas) —   */}
+        {/*   object-position anchors to the bottom so the room reads full   */}
+        {/*   width/height instead of a tight, zoomed-in crop; any overflow   */}
+        {/*   crops from the top (ceiling) rather than the floor/sofa.        */}
         {/*   Figma itself blurs this layer UNIFORMLY (8px rest / 24px on    */}
         {/*   the ecosystem+phone beats) — no split. Per explicit request,   */}
         {/*   this is a deliberate deviation: a masked duplicate blurs only  */}
@@ -317,41 +384,25 @@ export default function Hero() {
         {/*   product side of the photo stays clear.                        */}
         <div
           ref={bgLivingRef}
-          className="pointer-events-none absolute"
-          style={{
-            left: 'calc(50% + 78px)',
-            top: 'calc(50% + 126.5px)',
-            width: '2794px',
-            height: '1863px',
-            transform: 'translate(-50%, -50%)',
-          }}
+          className="pointer-events-none absolute inset-0"
           aria-hidden
         >
           <img
-            // DB `figma-hero-bg-living` currently points at the mobile portrait
-            // crop, not this web landscape scene — use the static asset until
-            // the CDN row is corrected.
-            // Sizing matches Figma's exact fill exactly (99.946% x 99.98% at
-            // 0.786px/0.109px) rather than a flat 100% cover.
-            src={bgLivingFallback}
+            ref={bgLivingImgRef}
+            src={images['figma-hero-bg-living']}
             alt=""
-            className="absolute max-w-none object-cover"
-            style={{
-              left: '0.0281%', top: '0.0059%',
-              width: '99.946%', height: '99.98%',
-              backgroundColor: 'lightgray',
-            }}
+            className="absolute inset-0 size-full max-w-none object-cover"
+            style={{ objectPosition: `${BG_LIVING_OBJECT_POSITION.xPct}% ${BG_LIVING_OBJECT_POSITION.yPct}%` }}
           />
           {/* Blurred duplicate, masked so only the left half stays blurred —
               fades out across the middle so the seam isn't a hard line. */}
           <img
             ref={bgLivingBlurRef}
-            src={bgLivingFallback}
+            src={images['figma-hero-bg-living']}
             alt=""
-            className="absolute max-w-none object-cover"
+            className="absolute inset-0 size-full max-w-none object-cover"
             style={{
-              left: '0.0281%', top: '0.0059%',
-              width: '99.946%', height: '99.98%',
+              objectPosition: `${BG_LIVING_OBJECT_POSITION.xPct}% ${BG_LIVING_OBJECT_POSITION.yPct}%`,
               WebkitMaskImage: 'linear-gradient(to right, black 0%, black 40%, transparent 60%)',
               maskImage: 'linear-gradient(to right, black 0%, black 40%, transparent 60%)',
             }}
@@ -368,19 +419,17 @@ export default function Hero() {
         </div>
 
         {/* ── BG Layer 1: dark night bedroom (states 0-2) ────────────────── */}
-        {/*   Figma's canvas (1440×1000, aspect 1.44) is almost an exact       */}
-        {/*   match for the photo's own aspect (2764×1892, 1.46) — effectively */}
-        {/*   no crop at the design's own size. At other viewport aspects,    */}
-        {/*   a bare center object-position crops into the lamp/nightstand/bed */}
-        {/*   on the right and leaves excess empty wall on the left; anchoring */}
-        {/*   right keeps that detail in frame and sacrifices the (empty) left */}
-        {/*   margin instead. */}
+        {/*   object-position anchors right+bottom: any crop from an off-     */}
+        {/*   aspect viewport eats into the (empty) wall at the top-left      */}
+        {/*   instead of the table/lamp/bed — keeps the table's front edge    */}
+        {/*   always visible so the product reads as resting ON it, not      */}
+        {/*   floating, and keeps the lamp/nightstand/bed detail in frame.    */}
         <div ref={bgNightRef} className="pointer-events-none absolute inset-0" aria-hidden>
           <img
             src={images['figma-hero-bg-night']}
             alt=""
             className="absolute inset-0 size-full max-w-none object-cover"
-            style={{ objectPosition: 'right center' }}
+            style={{ objectPosition: 'right bottom' }}
           />
           {/* Top-to-bottom black fade so the heading area reads dark in state 2 */}
           <div
@@ -679,7 +728,7 @@ export default function Hero() {
           </p>
         </div>
 
-        {/* ── App-phone block (states 6-7) ───────────────────────────────── */}
+        {/* ── App-phone block (state 6) ──────────────────────────────────── */}
         {/*   Column centred at (50%-289px, 50%+8.07px), w 312, gap 35.742.   */}
         <div
           ref={phoneBlockRef}

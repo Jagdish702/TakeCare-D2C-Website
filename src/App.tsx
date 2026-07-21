@@ -3,6 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useIsMobile } from './hooks/useIsMobile';
 import ErrorBoundary from './components/ErrorBoundary';
 import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
 import Hero from './components/Hero/Hero';
 import ConnectedEcosystem from './components/Hero/ConnectedEcosystem';
 import HeroMobile from './components/mobile/HeroMobile';
@@ -158,6 +159,7 @@ export default function App() {
           <SubscriptionSection onGetStarted={handleGetStarted} onOpenCart={openCart} />
         )}
         {isMobile ? <FAQSectionMobile /> : <FAQSection />}
+        <Footer />
         {!isMobile && <GetTakeCareStrip />}
       </div>
       {showSetupFlowPage && <SetupRefillFlowPage onBackHome={closeSetupFlowPage} />}
