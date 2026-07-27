@@ -463,6 +463,16 @@ INSERT INTO payment_page_content (
   'Fraud held payments are reviewed within 24 hrs — contact support@curebay.com'
 );
 
+DELETE FROM status_cards;
+INSERT INTO status_cards (variant_key, heading, subheading, primary_label, secondary_label, countdown_text, footer_text, sort_order) VALUES
+  ('payment_failed', 'Payment failed', 'Your order was not placed.', 'Try again', 'Change payment method', NULL, 'Your cart is saved.', 0),
+  ('payment_in_progress', 'Payment in progress', 'Waiting for payment confirmation.', 'Check status', NULL, '29:00 secs remaining', 'We''ll notify you when it''s confirmed.', 1),
+  ('payment_declined', 'Payment Declined', 'Use a different payment method.', 'Try Another Method', NULL, NULL, 'Your order was not placed.', 2),
+  ('payment_interrupted', 'Payment interrupted', 'Your payment was not completed.', 'Continue Payment', NULL, NULL, 'Your cart is saved.', 3),
+  ('confirmation_pending', 'Confirmation pending', 'If payment was deducted, it will be refunded automatically.', 'Check Status', NULL, NULL, 'We''ll update you shortly.', 4),
+  ('payment_under_review', 'Payment under review', 'We''re verifying your payment.', 'Check Status', NULL, NULL, 'We''ll notify you when it''s confirmed.', 5),
+  ('payment_successful', 'Payment successful', 'Your order has been placed.', 'View Order', NULL, NULL, 'Confirmation sent to your mail and phone number successfully.', 6);
+
 -- ============================================================================
 -- 13. PROFILE / OTP / DASHBOARD
 -- ============================================================================

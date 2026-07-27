@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CheckoutStepperMobile from './CheckoutStepperMobile';
 import DisclaimerCard from '../Subscription/DisclaimerCard';
 import AvailDiscounts from './AvailDiscounts';
 import RadioIcon from './RadioIcon';
 import PrimaryButton from '../common/PrimaryButton';
+import StatusCard from './StatusCard';
 import { PAYMENT_ICONS, ICON_SRC, ICON_SIZE, CashIcon, AlertCircleIcon } from './PaymentPage';
 import { useContent } from '../../context/ContentContext';
 
@@ -111,6 +112,21 @@ export default function PaymentPageMobile({ plan, shippingInfo, isOpen, onBack, 
     .map((opt) => ({ key: opt.option_key, label: opt.label, subtext: opt.subtext, icons: PAYMENT_ICONS[opt.option_key] }));
   const [paymentMode, setPaymentMode] = useState('upi');
 
+  // Demo payment-result flow — see the matching comment in PaymentPage.jsx.
+  const [statusVariant, setStatusVariant] = useState(null);
+  const successTimer = useRef(null);
+  useEffect(() => () => clearTimeout(successTimer.current), []);
+
+  const handlePayNow = () => {
+    setStatusVariant('payment_in_progress');
+    successTimer.current = setTimeout(() => setStatusVariant('payment_successful'), 2500);
+  };
+  const handleCheckStatus = () => {
+    clearTimeout(successTimer.current);
+    setStatusVariant('payment_successful');
+  };
+  const closeStatus = () => setStatusVariant(null);
+
   if (!isOpen || !plan) return null;
 
   const isMonthly = plan.key === 'monthly';
@@ -183,7 +199,7 @@ export default function PaymentPageMobile({ plan, shippingInfo, isOpen, onBack, 
             <CashIcon />
           </div>
 
-          <PrimaryButton fullWidth onClick={onContinue}>{section.continue_payment_label}</PrimaryButton>
+          <PrimaryButton fullWidth onClick={handlePayNow}>{section.continue_payment_label}</PrimaryButton>
           <button
             onClick={onBack}
             style={{
@@ -197,6 +213,20 @@ export default function PaymentPageMobile({ plan, shippingInfo, isOpen, onBack, 
           </button>
         </div>
       </div>
+
+      {statusVariant && (
+        <div
+          className="fixed inset-0 z-[1300] flex items-center justify-center overflow-y-auto p-4"
+          style={{ background: 'rgba(0,0,0,0.32)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
+        >
+          <StatusCard
+            variant={statusVariant}
+            onPrimary={statusVariant === 'payment_in_progress' ? handleCheckStatus : () => { closeStatus(); onContinue?.(); }}
+            onSecondary={closeStatus}
+            onFooterClick={closeStatus}
+          />
+        </div>
+      )}
     </div>
   );
 }

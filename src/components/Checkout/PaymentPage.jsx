@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import CheckoutStepper from './CheckoutStepper';
 import CheckoutSummaryPanel from './CheckoutSummaryPanel';
 import RadioIcon from './RadioIcon';
+import StatusCard from './StatusCard';
 import DisclaimerCard from '../Subscription/DisclaimerCard';
 import { useContent } from '../../context/ContentContext';
 
@@ -176,6 +177,23 @@ export default function PaymentPage({ plan, shippingInfo, isOpen, onBack, onCont
     .map((opt) => ({ key: opt.option_key, label: opt.label, subtext: opt.subtext, icons: PAYMENT_ICONS[opt.option_key] }));
   const [paymentMode, setPaymentMode] = useState('upi');
 
+  // Demo payment-result flow (no real backend/gateway exists) — "Pay Now"
+  // shows the "in progress" Status Card, then settles on "successful" after
+  // a short simulated wait; "Check status" on that card skips the wait.
+  const [statusVariant, setStatusVariant] = useState(null);
+  const successTimer = useRef(null);
+  useEffect(() => () => clearTimeout(successTimer.current), []);
+
+  const handlePayNow = () => {
+    setStatusVariant('payment_in_progress');
+    successTimer.current = setTimeout(() => setStatusVariant('payment_successful'), 2500);
+  };
+  const handleCheckStatus = () => {
+    clearTimeout(successTimer.current);
+    setStatusVariant('payment_successful');
+  };
+  const closeStatus = () => setStatusVariant(null);
+
   if (!isOpen || !plan) return null;
 
   return (
@@ -220,9 +238,23 @@ export default function PaymentPage({ plan, shippingInfo, isOpen, onBack, onCont
           </div>
 
           {/* ── Right panel: Summary & payment (shared across checkout steps) ── */}
-          <CheckoutSummaryPanel plan={plan} onBack={onBack} onContinue={onContinue} />
+          <CheckoutSummaryPanel plan={plan} onBack={onBack} onContinue={handlePayNow} />
         </div>
       </div>
+
+      {statusVariant && (
+        <div
+          className="fixed inset-x-0 bottom-0 z-[1300] flex items-center justify-center overflow-y-auto p-4 md:p-12"
+          style={{ top: HEADER_H, background: 'rgba(0,0,0,0.32)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
+        >
+          <StatusCard
+            variant={statusVariant}
+            onPrimary={statusVariant === 'payment_in_progress' ? handleCheckStatus : () => { closeStatus(); onContinue?.(); }}
+            onSecondary={closeStatus}
+            onFooterClick={closeStatus}
+          />
+        </div>
+      )}
     </div>
   );
 }

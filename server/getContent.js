@@ -92,6 +92,7 @@ export function getContent() {
       shipping: one('SELECT * FROM shipping_page_content WHERE id = 1'),
       paymentOptions: all('SELECT * FROM payment_options ORDER BY sort_order'),
       payment: one('SELECT * FROM payment_page_content WHERE id = 1'),
+      statusCards: all('SELECT * FROM status_cards ORDER BY sort_order'),
     },
 
     profile: {

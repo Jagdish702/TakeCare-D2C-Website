@@ -496,6 +496,22 @@ CREATE TABLE payment_page_content (
     updated_at               TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
+-- Payment-result "Status Card" shown after the Payment step's Pay Now
+-- action (StatusCard.jsx) — 7 variants, one row each. Icon/colour choice
+-- per variant stays in code (icons aren't DB-backed anywhere in this
+-- schema); only the copy shown to the user lives here.
+CREATE TABLE status_cards (
+    id                INTEGER PRIMARY KEY AUTOINCREMENT,
+    variant_key       TEXT NOT NULL UNIQUE,  -- 'payment_failed' | 'payment_in_progress' | 'payment_declined' | 'payment_interrupted' | 'confirmation_pending' | 'payment_under_review' | 'payment_successful'
+    heading           TEXT NOT NULL,         -- "Payment failed"
+    subheading        TEXT NOT NULL,         -- "Your order was not placed."
+    primary_label     TEXT NOT NULL,         -- "Try again"
+    secondary_label   TEXT,                  -- "Change payment method" — payment_failed only
+    countdown_text    TEXT,                  -- "29:00 secs remaining" — payment_in_progress only
+    footer_text       TEXT NOT NULL,         -- "Your cart is saved."
+    sort_order        INTEGER NOT NULL DEFAULT 0
+);
+
 -- ============================================================================
 -- 13. PROFILE / OTP / DASHBOARD
 -- ============================================================================

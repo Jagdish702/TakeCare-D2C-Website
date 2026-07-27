@@ -3,9 +3,9 @@
  * 24×24 box with white background; path box 18 × 17.182 centred (offset +0.34px Y),
  * stroke overflow expansion inset -5.24% / -5% (→ render box 19.8 × 18.9818).
  */
-export default function CartIcon() {
+export default function CartIcon({ className = 'relative size-6 shrink-0 overflow-clip bg-white' }: { className?: string }) {
   return (
-    <div className="relative size-6 shrink-0 overflow-clip bg-white" data-name="25">
+    <div className={className} data-name="25">
       <div className="absolute left-1/2 top-[calc(50%+0.34px)] h-[17.182px] w-[18px] -translate-x-1/2 -translate-y-1/2">
         <div className="absolute inset-[-5.24%_-5%]">
           <svg
