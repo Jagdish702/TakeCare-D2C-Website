@@ -89,6 +89,11 @@ const S10 = {
 // State 13 — all content vanishes, single phone centered (node 12387-7489 "3_mobile_img")
 // Figma frame 1440×900: center=(50%-24, 50%-0.5), 304.708×600.
 // Centered on the 1024 canvas → center y = 512 → TL=(543.646, 212).
+// Box aspect (304.708/600 ≈ 0.508) already matches the source image's own
+// aspect (1218×2400 ≈ 0.508) — a plain 100%/cover fits it exactly, same as
+// S18 below. No overscan/offset trim is needed (an earlier hand-tuned
+// 106.29%/104.33% zoom was cropping a few percent off every edge for no
+// reason and clipping into the phone's notch/bottom nav bar).
 const S13 = {
   phone13: { left: 543.646, top: 212.0, w: 304.708, h: 600.0 },
 };
@@ -808,18 +813,13 @@ export default function SetupRefillJourneySection() {
               position: 'absolute',
               left: S13.phone13.left, top: S13.phone13.top,
               width: S13.phone13.w, height: S13.phone13.h,
-              overflow: 'hidden', opacity: 0,
+              opacity: 0,
             }}
           >
             <img
               alt=""
               src={ASSETS.phone13}
-              style={{
-                position: 'absolute',
-                width: '106.29%', height: '104.33%',
-                left: '-3.14%', top: '-2.24%',
-                maxWidth: 'none',
-              }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
           </div>
 
