@@ -512,6 +512,33 @@ CREATE TABLE status_cards (
     sort_order        INTEGER NOT NULL DEFAULT 0
 );
 
+-- "Order Confirmation" page (OrderConfirmationPage.jsx) shown after the
+-- payment_successful Status Card's "View Order" button. Icons/images stay
+-- in code (same convention as everywhere else in this schema); only the
+-- copy shown to the user lives here. `starts_from_prefix` and
+-- `order_sent_prefix` are sentence prefixes, not full sentences — the
+-- component appends the actual email/phone (real checkout-session data,
+-- not DB content) after them at render time.
+CREATE TABLE order_confirmation_content (
+    id                       INTEGER PRIMARY KEY CHECK (id = 1),
+    heading                  TEXT NOT NULL,   -- "Payment successful"
+    subheading                TEXT NOT NULL,   -- "Your Take Care plan is now active & products will be delivered shortly"
+    starts_from_label          TEXT NOT NULL,   -- "Starts from"
+    starts_from_prefix         TEXT NOT NULL,   -- "Subscription will start once you login the Take care app using"
+    renews_on_label            TEXT NOT NULL,   -- "Renews on"
+    delivered_by_label         TEXT NOT NULL,   -- "Delivered by :"
+    delivered_at_label         TEXT NOT NULL,   -- "Delivered at"
+    order_number_prefix        TEXT NOT NULL,   -- "Order #"
+    order_sent_prefix          TEXT NOT NULL,   -- "Order confirmation sent to"
+    qr_heading_line1           TEXT NOT NULL,   -- "Scan the QR code"
+    qr_heading_line2           TEXT NOT NULL,   -- "to download the app"
+    qr_caption_line1           TEXT NOT NULL,   -- "Use your email ID to log in."
+    qr_caption_line2           TEXT NOT NULL,   -- "OTP will be sent for verification"
+    back_to_dashboard_label     TEXT NOT NULL,   -- "Back to dashboard"
+    track_order_label          TEXT NOT NULL,   -- "Track Order"
+    updated_at                TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 -- ============================================================================
 -- 13. PROFILE / OTP / DASHBOARD
 -- ============================================================================

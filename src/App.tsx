@@ -29,6 +29,8 @@ import ShippingDetailsPage from './components/Checkout/ShippingDetailsPage';
 import ShippingDetailsPageMobile from './components/Checkout/ShippingDetailsPageMobile';
 import PaymentPage from './components/Checkout/PaymentPage';
 import PaymentPageMobile from './components/Checkout/PaymentPageMobile';
+import OrderConfirmationPage from './components/Checkout/OrderConfirmationPage';
+import OrderConfirmationPageMobile from './components/Checkout/OrderConfirmationPageMobile';
 import FAQSection from './components/FAQ/FAQSection';
 import FAQSectionMobile from './components/mobile/FAQSectionMobile';
 import GetTakeCareStrip from './components/GetTakeCareStrip/GetTakeCareStrip';
@@ -40,8 +42,8 @@ import ProfileDashboardMobile from './components/ProfileDashboard/ProfileDashboa
 export default function App() {
   const [cartPlan, setCartPlan] = useState<any>(null);
   const [cartOpen, setCartOpen] = useState(false);
-  // Checkout flow: 'closed' | 'summary' (Purchase Summary) | 'shipping' (User Details & shipping address) | 'payment'
-  const [checkoutStep, setCheckoutStep] = useState<'closed' | 'summary' | 'shipping' | 'payment'>('closed');
+  // Checkout flow: 'closed' | 'summary' (Purchase Summary) | 'shipping' (User Details & shipping address) | 'payment' | 'confirmation' (Order Confirmation, post-payment)
+  const [checkoutStep, setCheckoutStep] = useState<'closed' | 'summary' | 'shipping' | 'payment' | 'confirmation'>('closed');
   // Collected on the "User Details & shipping address" step, read back on
   // the Payment step's Contact/Shipping Address summary card.
   const [shippingInfo, setShippingInfo] = useState<any>(null);
@@ -56,6 +58,26 @@ export default function App() {
     setCheckoutStep('payment');
   };
   const backToShipping = () => setCheckoutStep('shipping');
+
+  // Which plan (if any) shows the blue "Current Plan" badge/border on the
+  // subscription cards — set once the demo Payment flow's "View Order"
+  // (the payment_successful Status Card's primary button) confirms a
+  // purchase, since this app has no real login/subscription backend.
+  const [currentPlanKey, setCurrentPlanKey] = useState<string | null>(null);
+  const confirmPlanPurchase = () => {
+    if (cartPlan) setCurrentPlanKey(cartPlan.key);
+    setCheckoutStep('confirmation');
+  };
+
+  // Order Confirmation's "Back to dashboard" — closes the checkout overlay
+  // and scrolls the (now-visible) home page down to the subscription cards,
+  // where the plan just purchased shows its "Current Plan" badge/border.
+  const backToDashboardFromOrder = () => {
+    closeCheckout();
+    requestAnimationFrame(() => {
+      document.getElementById('subscription-plans')?.scrollIntoView({ behavior: 'smooth' });
+    });
+  };
 
   // Profile flow: null | 'profile' | 'otp'
   const [profileStep, setProfileStep] = useState<'profile' | 'otp' | null>(null);
@@ -154,9 +176,9 @@ export default function App() {
         </ErrorBoundary>
         {isMobile ? <DownloadAppSectionMobile /> : <DownloadAppSection />}
         {isMobile ? (
-          <SubscriptionSectionMobile onGetStarted={handleGetStarted} onOpenCart={openCart} />
+          <SubscriptionSectionMobile onGetStarted={handleGetStarted} onOpenCart={openCart} currentPlanKey={currentPlanKey} />
         ) : (
-          <SubscriptionSection onGetStarted={handleGetStarted} onOpenCart={openCart} />
+          <SubscriptionSection onGetStarted={handleGetStarted} onOpenCart={openCart} currentPlanKey={currentPlanKey} />
         )}
         {isMobile ? <FAQSectionMobile /> : <FAQSection />}
         <Footer />
@@ -204,7 +226,7 @@ export default function App() {
           shippingInfo={shippingInfo}
           isOpen={checkoutStep === 'payment'}
           onBack={backToShipping}
-          onContinue={() => {}}
+          onContinue={confirmPlanPurchase}
         />
       ) : (
         <PaymentPage
@@ -212,7 +234,24 @@ export default function App() {
           shippingInfo={shippingInfo}
           isOpen={checkoutStep === 'payment'}
           onBack={backToShipping}
-          onContinue={() => {}}
+          onContinue={confirmPlanPurchase}
+        />
+      )}
+      {isMobile ? (
+        <OrderConfirmationPageMobile
+          plan={cartPlan}
+          shippingInfo={shippingInfo}
+          isOpen={checkoutStep === 'confirmation'}
+          onBackToDashboard={backToDashboardFromOrder}
+          onTrackOrder={() => { closeCheckout(); openProfile(); }}
+        />
+      ) : (
+        <OrderConfirmationPage
+          plan={cartPlan}
+          shippingInfo={shippingInfo}
+          isOpen={checkoutStep === 'confirmation'}
+          onBackToDashboard={backToDashboardFromOrder}
+          onTrackOrder={() => { closeCheckout(); openProfile(); }}
         />
       )}
       {profileStep === 'profile' && (

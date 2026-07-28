@@ -473,6 +473,31 @@ INSERT INTO status_cards (variant_key, heading, subheading, primary_label, secon
   ('payment_under_review', 'Payment under review', 'We''re verifying your payment.', 'Check Status', NULL, NULL, 'We''ll notify you when it''s confirmed.', 5),
   ('payment_successful', 'Payment successful', 'Your order has been placed.', 'View Order', NULL, NULL, 'Confirmation sent to your mail and phone number successfully.', 6);
 
+DELETE FROM order_confirmation_content;
+INSERT INTO order_confirmation_content (
+  id, heading, subheading, starts_from_label, starts_from_prefix, renews_on_label,
+  delivered_by_label, delivered_at_label, order_number_prefix, order_sent_prefix,
+  qr_heading_line1, qr_heading_line2, qr_caption_line1, qr_caption_line2,
+  back_to_dashboard_label, track_order_label
+) VALUES (
+  1,
+  'Payment successful',
+  'Your Take Care plan is now active & products will be delivered shortly',
+  'Starts from',
+  'Subscription will start once you login the Take care app using',
+  'Renews on',
+  'Delivered by :',
+  'Delivered at',
+  'Order #',
+  'Order confirmation sent to',
+  'Scan the QR code',
+  'to download the app',
+  'Use your email ID to log in.',
+  'OTP will be sent for verification',
+  'Back to dashboard',
+  'Track Order'
+);
+
 -- ============================================================================
 -- 13. PROFILE / OTP / DASHBOARD
 -- ============================================================================
@@ -648,4 +673,5 @@ INSERT INTO image_assets (image_key, url) VALUES
   -- Subscription / Cart / Checkout ------------------------------------------
   ('subscription-device', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Subscription_section/Dispenser_%26_mobile_live_img.png'),
   ('subscription-cart-device', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Pill_dispenser.png'),
-  ('subscription-cart-mobile', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Mobile_img.png');
+  ('subscription-cart-mobile', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Mobile_img.png'),
+  ('order-confirmation-phone-in-hand', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/phone-in-hand.png');

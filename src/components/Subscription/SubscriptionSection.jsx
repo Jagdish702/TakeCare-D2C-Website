@@ -100,8 +100,13 @@ function PriceRow({ amount, periodLine1, periodLine2 }) {
   );
 }
 
+// Blue "current plan" ribbon badge + card border — brand blue (#004172, the
+// same blue used for buttons/links everywhere), per explicit request to
+// recolour this treatment away from the more conventional green.
+const CURRENT_PLAN_BLUE = '#004172';
+
 /* ── Single pricing card ── */
-function PlanCard({ plan, features, content, onGetStarted }) {
+function PlanCard({ plan, features, content, onGetStarted, isCurrent }) {
   return (
     <div
       style={{
@@ -115,6 +120,7 @@ function PlanCard({ plan, features, content, onGetStarted }) {
         gap: 38,
         boxSizing: 'border-box',
         boxShadow: '0 2px 4px rgba(0,65,114,0.08)',
+        border: `2px solid ${isCurrent ? CURRENT_PLAN_BLUE : 'transparent'}`,
       }}
     >
       {/* White fill */}
@@ -139,6 +145,29 @@ function PlanCard({ plan, features, content, onGetStarted }) {
           pointerEvents: 'none',
         }}
       />
+
+      {isCurrent && (
+        <div
+          style={{
+            position: 'absolute',
+            top: -18,
+            left: 24,
+            padding: '8px 20px',
+            borderRadius: 999,
+            background: CURRENT_PLAN_BLUE,
+            boxShadow: '0 2px 4px rgba(0,65,114,0.16)',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 700,
+            fontSize: 12,
+            letterSpacing: '0.3883px',
+            lineHeight: '20px',
+            color: '#fff',
+            textTransform: 'uppercase',
+          }}
+        >
+          Current Plan
+        </div>
+      )}
 
       {/* Plan title — green gradient text — green gradient text */}
       <p
@@ -166,11 +195,11 @@ function PlanCard({ plan, features, content, onGetStarted }) {
           position: 'relative',
           display: 'flex',
           flexDirection: 'column',
-          gap: 24,
+          gap: 12,
           color: '#000',
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <p
             style={{
               margin: 0,
@@ -204,7 +233,7 @@ function PlanCard({ plan, features, content, onGetStarted }) {
           +
         </p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <p
             style={{
               margin: 0,
@@ -241,7 +270,30 @@ function PlanCard({ plan, features, content, onGetStarted }) {
             <p key={i} style={{ margin: 0 }}>{line}</p>
           ))}
         </div>
-        <PrimaryButton fullWidth onClick={() => onGetStarted(plan)}>{plan.cta}</PrimaryButton>
+        {isCurrent ? (
+          <div
+            style={{
+              width: '100%',
+              height: 48,
+              boxSizing: 'border-box',
+              borderRadius: 12,
+              background: '#e5e5e5',
+              color: '#808080',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 500,
+              fontSize: 16,
+              letterSpacing: '0.2592px',
+              cursor: 'default',
+            }}
+          >
+            Current Plan
+          </div>
+        ) : (
+          <PrimaryButton fullWidth onClick={() => onGetStarted(plan)}>{plan.cta}</PrimaryButton>
+        )}
       </div>
 
       {/* Features list */}
@@ -275,7 +327,7 @@ function PlanCard({ plan, features, content, onGetStarted }) {
 }
 
 /* ── Section root ── */
-export default function SubscriptionSection({ onGetStarted, onOpenCart }) {
+export default function SubscriptionSection({ onGetStarted, onOpenCart, currentPlanKey }) {
   const { subscription, images } = useContent();
   const { content } = subscription;
   const { plans, features } = usePlansAndFeatures();
@@ -386,7 +438,14 @@ export default function SubscriptionSection({ onGetStarted, onOpenCart }) {
           }}
         >
           {plans.map((plan) => (
-            <PlanCard key={plan.key} plan={plan} features={features} content={content} onGetStarted={handleGetStarted} />
+            <PlanCard
+              key={plan.key}
+              plan={plan}
+              features={features}
+              content={content}
+              onGetStarted={handleGetStarted}
+              isCurrent={plan.key === currentPlanKey}
+            />
           ))}
         </div>
 

@@ -39,8 +39,12 @@ function PriceRowMobile({ amount, periodLine1, periodLine2 }) {
   );
 }
 
+// Blue "current plan" ribbon badge + card border — see the matching
+// constant/comment in the desktop SubscriptionSection.jsx.
+const CURRENT_PLAN_BLUE = '#004172';
+
 /* ── Single pricing card ── */
-function PlanCardMobile({ plan, features, content, onGetStarted }) {
+function PlanCardMobile({ plan, features, content, onGetStarted, isCurrent }) {
   return (
     <div
       style={{
@@ -53,10 +57,34 @@ function PlanCardMobile({ plan, features, content, onGetStarted }) {
         gap: 36,
         boxSizing: 'border-box',
         boxShadow: '0 2px 4px rgba(0,65,114,0.08)',
+        border: `2px solid ${isCurrent ? CURRENT_PLAN_BLUE : 'transparent'}`,
       }}
     >
       <div aria-hidden style={{ position: 'absolute', inset: 0, background: '#fff', borderRadius: 36, pointerEvents: 'none' }} />
       <div aria-hidden style={{ position: 'absolute', inset: 0, borderRadius: 36, boxShadow: 'inset 0 0 2px 0 rgba(0,65,114,0.08)', pointerEvents: 'none' }} />
+
+      {isCurrent && (
+        <div
+          style={{
+            position: 'absolute',
+            top: -16,
+            left: 20,
+            padding: '6px 16px',
+            borderRadius: 999,
+            background: CURRENT_PLAN_BLUE,
+            boxShadow: '0 2px 4px rgba(0,65,114,0.16)',
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 700,
+            fontSize: 11,
+            letterSpacing: '0.3883px',
+            lineHeight: '18px',
+            color: '#fff',
+            textTransform: 'uppercase',
+          }}
+        >
+          Current Plan
+        </div>
+      )}
 
       {/* Plan title — green gradient text */}
       <p
@@ -107,7 +135,30 @@ function PlanCardMobile({ plan, features, content, onGetStarted }) {
         <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 300, fontSize: 14, letterSpacing: '0.4536px', lineHeight: '24px', color: '#000' }}>
           {plan.disclaimer.join(' ')}
         </p>
-        <PrimaryButton fullWidth onClick={() => onGetStarted(plan)}>{plan.cta}</PrimaryButton>
+        {isCurrent ? (
+          <div
+            style={{
+              width: '100%',
+              height: 48,
+              boxSizing: 'border-box',
+              borderRadius: 12,
+              background: '#e5e5e5',
+              color: '#808080',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 500,
+              fontSize: 16,
+              letterSpacing: '0.2592px',
+              cursor: 'default',
+            }}
+          >
+            Current Plan
+          </div>
+        ) : (
+          <PrimaryButton fullWidth onClick={() => onGetStarted(plan)}>{plan.cta}</PrimaryButton>
+        )}
       </div>
 
       {/* Features list */}
@@ -138,7 +189,7 @@ function PlanCardMobile({ plan, features, content, onGetStarted }) {
 }
 
 /* ── Section root ── */
-export default function SubscriptionSectionMobile({ onGetStarted, onOpenCart }) {
+export default function SubscriptionSectionMobile({ onGetStarted, onOpenCart, currentPlanKey }) {
   const { subscription, images } = useContent();
   const { content } = subscription;
   const { plans, features } = usePlansAndFeatures();
@@ -193,7 +244,14 @@ export default function SubscriptionSectionMobile({ onGetStarted, onOpenCart }) 
         {/* Pricing cards */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24, width: '100%' }}>
           {plans.map((plan) => (
-            <PlanCardMobile key={plan.key} plan={plan} features={features} content={content} onGetStarted={handleGetStarted} />
+            <PlanCardMobile
+              key={plan.key}
+              plan={plan}
+              features={features}
+              content={content}
+              onGetStarted={handleGetStarted}
+              isCurrent={plan.key === currentPlanKey}
+            />
           ))}
         </div>
 
