@@ -3,6 +3,7 @@ import DisclaimerCard from '../Subscription/DisclaimerCard';
 import CartIcon from '../icons/CartIcon';
 import { useContent } from '../../context/ContentContext';
 import { FONT, SuccessCheck, ChevronLeft, computeOrderMeta } from './OrderConfirmationPage';
+import { getCaregiverPatientNames } from './PaymentPage';
 import iconMail from '../../assets/status-card/icon-mail-footer.svg';
 import qrChipImg from '../../assets/figma-hero/qr-chip.png';
 
@@ -67,7 +68,7 @@ function MobileOrderCard({ thumbnail, imageBg, heading, price, rows }) {
   );
 }
 
-export default function OrderConfirmationPageMobile({ plan, shippingInfo, isOpen, onBackToDashboard, onTrackOrder }) {
+export default function OrderConfirmationPageMobile({ plan, shippingInfo, personDetails, careForSelection, isCaregiver, isOpen, onBackToDashboard, onTrackOrder }) {
   const { subscription, checkout, images } = useContent();
   const product = subscription.cartProduct;
   const oc = checkout.orderConfirmation;
@@ -82,9 +83,42 @@ export default function OrderConfirmationPageMobile({ plan, shippingInfo, isOpen
   const addressLine = shippingInfo
     ? [shippingInfo.address1, shippingInfo.city, shippingInfo.state, shippingInfo.pincode, shippingInfo.country].filter(Boolean).join(', ')
     : '';
-  const deliveredAt = [shippingInfo && `${shippingInfo.firstName} ${shippingInfo.lastName}`.trim(), contactPhone, addressLine]
-    .filter(Boolean)
-    .join(', ');
+
+  // See the matching comment in OrderConfirmationPage.jsx.
+  const isSomeoneElseOrder = careForSelection === 'someone-else' && !!personDetails;
+  const { giverName, giverPhone, recipientName, recipientPhone } = getCaregiverPatientNames(shippingInfo, personDetails);
+
+  const startsFromText = !isSomeoneElseOrder ? (
+    `${oc.starts_from_prefix} ${email}.`
+  ) : isCaregiver === false ? (
+    <>
+      Subscription will start once patient login the Take care app using
+      <br />
+      <span style={{ color: '#30956a' }}>Patient</span>{` : ${recipientName} (${recipientPhone})`}
+    </>
+  ) : (
+    <>
+      {oc.starts_from_prefix}
+      <br />
+      <span style={{ color: '#30956a' }}>Caregiver</span>{` : ${giverName} (${giverPhone})`}
+      <br />
+      <span style={{ color: '#30956a' }}>Patient</span>{` : ${recipientName} (${recipientPhone})`}
+    </>
+  );
+
+  const deliveredAt = isSomeoneElseOrder
+    ? [
+        recipientName,
+        recipientPhone,
+        [personDetails.address1, personDetails.city, personDetails.state, personDetails.pincode, personDetails.country]
+          .filter(Boolean)
+          .join(', '),
+      ]
+        .filter(Boolean)
+        .join(', ')
+    : [shippingInfo && `${shippingInfo.firstName} ${shippingInfo.lastName}`.trim(), contactPhone, addressLine]
+        .filter(Boolean)
+        .join(', ');
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#f9f9f9', zIndex: 1200, overflowY: 'auto' }}>
@@ -108,7 +142,7 @@ export default function OrderConfirmationPageMobile({ plan, shippingInfo, isOpen
             heading={`TakeCare ${planName} Plan`}
             price={`₹${plan.subAmount}`}
             rows={[
-              { label: oc.starts_from_label, value: `${oc.starts_from_prefix} ${email}.` },
+              { label: oc.starts_from_label, value: startsFromText },
               { label: oc.renews_on_label, value: orderMeta.renewsOn },
             ]}
           />

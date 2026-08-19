@@ -6,6 +6,7 @@ import { useContent } from '../../context/ContentContext';
 import iconMail from '../../assets/status-card/icon-mail-footer.svg';
 import iconVerifyCheck from '../../assets/profile-modal/icon-verify-check.svg';
 import qrChipImg from '../../assets/figma-hero/qr-chip.png';
+import { getCaregiverPatientNames } from './PaymentPage';
 
 /*
   "Order Confirmation" — Figma node 12185:5206 ("Step 6"), shown after the
@@ -186,7 +187,7 @@ export function computeOrderMeta(plan) {
   };
 }
 
-export default function OrderConfirmationPage({ plan, shippingInfo, isOpen, onBackToDashboard, onTrackOrder }) {
+export default function OrderConfirmationPage({ plan, shippingInfo, personDetails, careForSelection, isCaregiver, isOpen, onBackToDashboard, onTrackOrder }) {
   const { subscription, checkout, images } = useContent();
   const product = subscription.cartProduct;
   const oc = checkout.orderConfirmation;
@@ -202,9 +203,49 @@ export default function OrderConfirmationPage({ plan, shippingInfo, isOpen, onBa
   const addressLine = shippingInfo
     ? [shippingInfo.address1, shippingInfo.city, shippingInfo.state, shippingInfo.pincode, shippingInfo.country].filter(Boolean).join(', ')
     : '';
-  const deliveredAt = [shippingInfo && `${shippingInfo.firstName} ${shippingInfo.lastName}`.trim(), contactPhone, addressLine]
-    .filter(Boolean)
-    .join(', ');
+
+  // "Someone else" path (Figma nodes 14019:18599 agreed / 14024:19525
+  // declined): the subscription card's "Starts from" line names the
+  // account holder and the other person instead of just the account
+  // holder's email, and the product card's "Delivered at" shows the
+  // actual recipient (personDetails), not the account holder. Whether the
+  // "Caregiver" line appears at all depends on CaregiverConfirmPage's
+  // answer — declining it drops "Caregiver" and keeps only "Patient",
+  // with "using" prefix wording changing from "you" to "patient".
+  const isSomeoneElseOrder = careForSelection === 'someone-else' && !!personDetails;
+  const { giverName, giverPhone, recipientName, recipientPhone } = getCaregiverPatientNames(shippingInfo, personDetails);
+
+  const startsFromText = !isSomeoneElseOrder ? (
+    `${oc.starts_from_prefix} ${email}.`
+  ) : isCaregiver === false ? (
+    <>
+      Subscription will start once patient login the Take care app using
+      <br />
+      <span style={{ color: '#30956a' }}>Patient</span>{` : ${recipientName} (${recipientPhone})`}
+    </>
+  ) : (
+    <>
+      {oc.starts_from_prefix}
+      <br />
+      <span style={{ color: '#30956a' }}>Caregiver</span>{` : ${giverName} (${giverPhone})`}
+      <br />
+      <span style={{ color: '#30956a' }}>Patient</span>{` : ${recipientName} (${recipientPhone})`}
+    </>
+  );
+
+  const deliveredAt = isSomeoneElseOrder
+    ? [
+        recipientName,
+        recipientPhone,
+        [personDetails.address1, personDetails.city, personDetails.state, personDetails.pincode, personDetails.country]
+          .filter(Boolean)
+          .join(', '),
+      ]
+        .filter(Boolean)
+        .join(', ')
+    : [shippingInfo && `${shippingInfo.firstName} ${shippingInfo.lastName}`.trim(), contactPhone, addressLine]
+        .filter(Boolean)
+        .join(', ');
 
   return (
     <div style={{ position: 'fixed', top: HEADER_H, left: 0, right: 0, bottom: 0, background: '#f9f9f9', zIndex: 1200, overflowY: 'auto' }}>
@@ -233,7 +274,7 @@ export default function OrderConfirmationPage({ plan, shippingInfo, isOpen, onBa
                 planLabel={`TakeCare ${planName} Plan`}
                 price={`₹${plan.subAmount}`}
                 startsFromLabel={oc.starts_from_label}
-                startsFromText={`${oc.starts_from_prefix} ${email}.`}
+                startsFromText={startsFromText}
                 renewsOnLabel={oc.renews_on_label}
                 renewsOn={orderMeta.renewsOn}
                 thumbnail={images['subscription-cart-mobile']}

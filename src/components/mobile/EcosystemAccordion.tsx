@@ -34,7 +34,7 @@ function getPlatesByKey(images: Record<string, string>): Record<string, Plate[]>
       { src: images['mobile-plate-base'], className: 'object-cover' },
       { src: images['mobile-plate-medical-overlay'], className: 'object-cover' },
     ],
-    'magnetic-lock': [{ src: images['mobile-plate-magnetic-lock'], className: 'object-cover' }],
+    'ai-alert-prioritisation': [{ src: images['mobile-plate-ai-alert'], className: 'object-cover' }],
   };
 }
 

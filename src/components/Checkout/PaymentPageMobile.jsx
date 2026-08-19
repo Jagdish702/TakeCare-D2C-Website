@@ -5,7 +5,7 @@ import AvailDiscounts from './AvailDiscounts';
 import RadioIcon from './RadioIcon';
 import PrimaryButton from '../common/PrimaryButton';
 import StatusCard from './StatusCard';
-import { PAYMENT_ICONS, ICON_SRC, ICON_SIZE, CashIcon, AlertCircleIcon } from './PaymentPage';
+import { PAYMENT_ICONS, ICON_SRC, ICON_SIZE, CashIcon, AlertCircleIcon, getCaregiverPatientNames } from './PaymentPage';
 import { useContent } from '../../context/ContentContext';
 
 /*
@@ -24,11 +24,32 @@ function Divider() {
   return <div style={{ width: '100%', height: 1, background: '#ccc', flexShrink: 0 }} />;
 }
 
-function ContactShippingCardMobile({ shippingInfo, onChange, payment }) {
-  const contactLine = shippingInfo
-    ? `${shippingInfo.firstName} ${shippingInfo.lastName}, +91 ${shippingInfo.phone}`.trim()
-    : 'Nishant Jagtap, +91 9158074477';
-  const addressLine = shippingInfo
+function ContactShippingCardMobile({ shippingInfo, personDetails, careForSelection, isCaregiver, onChange, payment }) {
+  const isSomeoneElseOrder = careForSelection === 'someone-else' && !!personDetails;
+  const { giverName, giverPhone, recipientName, recipientPhone } = getCaregiverPatientNames(shippingInfo, personDetails);
+
+  const contactLine = !isSomeoneElseOrder ? (
+    shippingInfo ? `${shippingInfo.firstName} ${shippingInfo.lastName}, +91 ${shippingInfo.phone}`.trim() : 'Nishant Jagtap, +91 9158074477'
+  ) : isCaregiver === false ? (
+    <>
+      {`You : ${giverName}, ${giverPhone}`}
+      <br />
+      {`Patient :${recipientName}, ${recipientPhone}`}
+    </>
+  ) : (
+    <>
+      {`Caregiver : ${giverName} `}
+      <br />
+      {`(${giverPhone})`}
+      <br />
+      {`Patient : ${recipientName} `}
+      <br />
+      {`(${recipientPhone})`}
+    </>
+  );
+  const addressLine = isSomeoneElseOrder
+    ? [personDetails.address1, personDetails.city, personDetails.state, personDetails.pincode, personDetails.country].filter(Boolean).join(', ')
+    : shippingInfo
     ? [shippingInfo.address1, shippingInfo.city, shippingInfo.state, shippingInfo.pincode, shippingInfo.country].filter(Boolean).join(', ')
     : 'sdbcjsdb, Mumbai, Andaman and Nicobar Islands, 425404, India';
 
@@ -103,7 +124,7 @@ function PriceRowMobile({ label, amount, bold }) {
   );
 }
 
-export default function PaymentPageMobile({ plan, shippingInfo, isOpen, onBack, onContinue }) {
+export default function PaymentPageMobile({ plan, shippingInfo, personDetails, careForSelection, isCaregiver, isOpen, onBack, onContinue }) {
   const { checkout, subscription } = useContent();
   const payment = checkout.payment;
   const section = checkout.section;
@@ -144,7 +165,7 @@ export default function PaymentPageMobile({ plan, shippingInfo, isOpen, onBack, 
       <div style={{ width: '100%', padding: '48px 24px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 48, alignItems: 'flex-start' }}>
         <CheckoutStepperMobile currentStep={2} />
 
-        <ContactShippingCardMobile shippingInfo={shippingInfo} onChange={onBack} payment={payment} />
+        <ContactShippingCardMobile shippingInfo={shippingInfo} personDetails={personDetails} careForSelection={careForSelection} isCaregiver={isCaregiver} onChange={onBack} payment={payment} />
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>

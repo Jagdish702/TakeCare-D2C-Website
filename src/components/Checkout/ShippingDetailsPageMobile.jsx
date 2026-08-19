@@ -69,7 +69,7 @@ function fieldBoxStyle(error) {
 }
 const fieldTextStyle = { flex: '1 0 0', minWidth: 0, border: 'none', outline: 'none', background: 'transparent', fontFamily: FONT, fontWeight: 500, fontSize: 14, letterSpacing: '0.4536px', color: '#000' };
 
-function TextField({ label, value, onChange, onBlur, placeholder, helper, chevron = true, error, errorText, style }) {
+export function TextField({ label, value, onChange, onBlur, placeholder, helper, chevron = true, error, errorText, style }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', minWidth: 0, ...style }}>
       <p style={labelStyle}>{label}</p>
@@ -82,7 +82,7 @@ function TextField({ label, value, onChange, onBlur, placeholder, helper, chevro
   );
 }
 
-function PhoneField({ value, onChange, label, placeholder }) {
+export function PhoneField({ value, onChange, label, placeholder }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', minWidth: 0 }}>
       <p style={labelStyle}>{label}</p>
@@ -100,7 +100,7 @@ function PhoneField({ value, onChange, label, placeholder }) {
   );
 }
 
-function AddressField({ value, onChange, onSelect, label, placeholder, helper, savedAddresses }) {
+export function AddressField({ value, onChange, onSelect, label, placeholder, helper, savedAddresses }) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef(null);
 

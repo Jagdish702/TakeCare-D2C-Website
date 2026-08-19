@@ -84,7 +84,7 @@ const fieldTextStyle = { flex: '1 0 0', minWidth: 0, border: 'none', outline: 'n
      `error`/`errorText` swap in the red border + warning icon + red caption,
      replacing the chevron and any normal helper text (matches Figma: the
      error caption REPLACES the helper text, they never show together). ── */
-function TextField({ label, value, onChange, onBlur, placeholder, helper, chevron = true, error, errorText, style }) {
+export function TextField({ label, value, onChange, onBlur, placeholder, helper, chevron = true, error, errorText, style }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', minWidth: 0, ...style }}>
       <p style={labelStyle}>{label}</p>
@@ -100,7 +100,7 @@ function TextField({ label, value, onChange, onBlur, placeholder, helper, chevro
 /* ── Phone field — India flag + "+91" + separate number segment, matching
      ProfileModal's PhoneField shell (same gradient-free flat-border variant
      as this page's own Figma export). ── */
-function PhoneField({ value, onChange, label, placeholder }) {
+export function PhoneField({ value, onChange, label, placeholder }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', minWidth: 0 }}>
       <p style={labelStyle}>{label}</p>
@@ -125,7 +125,7 @@ function PhoneField({ value, onChange, label, placeholder }) {
 }
 
 /* ── Address field — dropdown of saved addresses, first marked "Default" ── */
-function AddressField({ value, onChange, onSelect, label, placeholder, helper, savedAddresses }) {
+export function AddressField({ value, onChange, onSelect, label, placeholder, helper, savedAddresses }) {
   const [open, setOpen] = useState(false);
   const wrapRef = useRef(null);
 

@@ -133,7 +133,7 @@ CREATE TABLE ecosystem_section_content (
 -- The 5 "No more ..." ecosystem items (ConnectedEcosystem desktop / EcosystemAccordion mobile)
 CREATE TABLE ecosystem_items (
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
-    item_key     TEXT NOT NULL UNIQUE,  -- 'connected-to-curebay', 'works-24x7', '30-day-slots', 'medical-grade-build', 'magnetic-lock'
+    item_key     TEXT NOT NULL UNIQUE,  -- 'connected-to-curebay', 'works-24x7', '30-day-slots', 'medical-grade-build', 'ai-alert-prioritisation'
     title        TEXT NOT NULL,
     body         TEXT NOT NULL,
     note         TEXT NOT NULL,

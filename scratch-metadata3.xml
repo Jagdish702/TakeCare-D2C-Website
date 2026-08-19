@@ -1,0 +1,904 @@
+Currently selected nodes:
+- 14073:23239: Checkout/OrderForOther/Patient
+
+<section id="14073:23239" name="Checkout/OrderForOther/Patient" x="68992" y="-1567" width="17635" height="3455">
+  <frame id="14024:19695" name="PatientAssigning/UserDetails/Mobile/Self" x="2054" y="294" width="402" height="1349">
+    <frame id="14024:19637" name="Frame 1984078903" x="24" y="48" width="354" height="92">
+      <instance id="14024:19638" name="Mobile 3" x="0" y="0" width="80" height="80" />
+      <frame id="14024:19639" name="Frame 1984078902" x="92" y="11" width="262" height="58">
+        <text id="14024:19640" name="User Details &amp; shipping address" x="0" y="0" width="262" height="36" />
+        <text id="14024:19641" name="Next : Purchase Summery" x="0" y="48" width="262" height="10" />
+      </frame>
+    </frame>
+    <frame id="14024:20372" name="Frame 1984078966" x="24" y="164" width="354" height="1137">
+      <frame id="14024:19701" name="Frame 1984078877" x="0" y="0" width="317" height="12">
+        <text id="14024:19702" name="Already have an account?" x="0" y="0" width="183" height="10" />
+        <instance id="14024:19703" name="Regular_button" x="195" y="0" width="122" height="12" />
+      </frame>
+      <frame id="14024:20366" name="Progress Bar" x="0" y="36" width="354" height="8">
+        <rounded-rectangle id="14024:20367" name="1" x="0" y="0" width="70.80000305175781" height="8" />
+        <rounded-rectangle id="14024:20368" name="2" x="70.80000305175781" y="0" width="70.80000305175781" height="8" />
+        <rounded-rectangle id="14024:20369" name="3" x="141.60000610351562" y="0" width="70.80000305175781" height="8" />
+        <rounded-rectangle id="14024:20370" name="4" x="212.40000915527344" y="0" width="70.80000305175781" height="8" />
+        <rounded-rectangle id="14024:20371" name="5" x="283.20001220703125" y="0" width="70.80000305175781" height="8" />
+      </frame>
+      <frame id="14024:19704" name="Frame 69" x="0" y="68" width="354" height="1069">
+        <instance id="14024:19705" name="Input Field" x="24" y="24" width="306" height="66" />
+        <instance id="14024:19706" name="Input Field" x="24" y="114" width="306" height="66" />
+        <instance id="14024:19707" name="Input Field" x="24" y="204" width="306" height="87" />
+        <instance id="14024:19708" name="Input Field" x="24" y="315" width="306" height="66" />
+        <frame id="14024:19709" name="Frame 1984078704" x="24" y="405" width="306" height="156">
+          <instance id="14024:19710" name="Input Field" x="0" y="0" width="141" height="66" />
+          <instance id="14024:19711" name="Input Field" x="165" y="0" width="141" height="66" />
+          <instance id="14024:19712" name="Input Field" x="0" y="90" width="141" height="66" />
+          <instance id="14024:19713" name="Input Field" x="165" y="90" width="141" height="66" />
+        </frame>
+        <instance id="14024:19714" name="Input Field" x="24" y="585" width="306" height="64" />
+        <instance id="14024:19715" name="Input Field" x="24" y="673" width="306" height="300" />
+        <instance id="14024:19716" name="Regular_button" x="24" y="997" width="306" height="48" />
+      </frame>
+    </frame>
+  </frame>
+  <frame id="14024:20404" name="PatientAssigning/SelectRecipient/Mobile" x="4920" y="294" width="402" height="890">
+    <frame id="14024:20405" name="Frame 1984078903" x="24" y="48" width="354" height="92">
+      <instance id="14024:20406" name="Mobile 3" x="0" y="0" width="80" height="80" />
+      <frame id="14024:20407" name="Frame 1984078902" x="92" y="11" width="262" height="58">
+        <text id="14024:20408" name="User Details &amp; shipping address" x="0" y="0" width="262" height="36" />
+        <text id="14024:20409" name="Next : Purchase Summery" x="0" y="48" width="262" height="10" />
+      </frame>
+    </frame>
+    <frame id="14024:20528" name="Frame 1984078877" x="24" y="164" width="354" height="581">
+      <frame id="14024:20529" name="Frame 1984078877" x="0" y="0" width="343" height="12">
+        <text id="14024:20530" name="Already have an account?" x="0" y="0" width="209" height="12" />
+        <instance id="14024:20531" name="Regular_button" x="221" y="0" width="122" height="12" />
+      </frame>
+      <frame id="14024:20532" name="Progress Bar" x="0" y="36" width="354" height="8">
+        <rounded-rectangle id="14024:20533" name="1" x="0" y="0" width="70.80000305175781" height="8" />
+        <rounded-rectangle id="14024:20534" name="2" x="70.80000305175781" y="0" width="70.80000305175781" height="8" />
+        <rounded-rectangle id="14024:20535" name="3" x="141.60000610351562" y="0" width="70.80000305175781" height="8" />
+        <rounded-rectangle id="14024:20536" name="4" x="212.40000915527344" y="0" width="70.80000305175781" height="8" />
+        <rounded-rectangle id="14024:20537" name="5" x="283.20001220703125" y="0" width="70.80000305175781" height="8" />
+      </frame>
+      <frame id="14024:20538" name="Frame 69" x="0" y="68" width="354" height="513">
+        <frame id="14024:20539" name="content-wrapper" x="24" y="48" width="306" height="417">
+          <text id="14024:20541" name="question" x="0" y="0" width="306" height="17" />
+          <frame id="14024:20542" name="options" x="0" y="65" width="306" height="352">
+            <frame id="14024:20543" name="option-me" x="0" y="0" width="306" height="168">
+              <rounded-rectangle id="14024:20544" name="doc 12" x="113" y="24" width="80" height="80" />
+              <text id="14024:20545" name="option-label-me" x="24" y="126" width="258" height="18" />
+            </frame>
+            <frame id="14024:20546" name="option-someone-else" x="0" y="184" width="306" height="168">
+              <rounded-rectangle id="14024:20547" name="doc 8" x="113" y="24" width="80" height="80" />
+              <text id="14024:20548" name="option-label-someone-else" x="24" y="126" width="258" height="18" />
+            </frame>
+          </frame>
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+  <frame id="14026:21829" name="PatientAssigning/OrderReview/Mobile" x="7744" y="294" width="402" height="890">
+    <frame id="14026:21830" name="Frame 1984078903" x="24" y="48" width="354" height="92">
+      <instance id="14026:21831" name="Mobile 3" x="0" y="0" width="80" height="80" />
+      <frame id="14026:21832" name="Frame 1984078902" x="92" y="11" width="262" height="58">
+        <text id="14026:21833" name="User Details &amp; shipping address" x="0" y="0" width="262" height="36" />
+        <text id="14026:21834" name="Next : Purchase Summery" x="0" y="48" width="262" height="10" />
+      </frame>
+    </frame>
+    <frame id="14026:21835" name="Frame 1984078877" x="24" y="164" width="354" height="407">
+      <frame id="14026:21836" name="Progress Bar" x="0" y="0" width="350" height="8">
+        <rounded-rectangle id="14026:21837" name="1" x="0" y="0" width="70" height="8" />
+        <rounded-rectangle id="14026:21838" name="2" x="70" y="0" width="70" height="8" />
+        <rounded-rectangle id="14026:21839" name="3" x="140" y="0" width="70" height="8" />
+        <rounded-rectangle id="14026:21840" name="4" x="210" y="0" width="70" height="8" />
+        <rounded-rectangle id="14026:21841" name="5" x="280" y="0" width="70" height="8" />
+      </frame>
+      <frame id="14026:21842" name="Frame 69" x="0" y="32" width="354" height="375">
+        <text id="14026:21843" name="confirmation-title" x="24" y="40" width="306" height="17" />
+        <frame id="14026:21844" name="Frame 1984078965" x="41.5" y="81" width="271" height="182">
+          <frame id="14026:21845" name="details-card-group" x="0" y="0" width="271" height="182">
+            <frame id="14026:21846" name="delivery-details-card" x="0" y="0" width="271" height="182">
+              <frame id="14026:21847" name="card-title-row" x="16" y="16" width="239" height="32">
+                <rounded-rectangle id="14026:21848" name="doc 14" x="0" y="0" width="32" height="32" />
+                <text id="14026:21849" name="Will be Delivered to" x="40" y="6.5" width="199" height="19" />
+              </frame>
+              <frame id="14026:21850" name="recipient" x="16" y="60" width="147" height="24">
+                <instance id="14026:21851" name="Delivery Van" x="0" y="0" width="24" height="24" />
+                <text id="14026:21852" name="Mr. Rohit Mehra" x="34" y="3" width="113" height="18" />
+              </frame>
+              <frame id="14026:21853" name="address" x="16" y="96" width="239" height="34">
+                <instance id="14026:21854" name="Location" x="0" y="0" width="16" height="16" />
+                <text id="14026:21855" name="Flat 402, Royal Palms, Sector 56, Gurgaon, Haryana - 122011" x="26" y="0" width="213" height="34" />
+              </frame>
+              <frame id="14026:21856" name="contact" x="16" y="142" width="239" height="24">
+                <instance id="14026:21857" name="Phone call" x="0" y="0" width="24" height="24" />
+                <text id="14026:21858" name="+91 98765 43210" x="32" y="3.5" width="207" height="17" />
+              </frame>
+            </frame>
+          </frame>
+        </frame>
+        <instance id="14026:21869" name="Regular_button" x="24" y="287" width="306" height="48" />
+      </frame>
+    </frame>
+  </frame>
+  <frame id="14024:19717" name="PatientAssigning/UserDetails/Mobile/Caregiver" x="2054" y="1928" width="402" height="1395">
+    <frame id="14024:20355" name="Frame 1984078903" x="24" y="48" width="354" height="92">
+      <instance id="14024:20356" name="Mobile 3" x="0" y="0" width="80" height="80" />
+      <frame id="14024:20357" name="Frame 1984078902" x="92" y="11" width="262" height="58">
+        <text id="14024:20358" name="User Details &amp; shipping address" x="0" y="0" width="262" height="36" />
+        <text id="14024:20359" name="Next : Purchase Summery" x="0" y="48" width="262" height="10" />
+      </frame>
+    </frame>
+    <frame id="14024:20379" name="Frame 1984078967" x="24" y="164" width="354" height="1089">
+      <frame id="14024:19723" name="Frame 1984078877" x="0" y="0" width="317" height="12">
+        <text id="14024:19724" name="Already have an account?" x="0" y="0" width="183" height="10" />
+        <instance id="14024:19725" name="Regular_button" x="195" y="0" width="122" height="12" />
+      </frame>
+      <frame id="14024:20373" name="Progress Bar" x="0" y="36" width="354" height="8">
+        <rounded-rectangle id="14024:20374" name="1" x="0" y="0" width="70.80000305175781" height="8" />
+        <rounded-rectangle id="14024:20375" name="2" x="70.80000305175781" y="0" width="70.80000305175781" height="8" />
+        <rounded-rectangle id="14024:20376" name="3" x="141.60000610351562" y="0" width="70.80000305175781" height="8" />
+        <rounded-rectangle id="14024:20377" name="4" x="212.40000915527344" y="0" width="70.80000305175781" height="8" />
+        <rounded-rectangle id="14024:20378" name="5" x="283.20001220703125" y="0" width="70.80000305175781" height="8" />
+      </frame>
+      <frame id="14024:19726" name="Frame 69" x="0" y="68" width="354" height="1021">
+        <instance id="14024:19727" name="Input Field" x="0" y="0" width="354" height="66" />
+        <instance id="14024:19728" name="Input Field" x="0" y="90" width="354" height="66" />
+        <instance id="14024:19729" name="Input Field" x="0" y="180" width="354" height="87" />
+        <instance id="14024:19730" name="Input Field" x="0" y="291" width="354" height="66" />
+        <frame id="14024:19731" name="Frame 1984078704" x="0" y="793" width="354" height="156">
+          <instance id="14024:19732" name="Input Field" x="0" y="0" width="165" height="66" />
+          <instance id="14024:19733" name="Input Field" x="189" y="0" width="165" height="66" />
+          <instance id="14024:19734" name="Input Field" x="0" y="90" width="165" height="66" />
+          <instance id="14024:19735" name="Input Field" x="189" y="90" width="165" height="66" />
+        </frame>
+        <instance id="14024:19736" name="Input Field" x="0" y="705" width="354" height="64" />
+        <instance id="14024:19737" name="Input Field" x="0" y="381" width="354" height="300" />
+        <instance id="14024:19738" name="Regular_button" x="0" y="973" width="354" height="48" />
+      </frame>
+    </frame>
+    <instance id="14024:19739" name="Disclaimer Card" x="24" y="1277" width="354" height="70" />
+  </frame>
+  <frame id="13994:21510" name="PatientAssigning/UserDetails/Desktop/Self" x="200" y="294" width="1800" height="1300">
+    <frame id="13994:21511" name="Steper" x="120" y="120" width="1560" height="60">
+      <frame id="13994:21517" name="Regular" x="340.5" y="0" width="323" height="40">
+        <frame id="13994:21518" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:21520" name="User Details &amp; shipping address" x="48" y="14" width="259" height="12" />
+      </frame>
+      <text id="13994:21516" name="-------------" x="663.5" y="14" width="100" height="12" />
+      <frame id="13994:21512" name="Regular" x="763.5" y="0" width="221" height="40">
+        <frame id="13994:21513" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:21515" name="Purchase Summery" x="48" y="14" width="157" height="12" />
+      </frame>
+      <text id="13994:21521" name="-------------" x="984.5" y="14" width="100" height="12" />
+      <frame id="13994:21522" name="Regular" x="1084.5" y="0" width="135" height="40">
+        <frame id="13994:21523" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:21525" name="Payment" x="48" y="14" width="71" height="12" />
+      </frame>
+    </frame>
+    <frame id="13994:21526" name="Frame 1984078876" x="400" y="240" width="1000" height="840">
+      <frame id="13994:21527" name="Frame 1984078877" x="0" y="0" width="343" height="12">
+        <text id="13994:21528" name="Already have an account?" x="0" y="0" width="209" height="12" />
+        <instance id="13994:21529" name="Regular_button" x="221" y="0" width="122" height="12" />
+      </frame>
+      <frame id="13994:22232" name="Progress Bar" x="0" y="36" width="1000" height="8">
+        <rounded-rectangle id="13994:22233" name="1" x="0" y="0" width="200" height="8" />
+        <rounded-rectangle id="13994:22234" name="2" x="200" y="0" width="200" height="8" />
+        <rounded-rectangle id="13994:22235" name="3" x="400" y="0" width="200" height="8" />
+        <rounded-rectangle id="13994:22236" name="4" x="600" y="0" width="200" height="8" />
+        <rounded-rectangle id="13994:22237" name="5" x="800" y="0" width="200" height="8" />
+      </frame>
+      <frame id="13994:21530" name="Frame 69" x="0" y="68" width="1000" height="772">
+        <instance id="13994:21531" name="Input Field" x="32" y="32" width="456" height="68" />
+        <instance id="13994:21532" name="Input Field" x="512" y="32" width="456" height="68" />
+        <instance id="13994:21533" name="Input Field" x="32" y="124" width="456" height="68" />
+        <instance id="13994:21534" name="Input Field" x="512" y="124" width="456" height="68" />
+        <frame id="13994:21535" name="Frame 1984078704" x="32" y="600" width="936" height="68">
+          <instance id="13994:21536" name="Input Field" x="0" y="0" width="216" height="68" />
+          <instance id="13994:21537" name="Input Field" x="240" y="0" width="216" height="68" />
+          <instance id="13994:21538" name="Input Field" x="480" y="0" width="216" height="68" />
+          <instance id="13994:21539" name="Input Field" x="720" y="0" width="216" height="68" />
+        </frame>
+        <instance id="13994:21540" name="Input Field" x="32" y="508" width="936" height="68" />
+        <instance id="13994:21541" name="Input Field" x="32" y="216" width="936" height="268" />
+        <instance id="13994:21542" name="Regular_button" x="32" y="692" width="456" height="48" />
+      </frame>
+    </frame>
+  </frame>
+  <frame id="14005:22734" name="PatientAssigning/SelectRecipient/Desktop" x="3066" y="294" width="1800" height="1300">
+    <frame id="14005:22735" name="Steper" x="120" y="120" width="1560" height="60">
+      <frame id="14005:22736" name="Regular" x="340.5" y="0" width="323" height="40">
+        <frame id="14005:22737" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="14005:22739" name="User Details &amp; shipping address" x="48" y="14" width="259" height="12" />
+      </frame>
+      <text id="14005:22740" name="-------------" x="663.5" y="14" width="100" height="12" />
+      <frame id="14005:22741" name="Regular" x="763.5" y="0" width="221" height="40">
+        <frame id="14005:22742" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="14005:22744" name="Purchase Summery" x="48" y="14" width="157" height="12" />
+      </frame>
+      <text id="14005:22745" name="-------------" x="984.5" y="14" width="100" height="12" />
+      <frame id="14005:22746" name="Regular" x="1084.5" y="0" width="135" height="40">
+        <frame id="14005:22747" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="14005:22749" name="Payment" x="48" y="14" width="71" height="12" />
+      </frame>
+    </frame>
+    <frame id="14005:22750" name="Frame 1984078876" x="400" y="240" width="1000" height="861">
+      <frame id="14005:22751" name="Frame 1984078877" x="0" y="0" width="343" height="12">
+        <text id="14005:22752" name="Already have an account?" x="0" y="0" width="209" height="12" />
+        <instance id="14005:22753" name="Regular_button" x="221" y="0" width="122" height="12" />
+      </frame>
+      <frame id="14005:22754" name="Progress Bar" x="0" y="36" width="1000" height="8">
+        <rounded-rectangle id="14005:22755" name="1" x="0" y="0" width="200" height="8" />
+        <rounded-rectangle id="14005:22756" name="2" x="200" y="0" width="200" height="8" />
+        <rounded-rectangle id="14005:22757" name="3" x="400" y="0" width="200" height="8" />
+        <rounded-rectangle id="14005:22758" name="4" x="600" y="0" width="200" height="8" />
+        <rounded-rectangle id="14005:22759" name="5" x="800" y="0" width="200" height="8" />
+      </frame>
+      <frame id="14005:22760" name="Frame 69" x="0" y="68" width="1000" height="793">
+        <frame id="14005:22761" name="content-wrapper" x="240" y="265" width="520" height="263">
+          <frame id="14005:22762" name="header" x="0" y="0" width="520" height="47">
+            <text id="14005:22763" name="question" x="0" y="0" width="520" height="47" />
+          </frame>
+          <frame id="14005:22764" name="options" x="0" y="95" width="520" height="168">
+            <frame id="14005:22765" name="option-me" x="0" y="0" width="252" height="168">
+              <rounded-rectangle id="14005:22766" name="doc 12" x="86" y="24" width="80" height="80" />
+              <text id="14005:22767" name="option-label-me" x="24" y="126" width="204" height="18" />
+            </frame>
+            <frame id="14005:22768" name="option-someone-else" x="268" y="0" width="252" height="168">
+              <rounded-rectangle id="14005:22769" name="doc 8" x="86" y="24" width="80" height="80" />
+              <text id="14005:22770" name="option-label-someone-else" x="24" y="126" width="204" height="18" />
+            </frame>
+          </frame>
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+  <frame id="14012:23318" name="PatientAssigning/SelectRecipient/OptionSelf" x="5439" y="739" width="252" height="168">
+    <rounded-rectangle id="14012:23319" name="doc 12" x="86" y="24" width="80" height="80" />
+    <text id="14012:23320" name="option-label-me" x="24" y="126" width="204" height="18" />
+  </frame>
+  <frame id="14012:23216" name="PatientAssigning/OrderReview/Desktop" x="5893" y="294" width="1800" height="1300">
+    <frame id="14012:23217" name="Steper" x="120" y="120" width="1560" height="60">
+      <frame id="14012:23218" name="Regular" x="340.5" y="0" width="323" height="40">
+        <frame id="14012:23219" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="14012:23221" name="User Details &amp; shipping address" x="48" y="14" width="259" height="12" />
+      </frame>
+      <text id="14012:23222" name="-------------" x="663.5" y="14" width="100" height="12" />
+      <frame id="14012:23223" name="Regular" x="763.5" y="0" width="221" height="40">
+        <frame id="14012:23224" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="14012:23226" name="Purchase Summery" x="48" y="14" width="157" height="12" />
+      </frame>
+      <text id="14012:23227" name="-------------" x="984.5" y="14" width="100" height="12" />
+      <frame id="14012:23228" name="Regular" x="1084.5" y="0" width="135" height="40">
+        <frame id="14012:23229" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="14012:23231" name="Payment" x="48" y="14" width="71" height="12" />
+      </frame>
+    </frame>
+    <frame id="14012:23232" name="Frame 1984078876" x="400" y="240" width="1000" height="861">
+      <frame id="14012:23233" name="Frame 1984078877" x="0" y="0" width="343" height="12">
+        <text id="14012:23234" name="Already have an account?" x="0" y="0" width="209" height="12" />
+        <instance id="14012:23235" name="Regular_button" x="221" y="0" width="122" height="12" />
+      </frame>
+      <frame id="14024:21648" name="Progress Bar" x="0" y="36" width="1000" height="8">
+        <rounded-rectangle id="14024:21649" name="1" x="0" y="0" width="200" height="8" />
+        <rounded-rectangle id="14024:21650" name="2" x="200" y="0" width="200" height="8" />
+        <rounded-rectangle id="14024:21651" name="3" x="400" y="0" width="200" height="8" />
+        <rounded-rectangle id="14024:21652" name="4" x="600" y="0" width="200" height="8" />
+        <rounded-rectangle id="14024:21653" name="5" x="800" y="0" width="200" height="8" />
+      </frame>
+      <frame id="14012:23242" name="Frame 69" x="0" y="68" width="1000" height="793">
+        <frame id="14012:23243" name="content-wrapper" x="240" y="180.5" width="520" height="432">
+          <frame id="13998:20865" name="confirmation-container" x="31" y="0" width="458" height="432">
+            <text id="13998:20869" name="confirmation-title" x="32" y="32" width="394" height="42" />
+            <frame id="13998:20871" name="details-card-group" x="32" y="122" width="394" height="182">
+              <frame id="13998:20872" name="delivery-details-card" x="0" y="0" width="394" height="182">
+                <frame id="13998:20873" name="card-title-row" x="16" y="16" width="362" height="32">
+                  <rounded-rectangle id="14012:23267" name="doc 14" x="0" y="0" width="32" height="32" />
+                  <text id="13998:20876" name="Will be Delivered to" x="40" y="6.5" width="322" height="19" />
+                </frame>
+                <frame id="13998:20877" name="recipient" x="16" y="60" width="164" height="24">
+                  <instance id="13998:20874" name="Delivery Van" x="0" y="0" width="24" height="24" />
+                  <text id="13998:20880" name="Mr. Krishna Mehra" x="34" y="3" width="130" height="18" />
+                </frame>
+                <frame id="13998:20881" name="address" x="16" y="96" width="362" height="34">
+                  <instance id="13998:20882" name="Location" x="0" y="0" width="16" height="16" />
+                  <text id="13998:20884" name="Flat 402, Royal Palms, Sector 56, Gurgaon, Haryana - 122011" x="26" y="0" width="336" height="34" />
+                </frame>
+                <frame id="14012:23273" name="contact" x="16" y="142" width="362" height="24">
+                  <instance id="14012:23274" name="Phone call" x="0" y="0" width="24" height="24" />
+                  <text id="14012:23275" name="+91 98765 43210" x="32" y="3.5" width="330" height="17" />
+                </frame>
+              </frame>
+            </frame>
+            <instance id="13998:20897" name="Regular_button" x="32" y="352" width="394" height="48" />
+          </frame>
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+  <frame id="13994:21631" name="PatientAssigning/UserDetails/Desktop/Caregiver" x="200" y="1928" width="1800" height="1300">
+    <frame id="13994:22214" name="Steper" x="120" y="120" width="1560" height="60">
+      <frame id="13994:22215" name="Regular" x="340.5" y="0" width="323" height="40">
+        <frame id="13994:22216" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:22218" name="User Details &amp; shipping address" x="48" y="14" width="259" height="12" />
+      </frame>
+      <text id="13994:22219" name="-------------" x="663.5" y="14" width="100" height="12" />
+      <frame id="13994:22220" name="Regular" x="763.5" y="0" width="221" height="40">
+        <frame id="13994:22221" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:22223" name="Purchase Summery" x="48" y="14" width="157" height="12" />
+      </frame>
+      <text id="13994:22224" name="-------------" x="984.5" y="14" width="100" height="12" />
+      <frame id="13994:22225" name="Regular" x="1084.5" y="0" width="135" height="40">
+        <frame id="13994:22226" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:22228" name="Payment" x="48" y="14" width="71" height="12" />
+      </frame>
+    </frame>
+    <frame id="13994:21647" name="Frame 1984078878" x="400" y="240" width="1000" height="817">
+      <frame id="13994:21648" name="Frame 1984078877" x="0" y="0" width="343" height="12">
+        <text id="13994:21649" name="Already have an account?" x="0" y="0" width="209" height="12" />
+        <instance id="13994:21650" name="Regular_button" x="221" y="0" width="122" height="12" />
+      </frame>
+      <frame id="13994:21651" name="Frame 69" x="0" y="24" width="1000" height="793">
+        <instance id="13994:21652" name="Input Field" x="32" y="32" width="456" height="68" />
+        <instance id="13994:21653" name="Input Field" x="512" y="32" width="456" height="68" />
+        <instance id="13994:21654" name="Input Field" x="32" y="124" width="456" height="89" />
+        <instance id="13994:21655" name="Input Field" x="512" y="124" width="456" height="68" />
+        <frame id="13994:21656" name="Frame 1984078704" x="32" y="621" width="936" height="68">
+          <instance id="13994:21657" name="Input Field" x="0" y="0" width="216" height="68" />
+          <instance id="13994:21658" name="Input Field" x="240" y="0" width="216" height="68" />
+          <instance id="13994:21659" name="Input Field" x="480" y="0" width="216" height="68" />
+          <instance id="13994:21660" name="Input Field" x="720" y="0" width="216" height="68" />
+        </frame>
+        <instance id="13994:21661" name="Input Field" x="32" y="529" width="936" height="68" />
+        <instance id="13994:21662" name="Input Field" x="32" y="237" width="936" height="268" />
+        <instance id="13994:21663" name="Regular_button" x="512" y="713" width="456" height="48" />
+      </frame>
+    </frame>
+    <instance id="13994:21664" name="Disclaimer Card" x="619" y="1117" width="562" height="50" />
+  </frame>
+  <instance id="13994:21820" name="Banner" x="200" y="1742" width="1800" height="152" />
+  <frame id="14024:19636" name="PatientAssigning/PurchaseSummary/Mobile" x="10721" y="299" width="402" height="1669">
+    <frame id="14024:19696" name="Frame 1984078903" x="24" y="48" width="354" height="92">
+      <instance id="14024:19697" name="Mobile 3" x="0" y="0" width="80" height="80" />
+      <frame id="14024:19698" name="Frame 1984078902" x="92" y="23" width="262" height="34">
+        <text id="14024:19699" name="Purchase Summery" x="0" y="0" width="262" height="12" />
+        <text id="14024:19700" name="Next : Payment" x="0" y="24" width="262" height="10" />
+      </frame>
+    </frame>
+    <frame id="14024:19642" name="Frame 1984078904" x="24" y="188" width="354" height="206">
+      <text id="14024:19643" name="Review your products" x="0" y="0" width="180" height="12" />
+      <instance id="14024:19644" name="added_in_cart_Prodcut_&amp;_subscription_card" x="0" y="36" width="354" height="170" />
+    </frame>
+    <frame id="14024:19645" name="Frame 1984078876" x="24" y="442" width="354" height="457">
+      <text id="14024:19646" name="Subscriptions" x="0" y="0" width="116" height="12" />
+      <instance id="14024:19647" name="added_in_cart_subscription_card" x="0" y="36" width="354" height="170" />
+      <frame id="14024:19648" name="Plan Details" x="0" y="230" width="354" height="116">
+        <frame id="14024:19649" name="Point 1" x="24" y="0" width="306" height="24">
+          <instance id="14024:19650" name="Mobile" x="0" y="0" width="24" height="24" />
+          <text id="14024:19651" name="Services &amp; Benefits_+_Logo_1" x="44" y="7" width="262" height="10" />
+        </frame>
+        <frame id="14024:19652" name="Point 2" x="24" y="36" width="306" height="34">
+          <instance id="14024:19653" name="Consignment Updates" x="0" y="5" width="24" height="24" />
+          <text id="14024:19654" name="Services &amp; Benefits_+_Logo_2" x="44" y="0" width="262" height="34" />
+        </frame>
+        <frame id="14024:19655" name="Point 3" x="24" y="82" width="306" height="34">
+          <instance id="14024:19656" name="shield check" x="0" y="5" width="24" height="24" />
+          <text id="14024:19657" name="Services &amp; Benefits_+_Logo_3" x="44" y="0" width="262" height="34" />
+        </frame>
+        <frame id="14024:19658" name="Point 6" x="0" y="240" width="450" height="24" hidden="true">
+          <instance id="14024:19659" name="24" x="0" y="0" width="24" height="24" />
+          <text id="14024:19660" name="Services &amp; Benefits_+_Logo_6" x="44" y="6" width="406" height="12" />
+        </frame>
+        <frame id="14024:19661" name="Point 7" x="0" y="288" width="450" height="24" hidden="true">
+          <instance id="14024:19662" name="24" x="0" y="0" width="24" height="24" />
+          <text id="14024:19663" name="Services &amp; Benefits_+_Logo_7" x="44" y="6" width="406" height="12" />
+        </frame>
+        <frame id="14024:19664" name="Point 8" x="0" y="336" width="450" height="24" hidden="true">
+          <instance id="14024:19665" name="24" x="0" y="0" width="24" height="24" />
+          <text id="14024:19666" name="Services &amp; Benefits_+_Logo_8" x="44" y="6" width="406" height="12" />
+        </frame>
+      </frame>
+      <instance id="14024:19667" name="Disclaimer Card" x="0" y="370" width="354" height="87" />
+    </frame>
+    <frame id="14024:19668" name="Frame 1984078906" x="24" y="947" width="354" height="506">
+      <instance id="14024:19669" name="Disclaimer Card" x="0" y="0" width="354" height="50" />
+      <frame id="14024:19670" name="Labels" x="0" y="74" width="354" height="189">
+        <instance id="14024:19671" name="Discounts &amp; curecoin apply options " x="0" y="16" width="354" height="156" />
+      </frame>
+      <frame id="14024:19672" name="Promo Code" x="0" y="287" width="354" height="219">
+        <frame id="14024:19673" name="Labels" x="16" y="0" width="322" height="219">
+          <frame id="14024:19674" name="Frame" x="0" y="16" width="322" height="23">
+            <text id="14024:19675" name="Take Care tablet dispenser" x="0" y="6.5" width="157" height="10" />
+            <text id="14024:19676" name="$299" x="165" y="6.5" width="157" height="10" />
+          </frame>
+          <frame id="14024:19677" name="Frame" x="0" y="51" width="322" height="23">
+            <text id="14024:19678" name="TakeCare Monthly Plan" x="0" y="6.5" width="157" height="10" />
+            <text id="14024:19679" name="$299" x="165" y="6.5" width="157" height="10" />
+          </frame>
+          <line id="14024:19680" name="Line 9" x="0" y="86" width="322" height="0" />
+          <frame id="14024:19681" name="Frame" x="0" y="98" width="322" height="23">
+            <text id="14024:19682" name="Subtotal" x="0" y="6.5" width="157" height="10" />
+            <text id="14024:19683" name="$299" x="165" y="6.5" width="157" height="10" />
+          </frame>
+          <frame id="14024:19684" name="Frame" x="0" y="133" width="322" height="23">
+            <text id="14024:19685" name="Delivery charges" x="0" y="6.5" width="157" height="10" />
+            <text id="14024:19686" name="Standard" x="165" y="6.5" width="157" height="10" />
+          </frame>
+          <line id="14024:19687" name="Line 10" x="0" y="168" width="322" height="0" />
+          <frame id="14024:19688" name="Frame" x="0" y="180" width="322" height="23">
+            <text id="14024:19689" name="Estimated Total" x="0" y="6.5" width="203" height="10" />
+            <text id="14024:19690" name="$299" x="211" y="2" width="57" height="19" />
+            <text id="14024:19691" name="$299" x="276" y="6.5" width="46" height="10" />
+          </frame>
+        </frame>
+      </frame>
+    </frame>
+    <frame id="14024:19692" name="Frame 1984078879" x="24" y="1501" width="354" height="120">
+      <instance id="14024:19693" name="Regular_button" x="0" y="0" width="354" height="48" />
+      <instance id="14024:19694" name="Regular_button" x="0" y="72" width="354" height="48" />
+    </frame>
+  </frame>
+  <frame id="14024:19740" name="PatientAssigning/Payment/Mobile" x="13877" y="299" width="402" height="2159">
+    <frame id="14024:19741" name="Frame 1984078903" x="24" y="48" width="354" height="92">
+      <instance id="14024:19742" name="Mobile 3" x="0" y="0" width="80" height="80" />
+      <frame id="14024:19743" name="Frame 1984078902" x="92" y="34" width="262" height="12">
+        <text id="14024:19744" name="Payment" x="0" y="0" width="262" height="12" />
+      </frame>
+    </frame>
+    <frame id="14024:19745" name="Frame 1984078907" x="24" y="188" width="354" height="257">
+      <instance id="14024:19746" name="Small" x="0" y="0" width="354" height="12" />
+      <frame id="14024:19747" name="Frame 1984078709" x="0" y="36" width="354" height="221">
+        <frame id="14024:19748" name="Frame 1984078707" x="24" y="24" width="306" height="34">
+          <text id="14024:19749" name="Contact" x="0" y="0" width="306" height="12" />
+          <text id="14024:19750" name="Krishna Mehra, +91 9158074477" x="0" y="24" width="306" height="10" />
+        </frame>
+        <line id="14024:19751" name="Line 9" x="24" y="82" width="306" height="0" />
+        <frame id="14024:19752" name="Frame 1984078708" x="24" y="106" width="306" height="58">
+          <text id="14024:19753" name="Shipping Address" x="0" y="0" width="306" height="12" />
+          <text id="14024:19754" name="123, Saheed Nagar, Bhubaneswar, Odisha, 751007, India" x="0" y="24" width="306" height="34" />
+        </frame>
+        <text id="14024:19755" name="Address cannot be changed after dispatch" x="24" y="188" width="261" height="9" />
+      </frame>
+    </frame>
+    <frame id="14024:19756" name="Frame 1984078912" x="24" y="493" width="354" height="849">
+      <frame id="14024:19757" name="Frame 1984078586" x="0" y="0" width="354" height="767">
+        <text id="14024:19758" name="Payment Mode" x="0" y="0" width="123" height="12" />
+        <frame id="14024:19759" name="Frame 1984078709" x="0" y="36" width="354" height="731">
+          <frame id="14024:19760" name="Frame 1984078707" x="12" y="12" width="330" height="70">
+            <instance id="14024:19761" name="Multi seclect option" x="0" y="0" width="330" height="36" />
+            <frame id="14024:19762" name="Frame 1984078908" x="0" y="52" width="190.36363220214844" height="18">
+              <rounded-rectangle id="14024:19763" name="image 107" x="0" y="0" width="40.09090805053711" height="17.6205997467041" />
+              <rounded-rectangle id="14024:19764" name="image 108" x="56.09090805053711" y="0" width="30.272727966308594" height="18" />
+              <rounded-rectangle id="14024:19765" name="image 109" x="102.36363220214844" y="0" width="30.272727966308594" height="18" />
+              <rounded-rectangle id="14024:19766" name="image 111" x="148.6363525390625" y="0" width="41.727272033691406" height="18" />
+            </frame>
+          </frame>
+          <line id="14024:19767" name="Line 9" x="12" y="98" width="330" height="0" />
+          <frame id="14024:19768" name="Frame 1984078714" x="12" y="114" width="330" height="70">
+            <instance id="14024:19769" name="Multi seclect option" x="0" y="0" width="330" height="36" />
+            <frame id="14024:19770" name="Frame 1984078909" x="0" y="52" width="132.63636779785156" height="18">
+              <rounded-rectangle id="14024:19771" name="image 107" x="0" y="0.18970012664794922" width="40.09090805053711" height="17.6205997467041" />
+              <rounded-rectangle id="14024:19772" name="image 108" x="56.0908203125" y="0" width="30.272727966308594" height="18" />
+              <rounded-rectangle id="14024:19773" name="image 109" x="102.36363220214844" y="0" width="30.272727966308594" height="18" />
+            </frame>
+          </frame>
+          <line id="14024:19774" name="Line 10" x="12" y="200" width="330" height="0" />
+          <frame id="14024:19775" name="Frame 1984078715" x="12" y="216" width="330" height="70">
+            <instance id="14024:19776" name="Multi seclect option" x="0" y="0" width="330" height="36" />
+            <frame id="14024:19777" name="Frame 1984078910" x="0" y="52" width="132.63636779785156" height="18">
+              <rounded-rectangle id="14024:19778" name="image 107" x="0" y="0.18970012664794922" width="40.09090805053711" height="17.6205997467041" />
+              <rounded-rectangle id="14024:19779" name="image 108" x="56.0908203125" y="0" width="30.272727966308594" height="18" />
+              <rounded-rectangle id="14024:19780" name="image 109" x="102.36363220214844" y="0" width="30.272727966308594" height="18" />
+            </frame>
+          </frame>
+          <line id="14024:19781" name="Line 11" x="12" y="302" width="330" height="0" />
+          <frame id="14024:19782" name="Frame 1984078710" x="12" y="318" width="330" height="80">
+            <instance id="14024:19783" name="Multi seclect option" x="0" y="0" width="330" height="36" />
+            <rounded-rectangle id="14024:19784" name="image 114" x="0" y="52" width="145" height="28" />
+          </frame>
+          <line id="14024:19785" name="Line 12" x="12" y="414" width="330" height="0" />
+          <frame id="14024:19786" name="Frame 1984078716" x="12" y="430" width="330" height="70">
+            <instance id="14024:19787" name="Multi seclect option" x="0" y="0" width="330" height="36" />
+            <frame id="14024:19788" name="Frame 1984078911" x="0" y="52" width="190.36363220214844" height="18">
+              <rounded-rectangle id="14024:19789" name="image 107" x="0" y="0.18970012664794922" width="40.09090805053711" height="17.6205997467041" />
+              <rounded-rectangle id="14024:19790" name="image 108" x="56.0908203125" y="0" width="30.272727966308594" height="18" />
+              <rounded-rectangle id="14024:19791" name="image 109" x="102.36376953125" y="0" width="30.272727966308594" height="18" />
+              <rounded-rectangle id="14024:19792" name="image 111" x="148.6363525390625" y="0" width="41.727272033691406" height="18" />
+            </frame>
+          </frame>
+          <line id="14024:19793" name="Line 13" x="12" y="516" width="330" height="0" />
+          <frame id="14024:19794" name="Frame 1984078712" x="12" y="532" width="330" height="68">
+            <instance id="14024:19795" name="Multi seclect option" x="0" y="0" width="330" height="36" />
+            <rounded-rectangle id="14024:19796" name="image 113" x="0" y="52" width="30" height="16" />
+          </frame>
+          <line id="14024:19797" name="Line 14" x="12" y="616" width="330" height="0" />
+          <frame id="14024:19798" name="Frame 1984078713" x="12" y="632" width="330" height="87">
+            <instance id="14024:19799" name="Multi seclect option" x="0" y="0" width="330" height="47" />
+            <frame id="14024:19800" name="tabler:cash" x="0" y="63" width="24" height="24" />
+          </frame>
+        </frame>
+      </frame>
+      <instance id="14024:19805" name="Disclaimer Card" x="0" y="779" width="354" height="70" />
+    </frame>
+    <frame id="14024:19806" name="Frame 1984078906" x="24" y="1390" width="354" height="505">
+      <instance id="14024:19807" name="Disclaimer Card" x="0" y="0" width="354" height="50" />
+      <frame id="14024:19808" name="Labels" x="0" y="74" width="354" height="188">
+        <instance id="14024:19809" name="Discounts &amp; curecoin apply options " x="0" y="16" width="354" height="156" />
+      </frame>
+      <frame id="14024:19810" name="Promo Code" x="0" y="286" width="354" height="219">
+        <frame id="14024:19811" name="Labels" x="16" y="0" width="322" height="219">
+          <frame id="14024:19812" name="Frame" x="0" y="16" width="322" height="23">
+            <text id="14024:19813" name="Take Care tablet dispenser" x="0" y="6.5" width="157" height="10" />
+            <text id="14024:19814" name="$299" x="165" y="6.5" width="157" height="10" />
+          </frame>
+          <frame id="14024:19815" name="Frame" x="0" y="51" width="322" height="23">
+            <text id="14024:19816" name="TakeCare Monthly Plan" x="0" y="6.5" width="157" height="10" />
+            <text id="14024:19817" name="$299" x="165" y="6.5" width="157" height="10" />
+          </frame>
+          <line id="14024:19818" name="Line 9" x="0" y="86" width="322" height="0" />
+          <frame id="14024:19819" name="Frame" x="0" y="98" width="322" height="23">
+            <text id="14024:19820" name="Subtotal" x="0" y="6.5" width="157" height="10" />
+            <text id="14024:19821" name="$299" x="165" y="6.5" width="157" height="10" />
+          </frame>
+          <frame id="14024:19822" name="Frame" x="0" y="133" width="322" height="23">
+            <text id="14024:19823" name="Delivery charges" x="0" y="6.5" width="157" height="10" />
+            <text id="14024:19824" name="Standard" x="165" y="6.5" width="157" height="10" />
+          </frame>
+          <line id="14024:19825" name="Line 10" x="0" y="168" width="322" height="0" />
+          <frame id="14024:19826" name="Frame" x="0" y="180" width="322" height="23">
+            <text id="14024:19827" name="Estimated Total" x="0" y="6.5" width="203" height="10" />
+            <text id="14024:19828" name="$299" x="211" y="2" width="57" height="19" />
+            <text id="14024:19829" name="$299" x="276" y="6.5" width="46" height="10" />
+          </frame>
+        </frame>
+      </frame>
+    </frame>
+    <frame id="14024:19830" name="Frame 1984078581" x="24" y="1943" width="354" height="168">
+      <frame id="14024:19831" name="Frame 1984078706" x="0" y="0" width="354" height="24">
+        <frame id="14024:19832" name="Frame 1984078578" x="0" y="0" width="182.36363220214844" height="24">
+          <rounded-rectangle id="14024:19833" name="image 107" x="0" y="3.189700126647949" width="40.09090805053711" height="17.6205997467041" />
+          <rounded-rectangle id="14024:19834" name="image 108" x="44.09090805053711" y="3" width="30.272727966308594" height="18" />
+          <rounded-rectangle id="14024:19835" name="image 109" x="78.36363220214844" y="3" width="30.272727966308594" height="18" />
+          <rounded-rectangle id="14024:19836" name="image 111" x="112.63636016845703" y="3" width="41.727272033691406" height="18" />
+          <frame id="14024:19837" name="tabler:cash" x="158.36363220214844" y="0" width="24" height="24" />
+        </frame>
+        <frame id="14024:19842" name="Frame 1984078574" x="234" y="3.5" width="120" height="17">
+          <text id="14024:19843" name="2,896" x="0" y="0" width="69" height="17" />
+          <text id="14024:19844" name="₹1,747" x="74" y="3.5" width="46" height="10" />
+        </frame>
+      </frame>
+      <instance id="14024:19845" name="Regular_button" x="0" y="48" width="354" height="48" />
+      <instance id="14024:19846" name="Regular_button" x="0" y="120" width="354" height="48" />
+    </frame>
+  </frame>
+  <frame id="14024:19847" name="PatientAssigning/Confirmation/Mobile" x="17033" y="299" width="402" height="1991.280517578125">
+    <frame id="14024:19848" name="Frame 1984078903" x="24" y="48" width="354" height="213">
+      <frame id="14024:19849" name="Frame 1984078400" x="0" y="0" width="354" height="189">
+        <instance id="14024:19850" name="Check" x="127" y="0" width="100" height="100" />
+        <frame id="14024:19851" name="Frame 1984077915" x="0" y="108" width="354" height="81">
+          <text id="14024:19852" name="Payment successful" x="58" y="0" width="238" height="17" />
+          <text id="14024:19853" name="Your Total Care plan is now active &amp; products will be delivered shortly" x="0" y="41" width="354" height="40" />
+        </frame>
+      </frame>
+    </frame>
+    <frame id="14024:19854" name="Frame 1984078904" x="24" y="309" width="354" height="648.4010009765625">
+      <instance id="14024:19855" name="added_in_cart_subscription_card" x="0" y="0" width="354" height="245.2005157470703" />
+      <instance id="14024:19856" name="added_in_cart_Prodcut_&amp;_subscription_card" x="0" y="293.20050048828125" width="354" height="221.2005157470703" />
+      <instance id="14024:19857" name="Disclaimer Card" x="0" y="562.4010009765625" width="354" height="86" />
+    </frame>
+    <frame id="14024:19858" name="Frame 1984078716" x="24" y="1005.4010009765625" width="354" height="937.8795776367188">
+      <frame id="14024:19859" name="QR code" x="0" y="0" width="354" height="757.8795776367188">
+        <rounded-rectangle id="14024:19860" name="image 115" x="53.5" y="48" width="247" height="372" />
+        <frame id="14024:19861" name="Frame 1984078715" x="74.5" y="468" width="205" height="241.8795623779297">
+          <rounded-rectangle id="14024:19862" name="Rectangle 17" x="25.576919555664062" y="0" width="153.84616088867188" height="144.8795623779297" />
+          <text id="14024:19863" name="Scan the QR code to download the app" x="28.5" y="162.8795623779297" width="148" height="34" />
+          <text id="14024:19864" name="Use your Mobile number to log in. OTP will be sent for verification" x="0" y="214.8795623779297" width="205" height="27" />
+        </frame>
+      </frame>
+      <frame id="14024:19865" name="Frame 1984078880" x="0" y="817.8795776367188" width="354" height="120">
+        <instance id="14024:19866" name="Regular_button" x="0" y="0" width="354" height="48" />
+        <instance id="14024:19867" name="Regular_button" x="0" y="72" width="354" height="48" />
+      </frame>
+    </frame>
+  </frame>
+  <frame id="13994:21543" name="PatientAssigning/PurchaseSummary/Desktop" x="8835" y="299" width="1800" height="1300">
+    <frame id="13994:21544" name="Steper" x="120" y="120" width="1560" height="60">
+      <frame id="13994:21550" name="Regular" x="340.5" y="0" width="323" height="40">
+        <frame id="13994:21551" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:21553" name="User Details &amp; shipping address" x="48" y="14" width="259" height="12" />
+      </frame>
+      <text id="13994:21549" name="-------------" x="663.5" y="14" width="100" height="12" />
+      <frame id="13994:21545" name="Regular" x="763.5" y="0" width="221" height="40">
+        <frame id="13994:21546" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:21548" name="Purchase Summery" x="48" y="14" width="157" height="12" />
+      </frame>
+      <text id="13994:21554" name="-------------" x="984.5" y="14" width="100" height="12" />
+      <frame id="13994:21555" name="Regular" x="1084.5" y="0" width="135" height="40">
+        <frame id="13994:21556" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:21558" name="Payment" x="48" y="14" width="71" height="12" />
+      </frame>
+    </frame>
+    <frame id="13994:21559" name="Frame 1984078703" x="120" y="240" width="1560" height="699.5">
+      <frame id="13994:21560" name="Frame 1984078588" x="50" y="0" width="700" height="699.5">
+        <frame id="13994:21561" name="Frame 1984078588" x="32" y="32" width="636" height="635.5">
+          <frame id="13994:21562" name="Frame 1984078591" x="0" y="0" width="636" height="219.25">
+            <text id="13994:21563" name="Review your products" x="8" y="8" width="203" height="13" />
+            <instance id="13994:21564" name="added_in_cart_Prodcut_&amp;_subscription_card" x="8" y="45" width="620" height="166.25" />
+          </frame>
+          <frame id="13994:21565" name="Frame 1984078876" x="0" y="235.25" width="636" height="400.25">
+            <text id="13994:21566" name="Subscriptions" x="0" y="0" width="131" height="13" />
+            <instance id="13994:21567" name="added_in_cart_subscription_card" x="0" y="37" width="636" height="166.25" />
+            <frame id="13994:21568" name="Plan Details" x="0" y="227.25" width="636" height="96">
+              <frame id="13994:21569" name="Point 1" x="24" y="0" width="588" height="24">
+                <instance id="13994:21570" name="Mobile" x="0" y="0" width="24" height="24" />
+                <text id="13994:21571" name="Services &amp; Benefits_+_Logo_1" x="44" y="6" width="544" height="12" />
+              </frame>
+              <frame id="13994:21572" name="Point 2" x="24" y="36" width="588" height="24">
+                <instance id="13994:21573" name="Consignment Updates" x="0" y="0" width="24" height="24" />
+                <text id="13994:21574" name="Services &amp; Benefits_+_Logo_2" x="44" y="6" width="544" height="12" />
+              </frame>
+              <frame id="13994:21575" name="Point 3" x="24" y="72" width="588" height="24">
+                <instance id="13994:21576" name="shield check" x="0" y="0" width="24" height="24" />
+                <text id="13994:21577" name="Services &amp; Benefits_+_Logo_3" x="44" y="6" width="544" height="12" />
+              </frame>
+              <frame id="13994:21578" name="Point 6" x="0" y="240" width="450" height="24" hidden="true">
+                <instance id="13994:21579" name="24" x="0" y="0" width="24" height="24" />
+                <text id="13994:21580" name="Services &amp; Benefits_+_Logo_6" x="44" y="6" width="406" height="12" />
+              </frame>
+              <frame id="13994:21581" name="Point 7" x="0" y="288" width="450" height="24" hidden="true">
+                <instance id="13994:21582" name="24" x="0" y="0" width="24" height="24" />
+                <text id="13994:21583" name="Services &amp; Benefits_+_Logo_7" x="44" y="6" width="406" height="12" />
+              </frame>
+              <frame id="13994:21584" name="Point 8" x="0" y="336" width="450" height="24" hidden="true">
+                <instance id="13994:21585" name="24" x="0" y="0" width="24" height="24" />
+                <text id="13994:21586" name="Services &amp; Benefits_+_Logo_8" x="44" y="6" width="406" height="12" />
+              </frame>
+            </frame>
+            <instance id="13994:21587" name="Disclaimer Card" x="0" y="347.25" width="636" height="53" />
+          </frame>
+        </frame>
+      </frame>
+      <frame id="13994:21588" name="Frame 1984078589" x="810" y="0" width="700" height="682">
+        <instance id="13994:21589" name="Disclaimer Card" x="32" y="32" width="636" height="50" />
+        <frame id="13994:21590" name="Labels" x="32" y="98" width="636" height="189">
+          <instance id="13994:21591" name="Discounts &amp; curecoin apply options " x="0" y="16" width="636" height="157" />
+        </frame>
+        <frame id="13994:21592" name="Promo Code" x="32" y="303" width="636" height="219">
+          <frame id="13994:21593" name="Labels" x="16" y="0" width="604" height="219">
+            <frame id="13994:21594" name="Frame" x="0" y="16" width="604" height="23">
+              <text id="13994:21595" name="Take Care tablet dispenser" x="0" y="5.5" width="298" height="12" />
+              <text id="13994:21596" name="$299" x="306" y="5.5" width="298" height="12" />
+            </frame>
+            <frame id="13994:21597" name="Frame" x="0" y="51" width="604" height="23">
+              <text id="13994:21598" name="TakeCare Monthly Plan" x="0" y="5.5" width="298" height="12" />
+              <text id="13994:21599" name="$299" x="306" y="5.5" width="298" height="12" />
+            </frame>
+            <line id="13994:21600" name="Line 9" x="0" y="86" width="604" height="0" />
+            <frame id="13994:21601" name="Frame" x="0" y="98" width="604" height="23">
+              <text id="13994:21602" name="Subtotal" x="0" y="5.5" width="298" height="12" />
+              <text id="13994:21603" name="$299" x="306" y="5.5" width="298" height="12" />
+            </frame>
+            <frame id="13994:21604" name="Frame" x="0" y="133" width="604" height="23">
+              <text id="13994:21605" name="Delivery charges" x="0" y="5.5" width="298" height="12" />
+              <text id="13994:21606" name="Standard" x="306" y="5.5" width="298" height="12" />
+            </frame>
+            <line id="13994:21607" name="Line 10" x="0" y="168" width="604" height="0" />
+            <frame id="13994:21608" name="Frame" x="0" y="180" width="604" height="23">
+              <text id="13994:21609" name="Estimated Total" x="0" y="2" width="479" height="19" />
+              <text id="13994:21610" name="$299" x="487" y="2" width="57" height="19" />
+              <text id="13994:21611" name="$299" x="552" y="2" width="52" height="19" />
+            </frame>
+          </frame>
+        </frame>
+        <line id="13994:21612" name="Line 9" x="32" y="538" width="636" height="0" />
+        <frame id="13994:21613" name="Frame 1984078581" x="32" y="554" width="636" height="96">
+          <frame id="13994:21614" name="Frame 1984078706" x="0" y="0" width="636" height="24">
+            <frame id="13994:21615" name="Frame 1984078578" x="0" y="0" width="182.36363220214844" height="24">
+              <rounded-rectangle id="13994:21616" name="image 107" x="0" y="3.189700126647949" width="40.09090805053711" height="17.6205997467041" />
+              <rounded-rectangle id="13994:21617" name="image 108" x="44.09090805053711" y="3" width="30.272727966308594" height="18" />
+              <rounded-rectangle id="13994:21618" name="image 109" x="78.36363220214844" y="3" width="30.272727966308594" height="18" />
+              <rounded-rectangle id="13994:21619" name="image 111" x="112.63636016845703" y="3" width="41.727272033691406" height="18" />
+              <frame id="13994:21620" name="tabler:cash" x="158.36363220214844" y="0" width="24" height="24" />
+            </frame>
+            <frame id="13994:21625" name="Frame 1984078574" x="487" y="3.5" width="149" height="17">
+              <text id="13994:21626" name="2,896" x="0" y="0" width="69" height="17" />
+              <text id="13994:21627" name="₹1,747" x="74" y="0" width="75" height="17" />
+            </frame>
+          </frame>
+          <frame id="13994:21628" name="Frame 1984078879" x="0" y="48" width="636" height="48">
+            <instance id="13994:21629" name="Regular_button" x="0" y="0" width="306" height="48" />
+            <instance id="13994:21630" name="Regular_button" x="330" y="0" width="306" height="48" />
+          </frame>
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+  <frame id="13994:21665" name="PatientAssigning/Payment/Desktop" x="11991" y="299" width="1800" height="1300">
+    <frame id="13994:21666" name="Steper" x="120" y="120" width="1560" height="60">
+      <frame id="13994:21672" name="Regular" x="340.5" y="0" width="323" height="40">
+        <frame id="13994:21673" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:21675" name="User Details &amp; shipping address" x="48" y="14" width="259" height="12" />
+      </frame>
+      <text id="13994:21671" name="-------------" x="663.5" y="14" width="100" height="12" />
+      <frame id="13994:21667" name="Regular" x="763.5" y="0" width="221" height="40">
+        <frame id="13994:21668" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:21670" name="Purchase Summery" x="48" y="14" width="157" height="12" />
+      </frame>
+      <text id="13994:21676" name="-------------" x="984.5" y="14" width="100" height="12" />
+      <frame id="13994:21677" name="Regular" x="1084.5" y="0" width="135" height="40">
+        <frame id="13994:21678" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:21680" name="Payment" x="48" y="14" width="71" height="12" />
+      </frame>
+    </frame>
+    <frame id="13994:21681" name="Frame 1984078703" x="120" y="240" width="1560" height="909">
+      <frame id="13994:21682" name="Frame 1984078873" x="0" y="0" width="800" height="909">
+        <frame id="13994:21683" name="Frame 1984078710" x="0" y="0" width="800" height="847">
+          <frame id="13994:21684" name="Frame 1984078709" x="0" y="0" width="800" height="229">
+            <frame id="13994:21685" name="Frame 1984078707" x="32" y="32" width="736" height="40">
+              <text id="13994:21686" name="Contact" x="0" y="0" width="245.3333282470703" height="13" />
+              <text id="13994:21687" name="Krishna Mehra, +91 00000 00000" x="245.3333282470703" y="0" width="245.33334350585938" height="40" />
+              <instance id="13994:21688" name="Small" x="490.66668701171875" y="0" width="245.33334350585938" height="12" />
+            </frame>
+            <line id="13994:21689" name="Line 9" x="32" y="88" width="736" height="0" />
+            <frame id="13994:21690" name="Frame 1984078708" x="32" y="104" width="736" height="68">
+              <text id="13994:21691" name="Shipping Address" x="0" y="0" width="245.3333282470703" height="13" />
+              <text id="13994:21692" name="123, Saheed Nagar, Bhubaneswar, Odisha, 751007, India" x="245.3333282470703" y="0" width="245.33334350585938" height="68" />
+              <instance id="13994:21693" name="Small" x="490.66668701171875" y="0" width="245.33334350585938" height="12" />
+            </frame>
+            <text id="13994:21694" name="Address cannot be changed after dispatch" x="32" y="188" width="261" height="9" />
+          </frame>
+          <frame id="13994:21695" name="Frame 1984078586" x="0" y="289" width="800" height="558">
+            <text id="13994:21696" name="Payment Mode" x="0" y="0" width="138" height="13" />
+            <frame id="13994:21697" name="Frame 1984078709" x="0" y="37" width="800" height="521">
+              <frame id="13994:21698" name="Frame 1984078707" x="32" y="32" width="736" height="36">
+                <instance id="13994:21699" name="Multi seclect option" x="0" y="0" width="529.6363525390625" height="36" />
+                <rounded-rectangle id="13994:21700" name="image 107" x="545.6363525390625" y="9.18970012664795" width="40.09090805053711" height="17.6205997467041" />
+                <rounded-rectangle id="13994:21701" name="image 108" x="601.7272338867188" y="9" width="30.272727966308594" height="18" />
+                <rounded-rectangle id="13994:21702" name="image 109" x="647.9999389648438" y="9" width="30.272727966308594" height="18" />
+                <rounded-rectangle id="13994:21703" name="image 111" x="694.2726440429688" y="9" width="41.727272033691406" height="18" />
+              </frame>
+              <line id="13994:21704" name="Line 9" x="32" y="84" width="736" height="0" />
+              <frame id="13994:21705" name="Frame 1984078714" x="32" y="100" width="736" height="36">
+                <instance id="13994:21706" name="Multi seclect option" x="0" y="0" width="587.3636474609375" height="36" />
+                <rounded-rectangle id="13994:21707" name="image 107" x="603.3636474609375" y="9.18970012664795" width="40.09090805053711" height="17.6205997467041" />
+                <rounded-rectangle id="13994:21708" name="image 108" x="659.4545288085938" y="9" width="30.272727966308594" height="18" />
+                <rounded-rectangle id="13994:21709" name="image 109" x="705.7272338867188" y="9" width="30.272727966308594" height="18" />
+              </frame>
+              <line id="13994:21710" name="Line 10" x="32" y="152" width="736" height="0" />
+              <frame id="13994:21711" name="Frame 1984078715" x="32" y="168" width="736" height="36">
+                <instance id="13994:21712" name="Multi seclect option" x="0" y="0" width="587.3636474609375" height="36" />
+                <rounded-rectangle id="13994:21713" name="image 107" x="603.3636474609375" y="9.18970012664795" width="40.09090805053711" height="17.6205997467041" />
+                <rounded-rectangle id="13994:21714" name="image 108" x="659.4545288085938" y="9" width="30.272727966308594" height="18" />
+                <rounded-rectangle id="13994:21715" name="image 109" x="705.7272338867188" y="9" width="30.272727966308594" height="18" />
+              </frame>
+              <line id="13994:21716" name="Line 11" x="32" y="220" width="736" height="0" />
+              <frame id="13994:21717" name="Frame 1984078710" x="32" y="236" width="736" height="36">
+                <instance id="13994:21718" name="Multi seclect option" x="0" y="0" width="575" height="36" />
+                <rounded-rectangle id="13994:21719" name="image 114" x="591" y="4" width="145" height="28" />
+              </frame>
+              <line id="13994:21720" name="Line 12" x="32" y="288" width="736" height="0" />
+              <frame id="13994:21721" name="Frame 1984078716" x="32" y="304" width="736" height="36">
+                <instance id="13994:21722" name="Multi seclect option" x="0" y="0" width="529.6363525390625" height="36" />
+                <rounded-rectangle id="13994:21723" name="image 107" x="545.6363525390625" y="9.18970012664795" width="40.09090805053711" height="17.6205997467041" />
+                <rounded-rectangle id="13994:21724" name="image 108" x="601.7272338867188" y="9" width="30.272727966308594" height="18" />
+                <rounded-rectangle id="13994:21725" name="image 109" x="647.9999389648438" y="9" width="30.272727966308594" height="18" />
+                <rounded-rectangle id="13994:21726" name="image 111" x="694.2726440429688" y="9" width="41.727272033691406" height="18" />
+              </frame>
+              <line id="13994:21727" name="Line 13" x="32" y="356" width="736" height="0" />
+              <frame id="13994:21728" name="Frame 1984078712" x="32" y="372" width="736" height="36">
+                <instance id="13994:21729" name="Multi seclect option" x="0" y="0" width="690" height="36" />
+                <rounded-rectangle id="13994:21730" name="image 113" x="706" y="10" width="30" height="16" />
+              </frame>
+              <line id="13994:21731" name="Line 14" x="32" y="424" width="736" height="0" />
+              <frame id="13994:21732" name="Frame 1984078713" x="32" y="440" width="736" height="49">
+                <instance id="13994:21733" name="Multi seclect option" x="0" y="0" width="696" height="49" />
+                <frame id="13994:21734" name="tabler:cash" x="712" y="12.5" width="24" height="24" />
+              </frame>
+            </frame>
+          </frame>
+        </frame>
+        <instance id="13994:21739" name="Disclaimer Card" x="0" y="859" width="800" height="50" />
+      </frame>
+      <frame id="13994:21740" name="Frame 1984078589" x="860" y="0" width="700" height="682">
+        <instance id="13994:21741" name="Disclaimer Card" x="32" y="32" width="636" height="50" />
+        <frame id="13994:21742" name="Labels" x="32" y="98" width="636" height="189">
+          <instance id="13994:21743" name="Discounts &amp; curecoin apply options " x="0" y="16" width="636" height="157" />
+        </frame>
+        <frame id="13994:21744" name="Promo Code" x="32" y="303" width="636" height="219">
+          <frame id="13994:21745" name="Labels" x="16" y="0" width="604" height="219">
+            <frame id="13994:21746" name="Frame" x="0" y="16" width="604" height="23">
+              <text id="13994:21747" name="Take Care tablet dispenser" x="0" y="5.5" width="298" height="12" />
+              <text id="13994:21748" name="$299" x="306" y="5.5" width="298" height="12" />
+            </frame>
+            <frame id="13994:21749" name="Frame" x="0" y="51" width="604" height="23">
+              <text id="13994:21750" name="TakeCare Monthly Plan" x="0" y="5.5" width="298" height="12" />
+              <text id="13994:21751" name="$299" x="306" y="5.5" width="298" height="12" />
+            </frame>
+            <line id="13994:21752" name="Line 9" x="0" y="86" width="604" height="0" />
+            <frame id="13994:21753" name="Frame" x="0" y="98" width="604" height="23">
+              <text id="13994:21754" name="Subtotal" x="0" y="5.5" width="298" height="12" />
+              <text id="13994:21755" name="$299" x="306" y="5.5" width="298" height="12" />
+            </frame>
+            <frame id="13994:21756" name="Frame" x="0" y="133" width="604" height="23">
+              <text id="13994:21757" name="Delivery charges" x="0" y="5.5" width="298" height="12" />
+              <text id="13994:21758" name="Standard" x="306" y="5.5" width="298" height="12" />
+            </frame>
+            <line id="13994:21759" name="Line 10" x="0" y="168" width="604" height="0" />
+            <frame id="13994:21760" name="Frame" x="0" y="180" width="604" height="23">
+              <text id="13994:21761" name="Estimated Total" x="0" y="2" width="479" height="19" />
+              <text id="13994:21762" name="$299" x="487" y="2" width="57" height="19" />
+              <text id="13994:21763" name="$299" x="552" y="2" width="52" height="19" />
+            </frame>
+          </frame>
+        </frame>
+        <line id="13994:21764" name="Line 9" x="32" y="538" width="636" height="0" />
+        <frame id="13994:21765" name="Frame 1984078581" x="32" y="554" width="636" height="96">
+          <frame id="13994:21766" name="Frame 1984078706" x="0" y="0" width="636" height="24">
+            <frame id="13994:21767" name="Frame 1984078578" x="0" y="0" width="182.36363220214844" height="24">
+              <rounded-rectangle id="13994:21768" name="image 107" x="0" y="3.189700126647949" width="40.09090805053711" height="17.6205997467041" />
+              <rounded-rectangle id="13994:21769" name="image 108" x="44.09090805053711" y="3" width="30.272727966308594" height="18" />
+              <rounded-rectangle id="13994:21770" name="image 109" x="78.36363220214844" y="3" width="30.272727966308594" height="18" />
+              <rounded-rectangle id="13994:21771" name="image 111" x="112.63636016845703" y="3" width="41.727272033691406" height="18" />
+              <frame id="13994:21772" name="tabler:cash" x="158.36363220214844" y="0" width="24" height="24" />
+            </frame>
+            <frame id="13994:21777" name="Frame 1984078574" x="487" y="3.5" width="149" height="17">
+              <text id="13994:21778" name="2,896" x="0" y="0" width="69" height="17" />
+              <text id="13994:21779" name="₹1,747" x="74" y="0" width="75" height="17" />
+            </frame>
+          </frame>
+          <frame id="13994:21780" name="Frame 1984078879" x="0" y="48" width="636" height="48">
+            <instance id="13994:21781" name="Regular_button" x="0" y="0" width="306" height="48" />
+            <instance id="13994:21782" name="Regular_button" x="330" y="0" width="306" height="48" />
+          </frame>
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+  <frame id="13994:21783" name="PatientAssigning/Confirmation/Desktop" x="15147" y="299" width="1800" height="1300">
+    <frame id="13994:21784" name="Steper" x="120" y="120" width="1560" height="60">
+      <frame id="13994:21785" name="Regular" x="340.5" y="0" width="221" height="40">
+        <frame id="13994:21786" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:21788" name="Purchase Summery" x="48" y="14" width="157" height="12" />
+      </frame>
+      <text id="13994:21789" name="-------------" x="561.5" y="14" width="100" height="12" />
+      <frame id="13994:21790" name="Regular" x="661.5" y="0" width="323" height="40">
+        <frame id="13994:21791" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:21793" name="User Details &amp; shipping address" x="48" y="14" width="259" height="12" />
+      </frame>
+      <text id="13994:21794" name="-------------" x="984.5" y="14" width="100" height="12" />
+      <frame id="13994:21795" name="Regular" x="1084.5" y="0" width="135" height="40">
+        <frame id="13994:21796" name="Icon 25" x="16" y="8" width="24" height="24" />
+        <text id="13994:21798" name="Payment" x="48" y="14" width="71" height="12" />
+      </frame>
+    </frame>
+    <frame id="13994:21799" name="Frame 1984078703" x="120" y="240" width="1560" height="803">
+      <frame id="13994:21800" name="Frame 1984078403" x="52" y="0" width="800" height="803">
+        <frame id="13994:21801" name="Frame 1984078400" x="244" y="0" width="312" height="186">
+          <instance id="13994:21802" name="Check" x="106" y="0" width="100" height="100" />
+          <frame id="13994:21803" name="Frame 1984077915" x="0" y="108" width="312" height="78">
+            <text id="13994:21804" name="Payment successful" x="0" y="0" width="312" height="23" />
+            <text id="13994:21805" name="Your Take Care plan is now active &amp; products will be delivered shortly" x="0" y="47" width="312" height="31" />
+          </frame>
+        </frame>
+        <frame id="13994:21806" name="Frame 1984078714" x="40" y="266" width="720" height="537">
+          <instance id="13994:21807" name="added_in_cart_subscription_card" x="0" y="0" width="720" height="189" />
+          <instance id="13994:21808" name="added_in_cart_Prodcut_&amp;_subscription_card" x="0" y="237" width="720" height="202" />
+          <instance id="13994:21809" name="Disclaimer Card" x="0" y="487" width="720" height="50" />
+        </frame>
+      </frame>
+      <frame id="13994:21810" name="Frame 1984078716" x="912" y="97.5" width="596" height="608">
+        <frame id="13994:21811" name="QR code" x="0" y="0" width="596" height="500">
+          <frame id="13994:21812" name="Frame 1984078715" x="48" y="128.06021118164062" width="205" height="243.8795623779297">
+            <rounded-rectangle id="13994:21813" name="Rectangle 17" x="25.576919555664062" y="0" width="153.84616088867188" height="144.8795623779297" />
+            <text id="13994:21814" name="Scan the QR code to download the app" x="28.5" y="162.8795623779297" width="148" height="34" />
+            <text id="13994:21815" name="Use your Mobile number to log in. OTP will be sent for verification" x="0" y="214.8795623779297" width="205" height="29" />
+          </frame>
+          <rounded-rectangle id="13994:21816" name="image 115" x="301" y="64" width="247" height="372" />
+        </frame>
+        <frame id="13994:21817" name="Frame 1984078880" x="0" y="560" width="596" height="48">
+          <instance id="13994:21818" name="Regular_button" x="0" y="0" width="286" height="48" />
+          <instance id="13994:21819" name="Regular_button" x="310" y="0" width="286" height="48" />
+        </frame>
+      </frame>
+    </frame>
+  </frame>
+</section>IMPORTANT: After you call this tool, you MUST call get_design_context if trying to implement the design, since this tool only returns metadata. If you do not call get_design_context, the agent will not be able to implement the design.

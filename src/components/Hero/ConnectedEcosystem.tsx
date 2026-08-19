@@ -35,7 +35,7 @@ function getPlatesByKey(images: Record<string, string>): Record<string, Plate[]>
     'works-24x7': [{ src: images['figma-hero-plate-247'], className: 'object-cover' }],
     '30-day-slots': [{ src: images['figma-hero-plate-30day-drawers'], style: { height: '125.73%', left: '0.07%', top: '-25.95%', width: '100%' } }],
     'medical-grade-build': [{ src: images['figma-hero-plate-medical'], className: 'object-cover' }],
-    'magnetic-lock': [{ src: images['figma-hero-plate-magnetic-lock'], className: 'object-cover' }],
+    'ai-alert-prioritisation': [{ src: images['figma-hero-plate-ai-alert'], className: 'object-cover' }],
   };
 }
 

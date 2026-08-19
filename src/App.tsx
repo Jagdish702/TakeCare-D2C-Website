@@ -27,6 +27,20 @@ import CheckoutPage from './components/Checkout/CheckoutPage';
 import CheckoutPageMobile from './components/Checkout/CheckoutPageMobile';
 import ShippingDetailsPage from './components/Checkout/ShippingDetailsPage';
 import ShippingDetailsPageMobile from './components/Checkout/ShippingDetailsPageMobile';
+import CareForPage from './components/Checkout/CareForPage';
+import CareForPageMobile from './components/Checkout/CareForPageMobile';
+import PersonDetailsPage from './components/Checkout/PersonDetailsPage';
+import PersonDetailsPageMobile from './components/Checkout/PersonDetailsPageMobile';
+import CaregiverConfirmPage from './components/Checkout/CaregiverConfirmPage';
+import CaregiverConfirmPageMobile from './components/Checkout/CaregiverConfirmPageMobile';
+import GiftPage from './components/Checkout/GiftPage';
+import GiftPageMobile from './components/Checkout/GiftPageMobile';
+import GiftSummaryPage from './components/Checkout/GiftSummaryPage';
+import GiftSummaryPageMobile from './components/Checkout/GiftSummaryPageMobile';
+import CaregiverOrderDetailsPage from './components/Checkout/CaregiverOrderDetailsPage';
+import CaregiverOrderDetailsPageMobile from './components/Checkout/CaregiverOrderDetailsPageMobile';
+import OrderDetailsPage from './components/Checkout/OrderDetailsPage';
+import OrderDetailsPageMobile from './components/Checkout/OrderDetailsPageMobile';
 import PaymentPage from './components/Checkout/PaymentPage';
 import PaymentPageMobile from './components/Checkout/PaymentPageMobile';
 import OrderConfirmationPage from './components/Checkout/OrderConfirmationPage';
@@ -42,22 +56,65 @@ import ProfileDashboardMobile from './components/ProfileDashboard/ProfileDashboa
 export default function App() {
   const [cartPlan, setCartPlan] = useState<any>(null);
   const [cartOpen, setCartOpen] = useState(false);
-  // Checkout flow: 'closed' | 'summary' (Purchase Summary) | 'shipping' (User Details & shipping address) | 'payment' | 'confirmation' (Order Confirmation, post-payment)
-  const [checkoutStep, setCheckoutStep] = useState<'closed' | 'summary' | 'shipping' | 'payment' | 'confirmation'>('closed');
+  // Checkout flow: 'closed' | 'summary' (Purchase Summary) | 'shipping' (User Details & shipping address) | 'careFor' (Who is this care for?) | 'personDetails' (Enter the details of the person, only for "Someone else") | 'caregiverConfirm' (Would you like to be the caregiver of..., only for "Someone else") | 'gift' (Is it a gift?, only for "Someone else") | 'giftSummary' (Dispenser will be delivered with this gift card — final review, when "Someone else" + a gift) | 'caregiverOrderDetails' (Check order Details w/ recipient+caregiver cards, when "Someone else" + not a gift) | 'orderDetails' (Check order Details, single card, "Me" path) | 'payment' | 'confirmation' (Order Confirmation, post-payment)
+  const [checkoutStep, setCheckoutStep] = useState<
+    'closed' | 'summary' | 'shipping' | 'careFor' | 'personDetails' | 'caregiverConfirm' | 'gift' | 'giftSummary' | 'caregiverOrderDetails' | 'orderDetails' | 'payment' | 'confirmation'
+  >('closed');
   // Collected on the "User Details & shipping address" step, read back on
-  // the Payment step's Contact/Shipping Address summary card.
+  // the Order Details / Payment steps' delivery/contact summaries.
   const [shippingInfo, setShippingInfo] = useState<any>(null);
+  // 'me' | 'someone-else', picked on the "Who is this care for?" step, read
+  // back on Order Details to pick which avatar to show.
+  const [careForSelection, setCareForSelection] = useState<string | null>(null);
+  // Collected on "Enter the details of the person" (only reached when
+  // careForSelection === 'someone-else') — takes over from shippingInfo as
+  // the recipient shown on Order Details when present.
+  const [personDetails, setPersonDetails] = useState<any>(null);
 
   const openCart = () => setCartOpen(true);
   const closeCart = () => setCartOpen(false);
   const openCheckout = () => setCheckoutStep('summary');
   const closeCheckout = () => setCheckoutStep('closed');
   const continueToShipping = () => setCheckoutStep('shipping');
-  const continueToPayment = (form: any) => {
+  const continueToCareFor = (form: any) => {
     setShippingInfo(form);
-    setCheckoutStep('payment');
+    setCheckoutStep('careFor');
   };
-  const backToShipping = () => setCheckoutStep('shipping');
+  const continueFromCareFor = (careFor: string) => {
+    setCareForSelection(careFor);
+    setPersonDetails(null);
+    setCheckoutStep(careFor === 'someone-else' ? 'personDetails' : 'orderDetails');
+  };
+  const continueToCaregiverConfirm = (form: any) => {
+    setPersonDetails(form);
+    setCheckoutStep('caregiverConfirm');
+  };
+  // Whether the account holder agreed to be the caregiver on
+  // CaregiverConfirmPage — both options lead to GiftPage either way, but
+  // this is remembered so the review/Payment/Confirmation screens further
+  // down know whether to show a "Caregiver" card/label at all (declining
+  // drops it, leaving just the recipient shown as "Patient").
+  const [isCaregiver, setIsCaregiver] = useState<boolean | null>(null);
+  const continueFromCaregiverConfirm = (confirmed: boolean) => {
+    setIsCaregiver(confirmed);
+    setCheckoutStep('gift');
+  };
+  // GiftPage's two options both lead to a final review screen, but which
+  // one depends on the answer: "Yes, It's a gift" shows the gift card
+  // (giftSummary), "No, it's not" shows the plain two-card review
+  // (caregiverOrderDetails). Remembered so Payment's Back button can
+  // return to the right one.
+  const [isGift, setIsGift] = useState<boolean | null>(null);
+  const continueFromGift = (giftAnswer: boolean) => {
+    setIsGift(giftAnswer);
+    setCheckoutStep(giftAnswer ? 'giftSummary' : 'caregiverOrderDetails');
+  };
+  const continueToPayment = () => setCheckoutStep('payment');
+  // Payment's Back button returns to whichever review screen led here:
+  // giftSummary/caregiverOrderDetails for the "someone else" path
+  // (orderDetails is bypassed entirely there), orderDetails otherwise.
+  const backFromPayment = () =>
+    setCheckoutStep(careForSelection === 'someone-else' ? (isGift ? 'giftSummary' : 'caregiverOrderDetails') : 'orderDetails');
 
   // Which plan (if any) shows the blue "Current Plan" badge/border on the
   // subscription cards — set once the demo Payment flow's "View Order"
@@ -124,6 +181,23 @@ export default function App() {
   const handleGetStarted = (plan: any) => {
     setCartPlan(plan);
   };
+
+  // Order Details shows whoever the care is actually for: the person-details
+  // form (when "Someone else" was picked) takes over from the account
+  // holder's own shippingInfo.
+  const orderRecipient =
+    careForSelection === 'someone-else' && personDetails
+      ? {
+          firstName: personDetails.fullName,
+          lastName: '',
+          phone: personDetails.phone,
+          address1: personDetails.address1,
+          city: personDetails.city,
+          state: personDetails.state,
+          pincode: personDetails.pincode,
+          country: personDetails.country,
+        }
+      : shippingInfo;
 
   const isMobile = useIsMobile();
 
@@ -216,24 +290,99 @@ export default function App() {
         />
       )}
       {isMobile ? (
-        <ShippingDetailsPageMobile isOpen={checkoutStep === 'shipping'} onContinue={continueToPayment} />
+        <ShippingDetailsPageMobile isOpen={checkoutStep === 'shipping'} onContinue={continueToCareFor} />
       ) : (
-        <ShippingDetailsPage isOpen={checkoutStep === 'shipping'} onContinue={continueToPayment} />
+        <ShippingDetailsPage isOpen={checkoutStep === 'shipping'} onContinue={continueToCareFor} />
+      )}
+      {isMobile ? (
+        <CareForPageMobile isOpen={checkoutStep === 'careFor'} onContinue={continueFromCareFor} />
+      ) : (
+        <CareForPage isOpen={checkoutStep === 'careFor'} onContinue={continueFromCareFor} />
+      )}
+      {isMobile ? (
+        <PersonDetailsPageMobile isOpen={checkoutStep === 'personDetails'} onContinue={continueToCaregiverConfirm} />
+      ) : (
+        <PersonDetailsPage isOpen={checkoutStep === 'personDetails'} onContinue={continueToCaregiverConfirm} />
+      )}
+      {isMobile ? (
+        <CaregiverConfirmPageMobile personDetails={personDetails} isOpen={checkoutStep === 'caregiverConfirm'} onConfirm={continueFromCaregiverConfirm} />
+      ) : (
+        <CaregiverConfirmPage personDetails={personDetails} isOpen={checkoutStep === 'caregiverConfirm'} onConfirm={continueFromCaregiverConfirm} />
+      )}
+      {isMobile ? (
+        <GiftPageMobile isOpen={checkoutStep === 'gift'} onSelect={continueFromGift} />
+      ) : (
+        <GiftPage isOpen={checkoutStep === 'gift'} onSelect={continueFromGift} />
+      )}
+      {isMobile ? (
+        <GiftSummaryPageMobile
+          shippingInfo={shippingInfo}
+          personDetails={personDetails}
+          isCaregiver={isCaregiver}
+          isOpen={checkoutStep === 'giftSummary'}
+          onDone={continueToPayment}
+        />
+      ) : (
+        <GiftSummaryPage
+          shippingInfo={shippingInfo}
+          personDetails={personDetails}
+          isCaregiver={isCaregiver}
+          isOpen={checkoutStep === 'giftSummary'}
+          onDone={continueToPayment}
+        />
+      )}
+      {isMobile ? (
+        <CaregiverOrderDetailsPageMobile
+          shippingInfo={shippingInfo}
+          personDetails={personDetails}
+          isCaregiver={isCaregiver}
+          isOpen={checkoutStep === 'caregiverOrderDetails'}
+          onDone={continueToPayment}
+        />
+      ) : (
+        <CaregiverOrderDetailsPage
+          shippingInfo={shippingInfo}
+          personDetails={personDetails}
+          isCaregiver={isCaregiver}
+          isOpen={checkoutStep === 'caregiverOrderDetails'}
+          onDone={continueToPayment}
+        />
+      )}
+      {isMobile ? (
+        <OrderDetailsPageMobile
+          shippingInfo={orderRecipient}
+          careForSelection={careForSelection}
+          isOpen={checkoutStep === 'orderDetails'}
+          onDone={continueToPayment}
+        />
+      ) : (
+        <OrderDetailsPage
+          shippingInfo={orderRecipient}
+          careForSelection={careForSelection}
+          isOpen={checkoutStep === 'orderDetails'}
+          onDone={continueToPayment}
+        />
       )}
       {isMobile ? (
         <PaymentPageMobile
           plan={cartPlan}
           shippingInfo={shippingInfo}
+          personDetails={personDetails}
+          careForSelection={careForSelection}
+          isCaregiver={isCaregiver}
           isOpen={checkoutStep === 'payment'}
-          onBack={backToShipping}
+          onBack={backFromPayment}
           onContinue={confirmPlanPurchase}
         />
       ) : (
         <PaymentPage
           plan={cartPlan}
           shippingInfo={shippingInfo}
+          personDetails={personDetails}
+          careForSelection={careForSelection}
+          isCaregiver={isCaregiver}
           isOpen={checkoutStep === 'payment'}
-          onBack={backToShipping}
+          onBack={backFromPayment}
           onContinue={confirmPlanPurchase}
         />
       )}
@@ -241,6 +390,9 @@ export default function App() {
         <OrderConfirmationPageMobile
           plan={cartPlan}
           shippingInfo={shippingInfo}
+          personDetails={personDetails}
+          careForSelection={careForSelection}
+          isCaregiver={isCaregiver}
           isOpen={checkoutStep === 'confirmation'}
           onBackToDashboard={backToDashboardFromOrder}
           onTrackOrder={() => { closeCheckout(); openProfile(); }}
@@ -249,6 +401,9 @@ export default function App() {
         <OrderConfirmationPage
           plan={cartPlan}
           shippingInfo={shippingInfo}
+          personDetails={personDetails}
+          careForSelection={careForSelection}
+          isCaregiver={isCaregiver}
           isOpen={checkoutStep === 'confirmation'}
           onBackToDashboard={backToDashboardFromOrder}
           onTrackOrder={() => { closeCheckout(); openProfile(); }}

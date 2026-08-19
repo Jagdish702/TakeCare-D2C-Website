@@ -130,24 +130,23 @@ INSERT INTO ecosystem_section_content (id, heading, subheading) VALUES
 
 DELETE FROM ecosystem_items;
 INSERT INTO ecosystem_items (item_key, title, body, note, sort_order) VALUES
-  ('connected-to-curebay', 'Connected to CureBay',
-   'Consult doctors, order medications, book lab tests, manage doses, and access emergency support—all through the Take Care App.',
-   'No more disconnected healthcare.', 0),
   ('works-24x7', 'Works 24x7',
    'One missed dose; instant alerts to you, your family & the 24×7 command centre.',
    'No more boxes
-that just sit there.', 1),
+that just sit there.', 0),
   ('30-day-slots', '30-Day Slots',
    'Drop in a whole sealed strip — 30 days per slot, refilled monthly by CureBay.',
    'No more popping pills
-from foil every day.', 2),
+from foil every day.', 1),
+  ('connected-to-curebay', 'Connected to CureBay',
+   'Consult doctors, order medications, book lab tests, manage doses, and access emergency support—all through the Take Care App.',
+   'No more disconnected healthcare.', 2),
   ('medical-grade-build', 'Medical-Grade Build',
    'Medical-grade ABS, anti-microbial finish. Built to last, easy to wipe clean.',
    'No more cracks on the first drop.', 3),
-  ('magnetic-lock', 'Magnetic lock',
-   'Magnetic lock seals every slot.
-An IR sensor confirms the dose the slot glows when it''s done.',
-   'No more pills spilling in your bag.', 4);
+  ('ai-alert-prioritisation', 'AI Alert Prioritisation',
+   'AI priorities alerts by medicine and Patient urgency, ensuring critical moments aren''t buried.',
+   'No more alert fatigue.', 4);
 
 -- ============================================================================
 -- 3. MUM TOOK DOSE
@@ -586,7 +585,7 @@ INSERT INTO image_assets (image_key, url) VALUES
   ('figma-hero-plate-247', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_1.jpg'),
   ('figma-hero-plate-30day-drawers', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_0.jpg'),
   ('figma-hero-plate-curebay-connected', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/plate-curebay-connected.png'),
-  ('figma-hero-plate-magnetic-lock', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/magnetic%20lock%20image.png'),
+  ('figma-hero-plate-ai-alert', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/AI_Alert_Prioritisation.jpg'),
   ('figma-hero-plate-medical', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_2.jpg'),
 
   -- EcosystemAccordion (mobile) ---------------------------------------------
@@ -595,7 +594,7 @@ INSERT INTO image_assets (image_key, url) VALUES
   ('mobile-plate-247', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_1.jpg'),
   ('mobile-plate-30day-overlay', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_0.jpg'),
   ('mobile-plate-curebay-connected', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/plate-curebay-connected.png'),
-  ('mobile-plate-magnetic-lock', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/magnetic%20lock%20image.png'),
+  ('mobile-plate-ai-alert', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/AI_Alert_Prioritisation.jpg'),
   ('mobile-plate-medical-overlay', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Img_2.jpg'),
 
   -- Features (web) -----------------------------------------------------------

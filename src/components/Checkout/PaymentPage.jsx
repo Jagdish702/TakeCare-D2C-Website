@@ -79,16 +79,64 @@ function Divider() {
   return <div style={{ width: '100%', height: 1, background: '#ccc', flexShrink: 0 }} />;
 }
 
+// Shared by the Payment and Order Confirmation pages (desktop + mobile) for
+// the "someone else" + caregiver path, where the Contact card / order cards
+// need both the account holder's ("Caregiver") and the other person's
+// ("Patient") names/phones instead of a single contact line.
+export function getCaregiverPatientNames(shippingInfo, personDetails) {
+  const giverName = shippingInfo ? `${shippingInfo.firstName} ${shippingInfo.lastName}`.trim() : 'Krishna Mehra';
+  const giverPhone = shippingInfo?.phone ? `+91 ${shippingInfo.phone}` : '+91 98765 43210';
+  const recipientName = personDetails?.fullName?.trim() || 'Rohit Mehra';
+  const recipientPhone = personDetails?.phone ? `+91 ${personDetails.phone}` : '+91 98765 43210';
+  return { giverName, giverPhone, recipientName, recipientPhone };
+}
+
 /* ── Contact + Shipping Address summary card — reads back whatever the
      user entered on the "User Details & shipping address" step; falls
      back to Figma's own placeholder example only if that step somehow
      hasn't run yet (shouldn't normally happen, since Payment is only
-     reachable via that step's Continue button). ── */
-function ContactShippingCard({ shippingInfo, onChange, payment }) {
-  const contactLine = shippingInfo
-    ? `${shippingInfo.firstName} ${shippingInfo.lastName}, +91 ${shippingInfo.phone}`.trim()
-    : 'Nishant Jagtap, +91 9158074477';
-  const addressLine = shippingInfo
+     reachable via that step's Continue button).
+
+     For the "someone else" path, the Contact block and shipping address
+     depend on whether the account holder agreed to be the caregiver
+     (CaregiverConfirmPage):
+       - agreed/undecided (Figma node 14019:18481): "Caregiver : {name} /
+         (phone)" + "Patient : {name} / (phone)" four-line form.
+       - declined (Figma node 14024:19116): "You : {name}, {phone}" +
+         "Patient :{name}, {phone}" two-line form (no parens, no "Caregiver"
+         label at all).
+     Either way the shipping address shown is the recipient's
+     (personDetails'), not the account holder's — matching
+     CaregiverOrderDetailsPage/GiftSummaryPage's "Will be Delivered to"
+     convention. ── */
+function ContactShippingCard({ shippingInfo, personDetails, careForSelection, isCaregiver, onChange, payment }) {
+  const isSomeoneElseOrder = careForSelection === 'someone-else' && !!personDetails;
+  const { giverName, giverPhone, recipientName, recipientPhone } = getCaregiverPatientNames(shippingInfo, personDetails);
+
+  const contactLine = !isSomeoneElseOrder ? (
+    shippingInfo ? `${shippingInfo.firstName} ${shippingInfo.lastName}, +91 ${shippingInfo.phone}`.trim() : 'Nishant Jagtap, +91 9158074477'
+  ) : isCaregiver === false ? (
+    <>
+      {`You : ${giverName}, ${giverPhone}`}
+      <br />
+      {`Patient :${recipientName}, ${recipientPhone}`}
+    </>
+  ) : (
+    <>
+      {`Caregiver : ${giverName} `}
+      <br />
+      {`(${giverPhone})`}
+      <br />
+      {`Patient : ${recipientName} `}
+      <br />
+      {`(${recipientPhone})`}
+    </>
+  );
+  const addressLine = isSomeoneElseOrder
+    ? [personDetails.address1, personDetails.city, personDetails.state, personDetails.pincode, personDetails.country]
+        .filter(Boolean)
+        .join(', ')
+    : shippingInfo
     ? [shippingInfo.address1, shippingInfo.city, shippingInfo.state, shippingInfo.pincode, shippingInfo.country]
         .filter(Boolean)
         .join(', ')
@@ -169,7 +217,7 @@ function PaymentOptionRow({ option, selected, onSelect }) {
   );
 }
 
-export default function PaymentPage({ plan, shippingInfo, isOpen, onBack, onContinue }) {
+export default function PaymentPage({ plan, shippingInfo, personDetails, careForSelection, isCaregiver, isOpen, onBack, onContinue }) {
   const { checkout } = useContent();
   const payment = checkout.payment;
   const paymentModeOptions = [...checkout.paymentOptions]
@@ -210,7 +258,7 @@ export default function PaymentPage({ plan, shippingInfo, isOpen, onBack, onCont
           {/* ── Left panel: Contact/Shipping summary + Payment Mode ── */}
           <div style={{ flex: '1 1 800px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 60, width: '100%' }}>
-              <ContactShippingCard shippingInfo={shippingInfo} onChange={onBack} payment={payment} />
+              <ContactShippingCard shippingInfo={shippingInfo} personDetails={personDetails} careForSelection={careForSelection} isCaregiver={isCaregiver} onChange={onBack} payment={payment} />
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: '100%' }}>
                 <p style={{ margin: 0, fontFamily: FONT, fontWeight: 700, fontSize: 18, color: '#808080', letterSpacing: '0.5825px', lineHeight: '28px' }}>
