@@ -1,4 +1,5 @@
 import CheckoutStepper from './CheckoutStepper';
+import { useContent } from '../../context/ContentContext';
 
 /*
   "Who is this care for?" — Figma node 14005:22734 ("Step 15"), a new
@@ -11,15 +12,14 @@ import CheckoutStepper from './CheckoutStepper';
   The 5-segment bar below the stepper is Figma's own finer-grained
   sub-progress indicator for this phase (2 of 5 segments filled) — a new
   element, not shared with any other page yet.
+
+  Heading and the two option cards (label + image) come from
+  checkout.careForPage / checkout.optionCards (page_key='care_for') via
+  useContent() — see database/schema.sql section 14.
 */
 
 const HEADER_H = 52;
 const FONT = 'Inter, sans-serif';
-
-const OPTIONS = [
-  { key: 'me', label: 'Me', image: '/assets/checkout/avatar-me.png' },
-  { key: 'someone-else', label: 'Someone else', image: '/assets/checkout/avatar-someone-else.png' },
-];
 
 // Figma "Progress Bar" — 5 segments, first N filled with the green gradient.
 function SubProgressBar({ filled = 2, total = 5 }) {
@@ -76,7 +76,12 @@ function OptionCard({ option, onSelect }) {
 }
 
 export default function CareForPage({ isOpen, onContinue }) {
+  const { checkout, images } = useContent();
   if (!isOpen) return null;
+
+  const options = checkout.optionCards
+    .filter((o) => o.page_key === 'care_for')
+    .map((o) => ({ key: o.option_key, label: o.label, image: images[o.image_key] }));
 
   return (
     <div style={{ position: 'fixed', top: HEADER_H, left: 0, right: 0, bottom: 0, background: '#f9f9f9', zIndex: 1200, overflowY: 'auto' }}>
@@ -102,10 +107,10 @@ export default function CareForPage({ isOpen, onContinue }) {
           >
             <div style={{ width: 520, maxWidth: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 48 }}>
               <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 36, color: '#000', lineHeight: 1.3, letterSpacing: '-0.36px', textAlign: 'center' }}>
-                Who is this care for?
+                {checkout.careForPage.heading}
               </p>
               <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', width: '100%' }}>
-                {OPTIONS.map((option) => (
+                {options.map((option) => (
                   <OptionCard key={option.key} option={option} onSelect={onContinue} />
                 ))}
               </div>

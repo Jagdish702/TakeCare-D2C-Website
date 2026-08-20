@@ -1,20 +1,17 @@
 import CheckoutStepperMobile from './CheckoutStepperMobile';
 import PrimaryButton from '../common/PrimaryButton';
+import { useContent } from '../../context/ContentContext';
 
 /*
   Mobile "Check order Details" — Figma node 14026:21829. Same content/
   behaviour as the desktop OrderDetailsPage — reuses CheckoutStepperMobile
   (currentStep=1) and PrimaryButton for "Done", real shippingInfo +
-  careForSelection instead of Figma's placeholder example.
+  careForSelection instead of Figma's placeholder example. Copy/avatar
+  images come from checkout.orderReview/images via useContent().
 */
 
 const FONT = 'Inter, sans-serif';
 const BRAND_BLUE = '#004172';
-
-const AVATAR_SRC = {
-  me: '/assets/checkout/avatar-me.png',
-  'someone-else': '/assets/checkout/avatar-someone-else.png',
-};
 
 const DOT_GRID_BG = {
   backgroundImage: 'radial-gradient(circle, #e5e5e5 1px, transparent 1px)',
@@ -68,14 +65,16 @@ function PhoneCallIcon() {
 }
 
 export default function OrderDetailsPageMobile({ shippingInfo, careForSelection, isOpen, onDone }) {
+  const { checkout, images } = useContent();
   if (!isOpen) return null;
 
+  const review = checkout.orderReview;
   const recipientName = shippingInfo ? `${shippingInfo.firstName} ${shippingInfo.lastName}`.trim() : 'Rohit Mehra';
   const addressLine = shippingInfo
     ? [shippingInfo.address1, shippingInfo.city, shippingInfo.state, shippingInfo.pincode, shippingInfo.country].filter(Boolean).join(', ')
     : 'Flat 402, Royal Palms, Sector 56, Gurgaon, Haryana - 122011';
   const phoneLine = shippingInfo?.phone ? `+91 ${shippingInfo.phone}` : '+91 98765 43210';
-  const avatarSrc = AVATAR_SRC[careForSelection] || AVATAR_SRC.me;
+  const avatarSrc = careForSelection === 'someone-else' ? images['checkout-avatar-someone-else'] : images['checkout-avatar-me'];
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#f9f9f9', zIndex: 1200, overflowY: 'auto' }}>
@@ -103,13 +102,13 @@ export default function OrderDetailsPageMobile({ shippingInfo, careForSelection,
           }}
         >
           <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 24, color: '#000', lineHeight: '32px', textAlign: 'center' }}>
-            Check order Details
+            {review.plain_heading}
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start', padding: 16, borderRadius: 16, width: '100%', boxSizing: 'border-box' }}>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', width: '100%' }}>
               <img src={avatarSrc} alt="" draggable={false} style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
-              <p style={{ margin: 0, flex: '1 0 0', minWidth: 0, fontFamily: FONT, fontWeight: 700, fontSize: 16, color: '#000' }}>Will be Delivered to</p>
+              <p style={{ margin: 0, flex: '1 0 0', minWidth: 0, fontFamily: FONT, fontWeight: 700, fontSize: 16, color: '#000' }}>{review.delivered_to_label}</p>
             </div>
             <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
               <DeliveryVanIcon />
@@ -125,7 +124,7 @@ export default function OrderDetailsPageMobile({ shippingInfo, careForSelection,
             </div>
           </div>
 
-          <PrimaryButton fullWidth onClick={onDone}>Done</PrimaryButton>
+          <PrimaryButton fullWidth onClick={onDone}>{review.done_label}</PrimaryButton>
         </div>
       </div>
     </div>

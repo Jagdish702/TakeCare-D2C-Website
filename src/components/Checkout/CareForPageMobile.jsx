@@ -1,18 +1,16 @@
 import CheckoutStepperMobile from './CheckoutStepperMobile';
+import { useContent } from '../../context/ContentContext';
 
 /*
   Mobile "Who is this care for?" — Figma node 14024:20404. Same content/
   behaviour as the desktop CareForPage — reuses CheckoutStepperMobile
   (currentStep=1, same index ShippingDetailsPageMobile uses) —
   single-column option cards instead of side-by-side, mobile type sizes.
+  Heading/options come from checkout.careForPage/checkout.optionCards via
+  useContent(), same as the desktop page.
 */
 
 const FONT = 'Inter, sans-serif';
-
-const OPTIONS = [
-  { key: 'me', label: 'Me', image: '/assets/checkout/avatar-me.png' },
-  { key: 'someone-else', label: 'Someone else', image: '/assets/checkout/avatar-someone-else.png' },
-];
 
 function SubProgressBar({ filled = 2, total = 5 }) {
   return (
@@ -67,7 +65,12 @@ function OptionCardMobile({ option, onSelect }) {
 }
 
 export default function CareForPageMobile({ isOpen, onContinue }) {
+  const { checkout, images } = useContent();
   if (!isOpen) return null;
+
+  const options = checkout.optionCards
+    .filter((o) => o.page_key === 'care_for')
+    .map((o) => ({ key: o.option_key, label: o.label, image: images[o.image_key] }));
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#f9f9f9', zIndex: 1200, overflowY: 'auto' }}>
@@ -92,10 +95,10 @@ export default function CareForPageMobile({ isOpen, onContinue }) {
         >
           <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 48 }}>
             <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 24, color: '#000', lineHeight: '32px', textAlign: 'center' }}>
-              Who is this care for?
+              {checkout.careForPage.heading}
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start', width: '100%' }}>
-              {OPTIONS.map((option) => (
+              {options.map((option) => (
                 <OptionCardMobile key={option.key} option={option} onSelect={onContinue} />
               ))}
             </div>

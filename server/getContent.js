@@ -94,6 +94,11 @@ export function getContent() {
       payment: one('SELECT * FROM payment_page_content WHERE id = 1'),
       statusCards: all('SELECT * FROM status_cards ORDER BY sort_order'),
       orderConfirmation: one('SELECT * FROM order_confirmation_content WHERE id = 1'),
+      optionCards: all('SELECT * FROM checkout_option_cards ORDER BY sort_order'),
+      careForPage: one('SELECT * FROM care_for_page_content WHERE id = 1'),
+      caregiverConfirmPage: one('SELECT * FROM caregiver_confirm_page_content WHERE id = 1'),
+      giftPage: one('SELECT * FROM gift_page_content WHERE id = 1'),
+      orderReview: one('SELECT * FROM order_review_content WHERE id = 1'),
     },
 
     profile: {

@@ -1,10 +1,12 @@
 import CheckoutStepperMobile from './CheckoutStepperMobile';
+import { useContent } from '../../context/ContentContext';
 
 /*
   Mobile "Is it a gift? 💐" — Figma node 14024:21524. Same content/behaviour
   as the desktop GiftPage — reuses CheckoutStepperMobile (currentStep=1) —
   single-column stacked option cards instead of side-by-side, mobile type
-  sizes.
+  sizes. Copy/options come from checkout.giftPage/checkout.optionCards via
+  useContent().
 */
 
 const FONT = 'Inter, sans-serif';
@@ -46,7 +48,12 @@ function OptionCardMobile({ image, imageStyle, label, onSelect }) {
 }
 
 export default function GiftPageMobile({ isOpen, onSelect }) {
+  const { checkout, images } = useContent();
   if (!isOpen) return null;
+
+  const optionByKey = Object.fromEntries(
+    checkout.optionCards.filter((o) => o.page_key === 'gift').map((o) => [o.option_key, o])
+  );
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#f9f9f9', zIndex: 1200, overflowY: 'auto' }}>
@@ -74,23 +81,23 @@ export default function GiftPageMobile({ isOpen, onSelect }) {
           }}
         >
           <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 24, color: '#000', lineHeight: '32px', textAlign: 'center' }}>
-            Is it a gift? 💐
+            {checkout.giftPage.heading}
           </p>
           <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 14, color: '#808080', letterSpacing: '0.4536px', lineHeight: '24px', textAlign: 'center' }}>
-            The TakeCare device will be delivered with a gift card that has your name on it.
+            {checkout.giftPage.body}
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'stretch', width: '100%' }}>
             <OptionCardMobile
-              image="/assets/checkout/illustration-gift.png"
+              image={images[optionByKey.yes.image_key]}
               imageStyle={{ objectFit: 'cover' }}
-              label="Yes, It's a gift"
+              label={optionByKey.yes.label}
               onSelect={() => onSelect?.(true)}
             />
             <OptionCardMobile
-              image="/assets/checkout/illustration-device-self.png"
-              imageStyle={{ objectFit: 'cover', left: '-7.35%', top: '-3.31%', width: '107.91%', height: '107.91%' }}
-              label="No, it's not"
+              image={images[optionByKey.no.image_key]}
+              imageStyle={{ objectFit: 'contain' }}
+              label={optionByKey.no.label}
               onSelect={() => onSelect?.(false)}
             />
           </div>

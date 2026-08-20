@@ -462,6 +462,42 @@ INSERT INTO payment_page_content (
   'Fraud held payments are reviewed within 24 hrs — contact support@curebay.com'
 );
 
+DELETE FROM checkout_option_cards;
+INSERT INTO checkout_option_cards (page_key, option_key, label, image_key, sort_order) VALUES
+  ('care_for', 'me', 'Me', 'checkout-avatar-me', 0),
+  ('care_for', 'someone-else', 'Someone else', 'checkout-avatar-someone-else', 1),
+  ('caregiver_confirm', 'yes', 'Yes, I''ll be the caregiver', 'checkout-caregiver-yes', 0),
+  ('caregiver_confirm', 'no', 'No, not right now', 'checkout-caregiver-no', 1),
+  ('gift', 'yes', 'Yes, It''s a gift', 'checkout-gift-yes', 0),
+  ('gift', 'no', 'No, it''s not', 'checkout-gift-no', 1);
+
+DELETE FROM care_for_page_content;
+INSERT INTO care_for_page_content (id, heading) VALUES (
+  1, 'Who is this care for?'
+);
+
+DELETE FROM caregiver_confirm_page_content;
+INSERT INTO caregiver_confirm_page_content (id, heading_template, body) VALUES (
+  1, 'Would you like to be the caregiver of {name}?',
+  'By accepting, you will be able to manage their care.'
+);
+
+DELETE FROM gift_page_content;
+INSERT INTO gift_page_content (id, heading, body) VALUES (
+  1, 'Is it a gift? 💐',
+  'The TakeCare device will be delivered with a gift card that has your name on it.'
+);
+
+DELETE FROM order_review_content;
+INSERT INTO order_review_content (
+  id, gift_heading, plain_heading, delivered_to_label, caregiver_label, done_label,
+  gift_card_welcome_line1, gift_card_welcome_line2, gift_card_from_label
+) VALUES (
+  1, 'Dispenser will be delivered with this gift card', 'Check order Details',
+  'Will be Delivered to', 'Caregiver', 'Done',
+  'Welcome to', 'Take Care Family 🎉', 'A gift from'
+);
+
 DELETE FROM status_cards;
 INSERT INTO status_cards (variant_key, heading, subheading, primary_label, secondary_label, countdown_text, footer_text, sort_order) VALUES
   ('payment_failed', 'Payment failed', 'Your order was not placed.', 'Try again', 'Change payment method', NULL, 'Your cart is saved.', 0),
@@ -673,4 +709,19 @@ INSERT INTO image_assets (image_key, url) VALUES
   ('subscription-device', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Subscription_section/Dispenser_%26_mobile_live_img.png'),
   ('subscription-cart-device', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Pill_dispenser.png'),
   ('subscription-cart-mobile', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/HomePage_Assets/Hero_section/Mobile_img.png'),
-  ('order-confirmation-phone-in-hand', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/phone-in-hand.png');
+  ('order-confirmation-phone-in-hand', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/phone-in-hand.png'),
+
+  -- Caregiver/Gift checkout sub-flow (CareForPage/CaregiverConfirmPage/GiftPage/GiftSummaryPage) ---
+  ('checkout-avatar-me', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/me.png'),
+  -- No real bucket URL exists yet for this one — "someone else.png" at the
+  -- source is a byte-for-byte duplicate of "me.png" (confirmed via hash),
+  -- which would make the "Me"/"Someone else" cards visually identical, so
+  -- this keeps the existing distinct local asset as a placeholder url (same
+  -- documented convention as every other image_assets row before its real
+  -- file is uploaded to the bucket).
+  ('checkout-avatar-someone-else', '/assets/checkout/avatar-someone-else.png'),
+  ('checkout-caregiver-yes', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/yes%20i%20will%20be%20the%20care%20giver.png'),
+  ('checkout-caregiver-no', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/no%20not%20right%20now.png'),
+  ('checkout-gift-yes', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/yes%20its%20a%20gift.png'),
+  ('checkout-gift-no', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/no%20its%20not.png'),
+  ('checkout-gift-card-device', 'https://storage.googleapis.com/d2c-ruralos-assets/TakeCare%20D2C%20Website/Take%20Care%20Web%20Assets/Take%20Care%20Web%20Assets/welcome%20card%20pill%20box.png');

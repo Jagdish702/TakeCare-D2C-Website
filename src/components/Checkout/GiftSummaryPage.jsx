@@ -1,6 +1,7 @@
 import CheckoutStepper from './CheckoutStepper';
 import PrimaryButton from '../common/PrimaryButton';
 import { DeliveryVanIcon, LocationIcon, PhoneCallIcon } from './OrderDetailsPage';
+import { useContent } from '../../context/ContentContext';
 
 /*
   "Dispenser will be delivered with this gift card" — Figma node
@@ -15,6 +16,10 @@ import { DeliveryVanIcon, LocationIcon, PhoneCallIcon } from './OrderDetailsPage
   (shippingInfo, collected on the first "User Details & shipping address"
   step) — the "Will be Delivered to" card comes from the OTHER person's
   details (personDetails, collected on "Enter the details of the person").
+
+  All copy/labels + the avatar/gift-card-device images come from
+  checkout.orderReview / images via useContent() — shared with
+  CaregiverOrderDetailsPage/OrderDetailsPage (same review-card family).
 */
 
 const HEADER_H = 52;
@@ -66,7 +71,7 @@ export function DetailsCard({ title, avatarSrc, icon, primaryLine, primaryLineSi
   );
 }
 
-function GiftCard({ giverName, style }) {
+function GiftCard({ giverName, deviceImage, review, style }) {
   return (
     <div
       style={{
@@ -82,13 +87,13 @@ function GiftCard({ giverName, style }) {
       }}
     >
       <p style={{ margin: 0, width: '100%', fontFamily: "'Kalnia', serif", fontWeight: 600, fontSize: 28, color: '#fff', lineHeight: 1.3, letterSpacing: '-0.28px', textAlign: 'center' }}>
-        Welcome to
+        {review.gift_card_welcome_line1}
         <br />
-        Take Care Family 🎉
+        {review.gift_card_welcome_line2}
       </p>
-      <img src="/assets/checkout/gift-card-device.png" alt="" draggable={false} style={{ width: 120, height: 196.642, objectFit: 'cover', flexShrink: 0 }} />
+      <img src={deviceImage} alt="" draggable={false} style={{ width: 120, height: 196.642, objectFit: 'cover', flexShrink: 0 }} />
       <p style={{ margin: 0, width: '100%', fontFamily: "'Kalam', cursive", fontWeight: 400, fontSize: 18, color: '#fff', letterSpacing: '0.5825px', lineHeight: '28px', textAlign: 'center' }}>
-        A gift from
+        {review.gift_card_from_label}
         <br />
         {giverName}
       </p>
@@ -97,7 +102,10 @@ function GiftCard({ giverName, style }) {
 }
 
 export default function GiftSummaryPage({ shippingInfo, personDetails, isCaregiver, isOpen, onDone }) {
+  const { checkout, images } = useContent();
   if (!isOpen) return null;
+
+  const review = checkout.orderReview;
 
   // Figma node 14012:23464: when the account holder declined to be the
   // caregiver on CaregiverConfirmPage, this review screen drops the
@@ -140,16 +148,16 @@ export default function GiftSummaryPage({ shippingInfo, personDetails, isCaregiv
           >
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 48, padding: 32, borderRadius: 24, boxSizing: 'border-box' }}>
               <p style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 32, color: '#000', lineHeight: 1.3, letterSpacing: '-0.32px', textAlign: 'center' }}>
-                Dispenser will be delivered with this gift card
+                {review.gift_heading}
               </p>
 
               <div style={{ display: 'flex', gap: 48, alignItems: 'center' }}>
-                <GiftCard giverName={giverName} style={{ width: 372 }} />
+                <GiftCard giverName={giverName} deviceImage={images['checkout-gift-card-device']} review={review} style={{ width: 372 }} />
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start', width: 271 }}>
                   <DetailsCard
-                    title="Will be Delivered to"
-                    avatarSrc="/assets/checkout/avatar-someone-else.png"
+                    title={review.delivered_to_label}
+                    avatarSrc={images['checkout-avatar-someone-else']}
                     icon={<DeliveryVanIcon />}
                     primaryLine={recipientName}
                     primaryLineSize={15}
@@ -158,8 +166,8 @@ export default function GiftSummaryPage({ shippingInfo, personDetails, isCaregiv
                   />
                   {showCaregiverCard && (
                     <DetailsCard
-                      title="Caregiver"
-                      avatarSrc="/assets/checkout/avatar-me.png"
+                      title={review.caregiver_label}
+                      avatarSrc={images['checkout-avatar-me']}
                       icon={<UserIcon />}
                       primaryLine={giverName}
                       phone={giverPhone}
@@ -168,7 +176,7 @@ export default function GiftSummaryPage({ shippingInfo, personDetails, isCaregiv
                 </div>
               </div>
 
-              <PrimaryButton fullWidth onClick={onDone}>Done</PrimaryButton>
+              <PrimaryButton fullWidth onClick={onDone}>{review.done_label}</PrimaryButton>
             </div>
           </div>
         </div>

@@ -1,10 +1,12 @@
 import CheckoutStepperMobile from './CheckoutStepperMobile';
+import { useContent } from '../../context/ContentContext';
 
 /*
   Mobile "Would you like to be the caregiver of [Name]?" — Figma node
   14024:21403. Same content/behaviour as the desktop CaregiverConfirmPage —
   reuses CheckoutStepperMobile (currentStep=1) — single-column stacked
-  option cards instead of side-by-side, mobile type sizes.
+  option cards instead of side-by-side, mobile type sizes. Copy/options come
+  from checkout.caregiverConfirmPage/checkout.optionCards via useContent().
 */
 
 const FONT = 'Inter, sans-serif';
@@ -45,9 +47,14 @@ function OptionCardMobile({ image, imageStyle, label, onSelect }) {
 }
 
 export default function CaregiverConfirmPageMobile({ personDetails, isOpen, onConfirm }) {
+  const { checkout, images } = useContent();
   if (!isOpen) return null;
 
   const firstName = personDetails?.fullName?.trim().split(/\s+/)[0] || 'them';
+  const [headingBefore, headingAfter] = checkout.caregiverConfirmPage.heading_template.split('{name}');
+  const optionByKey = Object.fromEntries(
+    checkout.optionCards.filter((o) => o.page_key === 'caregiver_confirm').map((o) => [o.option_key, o])
+  );
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#f9f9f9', zIndex: 1200, overflowY: 'auto' }}>
@@ -75,23 +82,23 @@ export default function CaregiverConfirmPageMobile({ personDetails, isOpen, onCo
           }}
         >
           <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 24, color: '#000', lineHeight: '32px', textAlign: 'center' }}>
-            Would you like to be the caregiver of <span style={{ color: '#30956a' }}>{firstName}</span>?
+            {headingBefore}<span style={{ color: '#30956a' }}>{firstName}</span>{headingAfter}
           </p>
           <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 14, color: '#808080', letterSpacing: '0.4536px', lineHeight: '24px', textAlign: 'center' }}>
-            By accepting, you will be able to manage their care.
+            {checkout.caregiverConfirmPage.body}
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'stretch', width: '100%' }}>
             <OptionCardMobile
-              image="/assets/checkout/avatar-me.png"
+              image={images[optionByKey.yes.image_key]}
               imageStyle={{ objectFit: 'cover' }}
-              label="Yes, I'll be the caregiver"
+              label={optionByKey.yes.label}
               onSelect={() => onConfirm?.(true)}
             />
             <OptionCardMobile
-              image="/assets/checkout/illustration-not-caregiver.png"
+              image={images[optionByKey.no.image_key]}
               imageStyle={{ objectFit: 'contain' }}
-              label="No, not right now"
+              label={optionByKey.no.label}
               onSelect={() => onConfirm?.(false)}
             />
           </div>

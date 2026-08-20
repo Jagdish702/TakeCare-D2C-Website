@@ -1,10 +1,14 @@
 import CheckoutStepper from './CheckoutStepper';
+import { useContent } from '../../context/ContentContext';
 
 /*
   "Is it a gift? 💐" — Figma node 14012:23546, reached from either option on
   CaregiverConfirmPage ("Yes" or "No" both lead here). Reuses the shared
   CheckoutStepper (currentStep=1) and the same stepper/progress-bar/
   dot-grid-card shell as CareForPage/PersonDetailsPage/CaregiverConfirmPage.
+
+  Copy and the two option cards come from checkout.giftPage/
+  checkout.optionCards (page_key='gift') via useContent().
 */
 
 const HEADER_H = 52;
@@ -47,7 +51,12 @@ function OptionCard({ image, imageStyle, label, onSelect }) {
 }
 
 export default function GiftPage({ isOpen, onSelect }) {
+  const { checkout, images } = useContent();
   if (!isOpen) return null;
+
+  const optionByKey = Object.fromEntries(
+    checkout.optionCards.filter((o) => o.page_key === 'gift').map((o) => [o.option_key, o])
+  );
 
   return (
     <div style={{ position: 'fixed', top: HEADER_H, left: 0, right: 0, bottom: 0, background: '#f9f9f9', zIndex: 1200, overflowY: 'auto' }}>
@@ -78,24 +87,24 @@ export default function GiftPage({ isOpen, onSelect }) {
             <div style={{ width: 520, maxWidth: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 48 }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center', textAlign: 'center', width: '100%' }}>
                 <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 32, color: '#000', lineHeight: 1.3, letterSpacing: '-0.32px' }}>
-                  Is it a gift? 💐
+                  {checkout.giftPage.heading}
                 </p>
                 <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 400, fontSize: 16, color: '#000', lineHeight: 1.5 }}>
-                  The TakeCare device will be delivered with a gift card that has your name on it.
+                  {checkout.giftPage.body}
                 </p>
               </div>
 
               <div style={{ display: 'flex', gap: 16, alignItems: 'stretch', width: '100%' }}>
                 <OptionCard
-                  image="/assets/checkout/illustration-gift.png"
+                  image={images[optionByKey.yes.image_key]}
                   imageStyle={{ objectFit: 'cover' }}
-                  label="Yes, It's a gift"
+                  label={optionByKey.yes.label}
                   onSelect={() => onSelect?.(true)}
                 />
                 <OptionCard
-                  image="/assets/checkout/illustration-device-self.png"
-                  imageStyle={{ objectFit: 'cover', left: '-7.35%', top: '-3.31%', width: '107.91%', height: '107.91%' }}
-                  label="No, it's not"
+                  image={images[optionByKey.no.image_key]}
+                  imageStyle={{ objectFit: 'contain' }}
+                  label={optionByKey.no.label}
                   onSelect={() => onSelect?.(false)}
                 />
               </div>

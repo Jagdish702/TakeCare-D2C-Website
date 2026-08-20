@@ -1,6 +1,7 @@
 import CheckoutStepperMobile from './CheckoutStepperMobile';
 import PrimaryButton from '../common/PrimaryButton';
 import { DeliveryVanIcon, LocationIcon, PhoneCallIcon } from './OrderDetailsPage';
+import { useContent } from '../../context/ContentContext';
 
 /*
   Mobile "Dispenser will be delivered with this gift card" — Figma node
@@ -59,8 +60,10 @@ export function DetailsCard({ title, avatarSrc, icon, primaryLine, primaryLineSi
 }
 
 export default function GiftSummaryPageMobile({ shippingInfo, personDetails, isCaregiver, isOpen, onDone }) {
+  const { checkout, images } = useContent();
   if (!isOpen) return null;
 
+  const review = checkout.orderReview;
   const showCaregiverCard = isCaregiver !== false;
 
   const giverName = shippingInfo ? `${shippingInfo.firstName} ${shippingInfo.lastName}`.trim() : 'Krishna Mehra';
@@ -97,13 +100,13 @@ export default function GiftSummaryPageMobile({ shippingInfo, personDetails, isC
           }}
         >
           <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 24, color: '#000', lineHeight: '32px', textAlign: 'center' }}>
-            Dispenser will be delivered with this gift card
+            {review.gift_heading}
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start', width: '100%' }}>
             <DetailsCard
-              title="Will be Delivered to"
-              avatarSrc="/assets/checkout/avatar-someone-else.png"
+              title={review.delivered_to_label}
+              avatarSrc={images['checkout-avatar-someone-else']}
               icon={<DeliveryVanIcon />}
               primaryLine={recipientName}
               primaryLineSize={15}
@@ -112,8 +115,8 @@ export default function GiftSummaryPageMobile({ shippingInfo, personDetails, isC
             />
             {showCaregiverCard && (
               <DetailsCard
-                title="Caregiver"
-                avatarSrc="/assets/checkout/avatar-me.png"
+                title={review.caregiver_label}
+                avatarSrc={images['checkout-avatar-me']}
                 icon={<UserIcon />}
                 primaryLine={giverName}
                 phone={giverPhone}
@@ -121,7 +124,7 @@ export default function GiftSummaryPageMobile({ shippingInfo, personDetails, isC
             )}
           </div>
 
-          <PrimaryButton fullWidth onClick={onDone}>Done</PrimaryButton>
+          <PrimaryButton fullWidth onClick={onDone}>{review.done_label}</PrimaryButton>
 
           {/* Gift card visual — Figma places this below the Done button on mobile */}
           <div
@@ -138,13 +141,13 @@ export default function GiftSummaryPageMobile({ shippingInfo, personDetails, isC
             }}
           >
             <p style={{ margin: 0, width: '100%', fontFamily: "'Kalnia', serif", fontWeight: 600, fontSize: 24, color: '#fff', lineHeight: 1.3, letterSpacing: '-0.24px', textAlign: 'center' }}>
-              Welcome to
+              {review.gift_card_welcome_line1}
               <br />
-              Take Care Family 🎉
+              {review.gift_card_welcome_line2}
             </p>
-            <img src="/assets/checkout/gift-card-device.png" alt="" draggable={false} style={{ width: 95.484, height: 156.468, objectFit: 'cover', flexShrink: 0 }} />
+            <img src={images['checkout-gift-card-device']} alt="" draggable={false} style={{ width: 95.484, height: 156.468, objectFit: 'cover', flexShrink: 0 }} />
             <p style={{ margin: 0, width: '100%', fontFamily: "'Kalam', cursive", fontWeight: 400, fontSize: 18, color: '#fff', letterSpacing: '0.5825px', lineHeight: '22.28px', textAlign: 'center' }}>
-              A gift from
+              {review.gift_card_from_label}
               <br />
               {giverName}
             </p>

@@ -2,6 +2,7 @@ import CheckoutStepperMobile from './CheckoutStepperMobile';
 import PrimaryButton from '../common/PrimaryButton';
 import { DeliveryVanIcon, LocationIcon, PhoneCallIcon } from './OrderDetailsPage';
 import { UserIcon, DetailsCard } from './GiftSummaryPageMobile';
+import { useContent } from '../../context/ContentContext';
 
 /*
   Mobile "Check order Details" — Figma node 14026:21701, reached from
@@ -18,8 +19,10 @@ const DOT_GRID_BG = {
 };
 
 export default function CaregiverOrderDetailsPageMobile({ shippingInfo, personDetails, isCaregiver, isOpen, onDone }) {
+  const { checkout, images } = useContent();
   if (!isOpen) return null;
 
+  const review = checkout.orderReview;
   const showCaregiverCard = isCaregiver !== false;
 
   const giverName = shippingInfo ? `${shippingInfo.firstName} ${shippingInfo.lastName}`.trim() : 'Krishna Mehra';
@@ -56,13 +59,13 @@ export default function CaregiverOrderDetailsPageMobile({ shippingInfo, personDe
           }}
         >
           <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 24, color: '#000', lineHeight: '32px', textAlign: 'center' }}>
-            Check order Details
+            {review.plain_heading}
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start', width: '100%' }}>
             <DetailsCard
-              title="Will be Delivered to"
-              avatarSrc="/assets/checkout/avatar-someone-else.png"
+              title={review.delivered_to_label}
+              avatarSrc={images['checkout-avatar-someone-else']}
               icon={<DeliveryVanIcon />}
               primaryLine={recipientName}
               primaryLineSize={15}
@@ -71,8 +74,8 @@ export default function CaregiverOrderDetailsPageMobile({ shippingInfo, personDe
             />
             {showCaregiverCard && (
               <DetailsCard
-                title="Caregiver"
-                avatarSrc="/assets/checkout/avatar-me.png"
+                title={review.caregiver_label}
+                avatarSrc={images['checkout-avatar-me']}
                 icon={<UserIcon />}
                 primaryLine={giverName}
                 phone={giverPhone}
@@ -80,7 +83,7 @@ export default function CaregiverOrderDetailsPageMobile({ shippingInfo, personDe
             )}
           </div>
 
-          <PrimaryButton fullWidth onClick={onDone}>Done</PrimaryButton>
+          <PrimaryButton fullWidth onClick={onDone}>{review.done_label}</PrimaryButton>
         </div>
       </div>
     </div>

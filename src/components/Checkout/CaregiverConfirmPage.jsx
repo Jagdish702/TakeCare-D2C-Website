@@ -1,4 +1,5 @@
 import CheckoutStepper from './CheckoutStepper';
+import { useContent } from '../../context/ContentContext';
 
 /*
   "Would you like to be the caregiver of [Name]?" — Figma node 14012:23003,
@@ -7,6 +8,12 @@ import CheckoutStepper from './CheckoutStepper';
   same stepper/progress-bar/dot-grid-card shell as CareForPage/
   PersonDetailsPage/OrderDetailsPage. [Name] is the first word of the real
   full name entered on PersonDetailsPage, not Figma's placeholder "Rohit".
+
+  Body text and the two option cards come from
+  checkout.caregiverConfirmPage / checkout.optionCards (page_key=
+  'caregiver_confirm') via useContent() — heading_template's "{name}"
+  placeholder is split out so the real name can be wrapped in its own
+  colored <span>.
 */
 
 const HEADER_H = 52;
@@ -48,9 +55,14 @@ function OptionCard({ image, imageStyle, label, onSelect }) {
 }
 
 export default function CaregiverConfirmPage({ personDetails, isOpen, onConfirm }) {
+  const { checkout, images } = useContent();
   if (!isOpen) return null;
 
   const firstName = personDetails?.fullName?.trim().split(/\s+/)[0] || 'them';
+  const [headingBefore, headingAfter] = checkout.caregiverConfirmPage.heading_template.split('{name}');
+  const optionByKey = Object.fromEntries(
+    checkout.optionCards.filter((o) => o.page_key === 'caregiver_confirm').map((o) => [o.option_key, o])
+  );
 
   return (
     <div style={{ position: 'fixed', top: HEADER_H, left: 0, right: 0, bottom: 0, background: '#f9f9f9', zIndex: 1200, overflowY: 'auto' }}>
@@ -81,24 +93,24 @@ export default function CaregiverConfirmPage({ personDetails, isOpen, onConfirm 
             <div style={{ width: 520, maxWidth: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 48 }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center', textAlign: 'center', width: '100%' }}>
                 <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 32, color: '#000', lineHeight: 1.3, letterSpacing: '-0.32px' }}>
-                  Would you like to be the caregiver of <span style={{ color: '#30956a' }}>{firstName}</span>?
+                  {headingBefore}<span style={{ color: '#30956a' }}>{firstName}</span>{headingAfter}
                 </p>
                 <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 400, fontSize: 16, color: '#000', lineHeight: 1.5 }}>
-                  By accepting, you will be able to manage their care.
+                  {checkout.caregiverConfirmPage.body}
                 </p>
               </div>
 
               <div style={{ display: 'flex', gap: 16, alignItems: 'stretch', width: '100%' }}>
                 <OptionCard
-                  image="/assets/checkout/avatar-me.png"
+                  image={images[optionByKey.yes.image_key]}
                   imageStyle={{ objectFit: 'cover' }}
-                  label="Yes, I'll be the caregiver"
+                  label={optionByKey.yes.label}
                   onSelect={() => onConfirm?.(true)}
                 />
                 <OptionCard
-                  image="/assets/checkout/illustration-not-caregiver.png"
+                  image={images[optionByKey.no.image_key]}
                   imageStyle={{ objectFit: 'contain' }}
-                  label="No, not right now"
+                  label={optionByKey.no.label}
                   onSelect={() => onConfirm?.(false)}
                 />
               </div>

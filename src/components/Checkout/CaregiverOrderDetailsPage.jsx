@@ -2,6 +2,7 @@ import CheckoutStepper from './CheckoutStepper';
 import PrimaryButton from '../common/PrimaryButton';
 import { DeliveryVanIcon, LocationIcon, PhoneCallIcon } from './OrderDetailsPage';
 import { UserIcon, DetailsCard } from './GiftSummaryPage';
+import { useContent } from '../../context/ContentContext';
 
 /*
   "Check order Details" — Figma node 14019:18843, reached from GiftPage's
@@ -21,7 +22,10 @@ const DOT_GRID_BG = {
 };
 
 export default function CaregiverOrderDetailsPage({ shippingInfo, personDetails, isCaregiver, isOpen, onDone }) {
+  const { checkout, images } = useContent();
   if (!isOpen) return null;
+
+  const review = checkout.orderReview;
 
   // Figma node 14027:26492: when the account holder declined to be the
   // caregiver, this review screen drops the "Caregiver" card entirely.
@@ -63,13 +67,13 @@ export default function CaregiverOrderDetailsPage({ shippingInfo, personDetails,
           >
             <div style={{ width: 400, maxWidth: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 48, padding: 32, borderRadius: 24, boxSizing: 'border-box' }}>
               <p style={{ margin: 0, width: '100%', fontFamily: FONT, fontWeight: 500, fontSize: 32, color: '#000', lineHeight: 1.3, letterSpacing: '-0.32px', textAlign: 'center' }}>
-                Check order Details
+                {review.plain_heading}
               </p>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-start', width: 271 }}>
                 <DetailsCard
-                  title="Will be Delivered to"
-                  avatarSrc="/assets/checkout/avatar-someone-else.png"
+                  title={review.delivered_to_label}
+                  avatarSrc={images['checkout-avatar-someone-else']}
                   icon={<DeliveryVanIcon />}
                   primaryLine={recipientName}
                   primaryLineSize={15}
@@ -78,8 +82,8 @@ export default function CaregiverOrderDetailsPage({ shippingInfo, personDetails,
                 />
                 {showCaregiverCard && (
                   <DetailsCard
-                    title="Caregiver"
-                    avatarSrc="/assets/checkout/avatar-me.png"
+                    title={review.caregiver_label}
+                    avatarSrc={images['checkout-avatar-me']}
                     icon={<UserIcon />}
                     primaryLine={giverName}
                     phone={giverPhone}
@@ -87,7 +91,7 @@ export default function CaregiverOrderDetailsPage({ shippingInfo, personDetails,
                 )}
               </div>
 
-              <PrimaryButton fullWidth onClick={onDone}>Done</PrimaryButton>
+              <PrimaryButton fullWidth onClick={onDone}>{review.done_label}</PrimaryButton>
             </div>
           </div>
         </div>

@@ -638,7 +638,62 @@ CREATE TABLE dashboard_general_card (
 );
 
 -- ============================================================================
--- 14. IMAGE ASSETS  (photo/background/product/scene images, GCP Storage URLs)
+-- 14. CAREGIVER / GIFT CHECKOUT SUB-FLOW
+--     (CareForPage, CaregiverConfirmPage, GiftPage, GiftSummaryPage,
+--      CaregiverOrderDetailsPage, OrderDetailsPage — desktop + mobile share
+--      identical copy, same convention as the rest of the checkout flow)
+-- ============================================================================
+
+-- Generic option-card rows (icon image + label), reused across the three
+-- yes/no-style pages in this sub-flow — same "page_key + option_key" keying
+-- convention as form_fields' "form_key + field_key".
+CREATE TABLE checkout_option_cards (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    page_key     TEXT NOT NULL,    -- 'care_for' | 'caregiver_confirm' | 'gift'
+    option_key   TEXT NOT NULL,    -- 'me' | 'someone-else' | 'yes' | 'no'
+    label        TEXT NOT NULL,
+    image_key    TEXT NOT NULL,    -- references image_assets.image_key
+    sort_order   INTEGER NOT NULL DEFAULT 0
+);
+CREATE UNIQUE INDEX idx_checkout_option_cards_unique ON checkout_option_cards(page_key, option_key);
+
+CREATE TABLE care_for_page_content (
+    id         INTEGER PRIMARY KEY CHECK (id = 1),
+    heading    TEXT NOT NULL,   -- "Who is this care for?"
+    updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE caregiver_confirm_page_content (
+    id              INTEGER PRIMARY KEY CHECK (id = 1),
+    heading_template TEXT NOT NULL,   -- "Would you like to be the caregiver of {name}?" — {name} is the real recipient name, not DB content
+    body            TEXT NOT NULL,    -- "By accepting, you will be able to manage their care."
+    updated_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE gift_page_content (
+    id         INTEGER PRIMARY KEY CHECK (id = 1),
+    heading    TEXT NOT NULL,   -- "Is it a gift? 💐"
+    body       TEXT NOT NULL,   -- "The TakeCare device will be delivered with a gift card that has your name on it."
+    updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Shared by GiftSummaryPage / CaregiverOrderDetailsPage / OrderDetailsPage —
+-- all three are variants of the same "review before Done" card.
+CREATE TABLE order_review_content (
+    id                    INTEGER PRIMARY KEY CHECK (id = 1),
+    gift_heading           TEXT NOT NULL,   -- "Dispenser will be delivered with this gift card" (GiftSummaryPage)
+    plain_heading          TEXT NOT NULL,   -- "Check order Details" (CaregiverOrderDetailsPage / OrderDetailsPage)
+    delivered_to_label      TEXT NOT NULL,   -- "Will be Delivered to"
+    caregiver_label         TEXT NOT NULL,   -- "Caregiver"
+    done_label             TEXT NOT NULL,   -- "Done"
+    gift_card_welcome_line1  TEXT NOT NULL,   -- "Welcome to"
+    gift_card_welcome_line2  TEXT NOT NULL,   -- "Take Care Family 🎉"
+    gift_card_from_label     TEXT NOT NULL,   -- "A gift from"
+    updated_at             TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- ============================================================================
+-- 15. IMAGE ASSETS  (photo/background/product/scene images, GCP Storage URLs)
 -- ============================================================================
 
 -- Every photographic/illustrative image on the site (backgrounds, product &
