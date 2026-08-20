@@ -179,7 +179,7 @@ export function computeOrderMeta(plan) {
   deliveredBy.setDate(deliveredBy.getDate() + 5);
   const renewsOn = new Date(now);
   if (plan?.key === 'yearly') renewsOn.setFullYear(renewsOn.getFullYear() + 1);
-  else renewsOn.setMonth(renewsOn.getMonth() + 1);
+  else renewsOn.setMonth(renewsOn.getMonth() + 3);
   return {
     orderNumber: `CB-${now.getFullYear()}-${String(Math.floor(10000 + Math.random() * 90000))}`,
     deliveredBy: formatWeekdayDDMMYYYY(deliveredBy),
@@ -197,7 +197,7 @@ export default function OrderConfirmationPage({ plan, shippingInfo, personDetail
 
   if (!isOpen || !plan) return null;
 
-  const planName = plan.key === 'yearly' ? 'Yearly' : 'Monthly';
+  const planName = plan.key === 'yearly' ? 'Yearly' : 'Quarterly';
   const email = shippingInfo?.email || '';
   const contactPhone = shippingInfo?.phone ? `+91 ${shippingInfo.phone}` : '';
   const addressLine = shippingInfo

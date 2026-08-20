@@ -327,10 +327,10 @@ INSERT INTO subscription_section_content (
 );
 
 DELETE FROM subscription_plans;
-INSERT INTO subscription_plans (plan_key, title, price_amount, price_period_line1, price_period_line2, cta_label, disclaimer_line1, disclaimer_line2, sort_order) VALUES
-  ('monthly', 'Monthly plan', '99', 'INR /', 'month', 'Get Started at ₹1,698',
+INSERT INTO subscription_plans (plan_key, title, price_amount, price_period_line1, price_period_line2, price_period_note, cta_label, disclaimer_line1, disclaimer_line2, sort_order) VALUES
+  ('quarterly', 'Quarterly plan', '297', 'INR /', 'Quarterly', '(₹99/mo)', 'Get Started at ₹1,896',
    'One-time device purchase. Monthly subscription billing.', 'Save up to ₹100 every month on dedicated care.', 0),
-  ('yearly', 'Yearly plan', '999', 'INR /', 'year', 'Get Started at ₹2,598',
+  ('yearly', 'Yearly plan', '999', 'INR /', 'year', NULL, 'Get Started at ₹2,598',
    'One-time device purchase. Yearly subscription billing.', 'Save up to ₹1,000 every year on dedicated care.', 1);
 
 DELETE FROM subscription_plan_features;
@@ -348,7 +348,7 @@ INSERT INTO cart_product (id, name, tag, description, qty_label, price) VALUES (
 
 DELETE FROM cart_static_text;
 INSERT INTO cart_static_text (id, title, products_section_label, subscriptions_section_label, empty_subscription_title, empty_subscription_subtitle, checkout_cta_label) VALUES (
-  1, 'Your Cart', 'Product', 'Subscriptions', 'No subscription plan added.', 'Choose Monthly or Yearly below.', 'Checkout'
+  1, 'Your Cart', 'Product', 'Subscriptions', 'No subscription plan added.', 'Choose Quarterly or Yearly below.', 'Checkout'
 );
 
 -- ============================================================================
@@ -449,8 +449,7 @@ INSERT INTO payment_options (option_key, label, subtext, sort_order) VALUES
   ('credit', 'Pay via Credit Card', NULL, 2),
   ('upi', 'Pay via UPI', NULL, 3),
   ('ewallet', 'Pay via E-Wallet', NULL, 4),
-  ('netbanking', 'Pay via Netbanking', NULL, 5),
-  ('cod', 'Cash on delivery', '(Not available for subscription orders)', 6);
+  ('netbanking', 'Pay via Netbanking', NULL, 5);
 
 DELETE FROM payment_page_content;
 INSERT INTO payment_page_content (

@@ -16,8 +16,11 @@ import { useContent } from '../../context/ContentContext';
 const SECTION_BG =
   'radial-gradient(ellipse 50% 50% at 50% 50%, #F2FBFD 0%, #FFFFFF 100%)';
 
+// See the matching constant/comment in the desktop SubscriptionSection.jsx.
+const PERIOD_NOTE_GRADIENT = 'linear-gradient(91.5deg, #b189ff 0%, #2e008b 96.072%)';
+
 /* ── Price row: ₹ symbol + big number + period label ── */
-function PriceRowMobile({ amount, periodLine1, periodLine2 }) {
+function PriceRowMobile({ amount, periodLine1, periodLine2, periodNote }) {
   return (
     <div
       style={{
@@ -33,7 +36,25 @@ function PriceRowMobile({ amount, periodLine1, periodLine2 }) {
       <span style={{ fontSize: 48, lineHeight: 'normal', flexShrink: 0 }}>{amount}</span>
       <div style={{ fontSize: 14, letterSpacing: '0.4536px', lineHeight: '24px', width: 75, flexShrink: 0 }}>
         <p style={{ margin: 0 }}>{periodLine1}</p>
-        <p style={{ margin: 0 }}>{periodLine2}</p>
+        <p style={{ margin: 0 }}>
+          {periodLine2}
+          {periodNote && (
+            <>
+              {' '}
+              <span
+                style={{
+                  fontWeight: 700,
+                  background: PERIOD_NOTE_GRADIENT,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                {periodNote}
+              </span>
+            </>
+          )}
+        </p>
       </div>
     </div>
   );
@@ -126,7 +147,7 @@ function PlanCardMobile({ plan, features, content, onGetStarted, isCurrent }) {
           <p style={{ margin: 0, fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: 16, letterSpacing: '0.5178px', lineHeight: '24px' }}>
             {content.subscription_cost_label}
           </p>
-          <PriceRowMobile amount={plan.subAmount} periodLine1={plan.subPeriod[0]} periodLine2={plan.subPeriod[1]} />
+          <PriceRowMobile amount={plan.subAmount} periodLine1={plan.subPeriod[0]} periodLine2={plan.subPeriod[1]} periodNote={plan.subPeriodNote} />
         </div>
       </div>
 

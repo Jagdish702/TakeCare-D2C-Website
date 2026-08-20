@@ -361,12 +361,13 @@ CREATE TABLE subscription_section_content (
 
 CREATE TABLE subscription_plans (
     id                    INTEGER PRIMARY KEY AUTOINCREMENT,
-    plan_key              TEXT NOT NULL UNIQUE,  -- 'monthly' | 'yearly'
-    title                 TEXT NOT NULL,          -- "Monthly plan"
-    price_amount           TEXT NOT NULL,          -- "99"
+    plan_key              TEXT NOT NULL UNIQUE,  -- 'quarterly' | 'yearly'
+    title                 TEXT NOT NULL,          -- "Quarterly plan"
+    price_amount           TEXT NOT NULL,          -- "297"
     price_period_line1      TEXT NOT NULL,          -- "INR /"
-    price_period_line2      TEXT NOT NULL,          -- "month"
-    cta_label              TEXT NOT NULL,          -- "Get Started at ₹1,698"
+    price_period_line2      TEXT NOT NULL,          -- "Quarterly"
+    price_period_note       TEXT,                   -- "(₹99/mo)" — quarterly-only per-month callout, rendered in its own bold gradient span after price_period_line2; NULL for plans without one (e.g. yearly)
+    cta_label              TEXT NOT NULL,          -- "Get Started at ₹1,896"
     disclaimer_line1        TEXT NOT NULL,
     disclaimer_line2        TEXT NOT NULL,
     sort_order             INTEGER NOT NULL DEFAULT 0
@@ -478,7 +479,7 @@ CREATE TABLE shipping_page_content (
 
 CREATE TABLE payment_options (
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
-    option_key   TEXT NOT NULL UNIQUE,  -- 'all' | 'debit_card' | 'credit_card' | 'upi' | 'e_wallet' | 'netbanking' | 'cod'
+    option_key   TEXT NOT NULL UNIQUE,  -- 'all' | 'debit_card' | 'credit_card' | 'upi' | 'e_wallet' | 'netbanking'
     label        TEXT NOT NULL,
     subtext      TEXT,                  -- "(Not available for subscription orders)" — cod only
     sort_order   INTEGER NOT NULL DEFAULT 0

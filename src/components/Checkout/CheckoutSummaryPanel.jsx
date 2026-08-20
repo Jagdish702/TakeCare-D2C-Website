@@ -1,5 +1,4 @@
 import DisclaimerCard from '../Subscription/DisclaimerCard';
-import AvailDiscounts from './AvailDiscounts';
 import { useContent } from '../../context/ContentContext';
 
 /* ── Price row in breakdown ── */
@@ -87,13 +86,12 @@ function ChevronRight() {
 export default function CheckoutSummaryPanel({ plan, onBack, onContinue }) {
   const { checkout, subscription } = useContent();
   const section = checkout.section;
-  const isMonthly = plan.key === 'monthly';
   const devicePrice = 1599;
   const subPrice = parseInt(plan.subAmount, 10);
   const subtotal = devicePrice + subPrice;
   const delivery = 49;
   const total = subtotal + delivery;
-  const dbPlan = subscription.plans.find((p) => p.plan_key === (isMonthly ? 'monthly' : 'yearly'));
+  const dbPlan = subscription.plans.find((p) => p.plan_key === plan.key);
   const subLabel = dbPlan.title;
 
   return (
@@ -121,19 +119,6 @@ export default function CheckoutSummaryPanel({ plan, onBack, onContinue }) {
           {section.delivery_estimate}
         </p>
       </DisclaimerCard>
-
-      {/* Discounts section */}
-      <div
-        style={{
-          borderTop: '1px solid #ccc',
-          borderBottom: '1px solid #ccc',
-          padding: '16px 0',
-        }}
-      >
-        <div style={{ padding: '0 24px' }}>
-          <AvailDiscounts />
-        </div>
-      </div>
 
       {/* Price breakdown */}
       <div

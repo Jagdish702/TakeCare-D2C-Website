@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import CheckoutStepperMobile from './CheckoutStepperMobile';
 import DisclaimerCard from '../Subscription/DisclaimerCard';
-import AvailDiscounts from './AvailDiscounts';
 import RadioIcon from './RadioIcon';
 import PrimaryButton from '../common/PrimaryButton';
 import StatusCard from './StatusCard';
@@ -12,10 +11,10 @@ import { useContent } from '../../context/ContentContext';
   Mobile "Payment" — Figma node 12185:6450, the third/final checkout step.
   Reuses PAYMENT_ICONS/ICON_SRC/ICON_SIZE/CashIcon/AlertCircleIcon from the
   desktop PaymentPage (same payment-mode icon sets; labels/subtext now come
-  from checkout.paymentOptions via useContent), DisclaimerCard and
-  AvailDiscounts as-is — only the layout (single column, mobile type sizes)
-  and the Contact/Shipping summary + price-breakdown blocks are rebuilt for
-  mobile, matching CheckoutPageMobile's conventions.
+  from checkout.paymentOptions via useContent) and DisclaimerCard as-is —
+  only the layout (single column, mobile type sizes) and the Contact/
+  Shipping summary + price-breakdown blocks are rebuilt for mobile,
+  matching CheckoutPageMobile's conventions.
 */
 
 const FONT = 'Inter, sans-serif';
@@ -150,8 +149,7 @@ export default function PaymentPageMobile({ plan, shippingInfo, personDetails, c
 
   if (!isOpen || !plan) return null;
 
-  const isMonthly = plan.key === 'monthly';
-  const dbPlan = subscription.plans.find((p) => p.plan_key === (isMonthly ? 'monthly' : 'yearly'));
+  const dbPlan = subscription.plans.find((p) => p.plan_key === plan.key);
   const planName = dbPlan.title;
   const product = subscription.cartProduct;
   const devicePrice = 1599;
@@ -195,10 +193,6 @@ export default function PaymentPageMobile({ plan, shippingInfo, personDetails, c
             <p style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 12, color: '#000', letterSpacing: '0.3883px', lineHeight: '20px' }}>{section.delivery_label}</p>
             <p style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 12, color: '#999', letterSpacing: '0.3883px', lineHeight: '20px' }}>{section.delivery_estimate}</p>
           </DisclaimerCard>
-
-          <div style={{ borderTop: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '16px 0', width: '100%', boxSizing: 'border-box' }}>
-            <AvailDiscounts />
-          </div>
 
           <div style={{ background: '#f7f5f4', borderBottom: '1px solid #ccc', padding: 16, display: 'flex', flexDirection: 'column', gap: 12, boxSizing: 'border-box', width: '100%' }}>
             <PriceRowMobile label={product.name} amount={`₹${devicePrice.toLocaleString('en-IN')}`} />

@@ -27,7 +27,6 @@ export const PAYMENT_ICONS = {
   upi: ['upi-badge'],
   ewallet: ['visa', 'mastercard', 'paypal', 'upi'],
   netbanking: ['netbanking'],
-  cod: ['cash'],
 };
 
 export const ICON_SRC = {

@@ -39,6 +39,7 @@ export function usePlansAndFeatures() {
       title: p.title,
       subAmount: p.price_amount,
       subPeriod: [p.price_period_line1, p.price_period_line2],
+      subPeriodNote: p.price_period_note,
       cta: p.cta_label,
       disclaimer: [p.disclaimer_line1, p.disclaimer_line2],
     }));
@@ -53,8 +54,13 @@ export function usePlansAndFeatures() {
   return { plans, features };
 }
 
+// Figma's "(₹99/mo)" per-month callout on the Quarterly plan's Subscription
+// Cost row — a bold purple gradient span appended after the plain period
+// text (e.g. "Quarterly (₹99/mo)").
+const PERIOD_NOTE_GRADIENT = 'linear-gradient(91.5deg, #b189ff 0%, #2e008b 96.072%)';
+
 /* ── Price row: ₹ symbol + big number + period label ── */
-function PriceRow({ amount, periodLine1, periodLine2 }) {
+function PriceRow({ amount, periodLine1, periodLine2, periodNote }) {
   return (
     <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end', lineHeight: 0 }}>
       <span
@@ -94,7 +100,25 @@ function PriceRow({ amount, periodLine1, periodLine2 }) {
         }}
       >
         <p style={{ margin: 0 }}>{periodLine1}</p>
-        <p style={{ margin: 0 }}>{periodLine2}</p>
+        <p style={{ margin: 0 }}>
+          {periodLine2}
+          {periodNote && (
+            <>
+              {' '}
+              <span
+                style={{
+                  fontWeight: 700,
+                  background: PERIOD_NOTE_GRADIENT,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                {periodNote}
+              </span>
+            </>
+          )}
+        </p>
       </div>
     </div>
   );
@@ -250,6 +274,7 @@ function PlanCard({ plan, features, content, onGetStarted, isCurrent }) {
             amount={plan.subAmount}
             periodLine1={plan.subPeriod[0]}
             periodLine2={plan.subPeriod[1]}
+            periodNote={plan.subPeriodNote}
           />
         </div>
       </div>

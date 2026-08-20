@@ -216,8 +216,7 @@ function ProductReviewCard() {
 /* ── Subscription review card ── */
 function SubscriptionReviewCard({ plan }) {
   const { subscription, images } = useContent();
-  const isMonthly = plan.key === 'monthly';
-  const dbPlan = subscription.plans.find((p) => p.plan_key === (isMonthly ? 'monthly' : 'yearly'));
+  const dbPlan = subscription.plans.find((p) => p.plan_key === plan.key);
   const price = `₹${plan.subAmount}`;
 
   return (

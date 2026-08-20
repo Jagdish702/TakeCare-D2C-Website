@@ -200,11 +200,11 @@ export default function CartDrawerMobile({ plan, isOpen, onClose, onCheckout }) 
   const totalStr = total.toLocaleString('en-IN');
   const cartCount = plan ? 2 : 1;
 
-  const isMonthly = plan?.key === 'monthly';
-  const planName = plan ? (isMonthly ? 'TakeCare Monthly Plan' : 'TakeCare Yearly Plan') : '';
-  const planTag = isMonthly ? 'Monthly subscription' : 'Yearly subscription';
+  const isQuarterly = plan?.key === 'quarterly';
+  const planName = plan ? (isQuarterly ? 'TakeCare Quarterly Plan' : 'TakeCare Yearly Plan') : '';
+  const planTag = isQuarterly ? 'Quarterly subscription' : 'Yearly subscription';
   const planDesc = plan
-    ? (isMonthly
+    ? (isQuarterly
         ? 'Monthly subscription billing. Save up to ₹100 every month on dedicated care.'
         : 'Yearly subscription billing. Save up to ₹1,000 every year on dedicated care.')
     : '';

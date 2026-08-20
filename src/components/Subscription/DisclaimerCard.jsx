@@ -22,10 +22,10 @@ function AlertTriangleIcon() {
 }
 
 export default function DisclaimerCard({ plan, icon, iconNode, tone = 'default', children, style }) {
-  const isMonthly = plan?.key === 'monthly';
+  const isQuarterly = plan?.key === 'quarterly';
   const defaultText = plan
-    ? (isMonthly
-        ? 'Auto-renews monthly at ₹99 after trial. Cancel anytime from app settings at least 24hrs before renewal. No refund for current billing period after cancellation (T&C §2.1)'
+    ? (isQuarterly
+        ? 'Auto-renews quarterly at ₹297 after trial. Cancel anytime from app settings at least 24hrs before renewal. No refund for current billing period after cancellation (T&C §2.1)'
         : 'Auto-renews yearly at ₹999 after trial. Cancel anytime from app settings at least 24hrs before renewal. No refund for current billing period after cancellation (T&C §2.1)')
     : null;
 

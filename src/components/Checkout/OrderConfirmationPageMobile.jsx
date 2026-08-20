@@ -77,7 +77,7 @@ export default function OrderConfirmationPageMobile({ plan, shippingInfo, person
 
   if (!isOpen || !plan) return null;
 
-  const planName = plan.key === 'yearly' ? 'Yearly' : 'Monthly';
+  const planName = plan.key === 'yearly' ? 'Yearly' : 'Quarterly';
   const email = shippingInfo?.email || '';
   const contactPhone = shippingInfo?.phone ? `+91 ${shippingInfo.phone}` : '';
   const addressLine = shippingInfo

@@ -254,14 +254,14 @@ function ProductCard({ product }) {
 }
 
 /* ─────────────────────────────────────────────
-   Subscription card — monthly or yearly
+   Subscription card — quarterly or yearly
 ───────────────────────────────────────────── */
 function SubscriptionCard({ plan, qty, onQtyChange }) {
   const { images } = useContent();
-  const isMonthly = plan.key === 'monthly';
-  const planName = isMonthly ? 'TakeCare Monthly Plan' : 'TakeCare Yearly Plan';
+  const isQuarterly = plan.key === 'quarterly';
+  const planName = isQuarterly ? 'TakeCare Quarterly Plan' : 'TakeCare Yearly Plan';
   const price = `₹${plan.subAmount}`;
-  const descLine1 = isMonthly ? 'Monthly subscription billing.' : 'Yearly subscription billing.';
+  const descLine1 = isQuarterly ? 'Monthly subscription billing.' : 'Yearly subscription billing.';
   const descLine2 = plan.disclaimer[1];
 
   return (

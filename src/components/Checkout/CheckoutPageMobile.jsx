@@ -1,14 +1,13 @@
 import DisclaimerCard from '../Subscription/DisclaimerCard';
 import PrimaryButton from '../common/PrimaryButton';
 import CheckoutStepperMobile from './CheckoutStepperMobile';
-import AvailDiscounts from './AvailDiscounts';
 import { useContent } from '../../context/ContentContext';
 
 /*
   Mobile "Purchase Summery" — Figma node 12185:6186 ("Mobile: Cart").
   Single-column stack of the same content as the desktop CheckoutPage
-  (node 12185-4781) + CheckoutSummaryPanel, reusing DisclaimerCard,
-  PrimaryButton and AvailDiscounts as-is. Figma's mobile mockup mislabels
+  (node 12185-4781) + CheckoutSummaryPanel, reusing DisclaimerCard and
+  PrimaryButton as-is. Figma's mobile mockup mislabels
   the subscription review card with the product's copy — this uses the
   correct plan-specific copy instead, per the site's "web content is
   source of truth" convention (see SubscriptionSectionMobile/CartDrawerMobile).
@@ -124,8 +123,7 @@ export default function CheckoutPageMobile({ plan, onBack, onContinue, isOpen })
 
   if (!isOpen || !plan) return null;
 
-  const isMonthly = plan.key === 'monthly';
-  const dbPlan = subscription.plans.find((p) => p.plan_key === (isMonthly ? 'monthly' : 'yearly'));
+  const dbPlan = subscription.plans.find((p) => p.plan_key === plan.key);
   const planName = dbPlan.title;
   const planDesc = `${dbPlan.disclaimer_line1} ${dbPlan.disclaimer_line2}`;
   const product = subscription.cartProduct;
@@ -180,10 +178,6 @@ export default function CheckoutPageMobile({ plan, onBack, onContinue, isOpen })
             <p style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 12, color: '#000', letterSpacing: '0.3883px', lineHeight: '20px' }}>{section.delivery_label}</p>
             <p style={{ margin: 0, fontFamily: FONT, fontWeight: 500, fontSize: 12, color: '#999', letterSpacing: '0.3883px', lineHeight: '20px' }}>{section.delivery_estimate}</p>
           </DisclaimerCard>
-
-          <div style={{ borderTop: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '16px 0', width: '100%', boxSizing: 'border-box' }}>
-            <AvailDiscounts />
-          </div>
 
           <div style={{ background: '#f7f5f4', borderBottom: '1px solid #ccc', padding: 16, display: 'flex', flexDirection: 'column', gap: 12, boxSizing: 'border-box', width: '100%' }}>
             <PriceRowMobile label={product.name} amount={`₹${devicePrice.toLocaleString('en-IN')}`} />
